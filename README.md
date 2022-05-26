@@ -1,6 +1,6 @@
 # formulario_de_atendimento
 
-an attendance spreadsheet generator made for a freelance job
+An attendance spreadsheet generator made for a freelance job
 
 ## Getting Started
 
