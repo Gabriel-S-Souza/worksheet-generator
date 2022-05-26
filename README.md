@@ -1,6 +1,6 @@
 # formulario_de_atendimento
 
-A new Flutter project.
+an attendance spreadsheet generator made for a freelance job
 
 ## Getting Started
 
