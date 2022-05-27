@@ -37,6 +37,14 @@ dependencies:
 
   excel: ^2.0.0-null-safety-3
 
+  path_provider: ^2.0.10
+
+  path: ^1.8.1
+
+  permission_handler: ^9.2.0
+
+  downloads_path_provider: ^0.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -47,7 +55,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  path_provider: ^2.0.10
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

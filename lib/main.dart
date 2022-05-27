@@ -1,13 +1,16 @@
+
+
+import 'dart:io';
+
 import 'package:excel/excel.dart';
+import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-void main() async {
+void main() {
   runApp(const MyApp());
-
-  ByteData data = await rootBundle.load("assets/worksheets/teste.xlsx");
-  var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-  var excel = Excel.decodeBytes(bytes);
 }
 
 class MyApp extends StatelessWidget {
@@ -38,6 +41,58 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textEditingController = TextEditingController();
+  late Excel excel;
+  late Permission _permission;
+  PermissionStatus _permissionStatus = PermissionStatus.denied;
+
+  @override
+  void initState() {
+    super.initState();
+    _listenForPermission();
+  }
+
+   void _listenForPermission() async {
+    final status = await Permission.storage.status;
+    setState(() {
+      _permissionStatus = status;
+    });
+
+    switch (status) {
+      case PermissionStatus.denied:
+        _requestForPermission();
+        break;
+      case PermissionStatus.granted:
+        print('granted');
+        break;
+      case PermissionStatus.limited:
+        print('limited');
+        break;
+      case PermissionStatus.restricted:
+        print('restricted');
+        break;
+      case PermissionStatus.permanentlyDenied:
+        print('permanently denied');
+        break;
+
+      default:
+    }
+
+   }
+
+   Future<void> _requestForPermission() async {
+     final status = await Permission.storage.request();
+     setState(() {
+        _permissionStatus = status;
+     });
+   }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    ByteData data = await rootBundle.load("assets/worksheets/teste2.xlsx");
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    excel = Excel.decodeBytes(bytes);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,17 +118,33 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                 onPressed: () async {
 
+                  excel.updateCell('Página1', CellIndex.indexByString('B3'), _textEditingController.text);
+
+                  
+
+                  final fileBytes = excel.save(fileName: 'teste.xlsx');
+
+                  final directory = await getApplicationDocumentsDirectory();
+
+                  File(p.join(directory.path, 'teste.xlsx'))
+                    ..createSync(recursive: true)
+                    ..writeAsBytesSync(fileBytes!);
+                  
+
                 }, 
                 child: const Text('Atualizar'),
               ),
               ElevatedButton(
                 onPressed: () async {
-                
-                
                     
                 for (var table in excel.tables.keys) {
+                  print(table); //sheet Name
+                  print(excel.tables[table]?.maxCols);
+                  print(excel.tables[table]?.maxRows);
                   for (var row in excel.tables[table]!.rows) {
-                    print("${row}");
+                    for (var cell in row) {
+                      print(cell?.value ?? 'sem valor');
+                    }
                   }
                 }
                 }, 
@@ -85,4 +156,5 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
 }
