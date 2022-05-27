@@ -1,11 +1,13 @@
 
 
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:excel/excel.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:flutter/services.dart' show ByteData, PlatformException, rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -44,11 +46,32 @@ class _MyHomePageState extends State<MyHomePage> {
   late Excel excel;
   late Permission _permission;
   PermissionStatus _permissionStatus = PermissionStatus.denied;
+  late Directory _downloadsDirectory;
 
   @override
   void initState() {
     super.initState();
     _listenForPermission();
+    initDownloadsDirectoryState();
+  }
+
+  Future<void> initDownloadsDirectoryState() async {
+    Directory? downloadsDirectory;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      downloadsDirectory = await DownloadsPathProvider.downloadsDirectory;
+    } on PlatformException {
+      print('Could not get the downloads directory');
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _downloadsDirectory = downloadsDirectory!;
+    });
   }
 
    void _listenForPermission() async {
@@ -118,20 +141,35 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                 onPressed: () async {
 
-                  excel.updateCell('Página1', CellIndex.indexByString('B3'), _textEditingController.text);
+                  excel.updateCell(
+                    'Página1',
+                     CellIndex.indexByString('B3'), 
+                     _textEditingController.text, 
+                     cellStyle: CellStyle(bold: true, fontColorHex: 'FF000000', horizontalAlign: HorizontalAlign.Right));
 
+                    final List<int> bytes = excel.encode()!;
+
+                    Uint8List data = Uint8List.fromList(bytes);
+
+                    writeFile(data, 'teste2.xlsx');
+
+                    _downloadsDirectory != null
+                        ? print('downloadsDirectory: $_downloadsDirectory')
+                        : print('downloadsDirectory: null');
+
+
+                  // final fileBytes = excel.save(fileName: 'teste2.xlsx');
+
+                  // final directory = await getApplicationDocumentsDirectory();
+                  // print(directory.path);
+
+                  // File(p.join(directory.path, 'teste2'))
+                  //   ..createSync(recursive: true)
+                  //   ..writeAsBytesSync(fileBytes!);
                   
+                  // print('salvo');
 
-                  final fileBytes = excel.save(fileName: 'teste.xlsx');
-
-                  final directory = await getApplicationDocumentsDirectory();
-
-                  File(p.join(directory.path, 'teste.xlsx'))
-                    ..createSync(recursive: true)
-                    ..writeAsBytesSync(fileBytes!);
-                  
-
-                }, 
+                },
                 child: const Text('Atualizar'),
               ),
               ElevatedButton(
@@ -157,4 +195,22 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<File> writeFile(Uint8List data, String name) async {
+    // storage permission ask
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+    // the downloads folder path
+    Directory tempDir = _downloadsDirectory;
+    String tempPath = tempDir.path;
+    var filePath = '$tempPath/$name';
+    // 
+
+    // the data
+    var bytes = ByteData.view(data.buffer);
+    final buffer = bytes.buffer;
+    // save the data in the path
+    return File(filePath).writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  }
 }
