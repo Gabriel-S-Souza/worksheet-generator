@@ -139,8 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   excel.updateCell(
                     'Página1',
                      CellIndex.indexByString('B3'), 
-                     _textEditingController.text, 
-                     cellStyle: CellStyle(bold: true, fontColorHex: 'FF000000', horizontalAlign: HorizontalAlign.Right));
+                     _textEditingController.text);
 
                     final List<int> bytes = excel.encode()!;
 
