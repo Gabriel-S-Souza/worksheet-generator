@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Formulário de Atendimento'),
         centerTitle: true,
-        toolbarHeight: 60,
         elevation: 14,
       ),
       body: const Text('HomeScreen'),

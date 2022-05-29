@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:formulario_de_atendimento/view/screens/home_screen.dart';
+import 'screens/home_screen.dart';
+
+import 'screens/login_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -10,9 +12,8 @@ class MyApp extends StatelessWidget {
       title: 'Formulário de Atendimento',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const LoginScreen(),
     );
   }
 }
