@@ -1,25 +1,24 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, PlatformException, rootBundle;
 import 'package:permission_handler/permission_handler.dart';
 
 class SpreadsheetGenerator {
-  final String spredsheetPath;
+  final String spredsheetTemplatePath;
   final String spreadsheetName;
+  final Directory downloadsDirectory;
   SpreadsheetGenerator({
-    required this.spredsheetPath,
-    required this.spreadsheetName
+    required this.spredsheetTemplatePath,
+    required this.spreadsheetName,
+    required this.downloadsDirectory
   }) {
-    _initDownloadsDirectoryState();
-    _getSpreadsheet(spredsheetPath);
+    _getSpreadsheet(spredsheetTemplatePath);
   }
   
   late final Excel _excel;
-  late final Directory _downloadsDirectory;
 
   //TODO: needs to be tested
   /// Updates the cell
@@ -50,11 +49,7 @@ class SpreadsheetGenerator {
 
     await _writeFile(data, '${spreadsheetName}_${UniqueKey().toString().substring(2, 7)}.xlsx');
 
-    if (_downloadsDirectory != null) {
-      return _downloadsDirectory.path;
-    } else {
-      return Exception('Cannot find download directory').toString();
-    }
+    return downloadsDirectory.path;
   }
 
   //TODO: needs to be tested
@@ -66,7 +61,7 @@ class SpreadsheetGenerator {
       await Permission.storage.request();
     }
 
-    Directory tempDir = _downloadsDirectory;
+    Directory tempDir = downloadsDirectory;
     String tempPath = tempDir.path;
     var filePath = '$tempPath/$name';
 
@@ -75,20 +70,19 @@ class SpreadsheetGenerator {
 
     return File(filePath).writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
-
-  //TODO: needs to be tested
-  /// Get the downloads directory.
-  Future<void> _initDownloadsDirectoryState() async {
-    Directory? downloadsDirectory;
-    try {
-      downloadsDirectory = await DownloadsPathProvider.downloadsDirectory;
-    } on PlatformException {
-      throw Exception('Could not get the downloads directory');
-    }
-    if(downloadsDirectory != null) {
-      _downloadsDirectory = downloadsDirectory;
-    }
-  }
+  
+  // /// Get the downloads directory.
+  // Future<void> _initDownloadsDirectoryState() async {
+  //   Directory? downloadsDirectory;
+  //   try {
+  //     downloadsDirectory = await DownloadsPathProvider.downloadsDirectory;
+  //   } on PlatformException {
+  //     throw Exception('Could not get the downloads directory');
+  //   }
+  //   if(downloadsDirectory != null) {
+  //     _downloadsDirectory = downloadsDirectory;
+  //   }
+  // }
   
   /// Get the spreadsheet from the path.
   Future<void> _getSpreadsheet(String path) async {

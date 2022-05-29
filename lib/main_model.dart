@@ -39,7 +39,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textEditingController = TextEditingController();
   late Excel excel;
-  late Permission _permission;
   PermissionStatus _permissionStatus = PermissionStatus.denied;
   late Directory _downloadsDirectory;
 
