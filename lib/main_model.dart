@@ -107,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    ByteData data = await rootBundle.load("assets/worksheets/teste2.xlsx");
+    ByteData data = await rootBundle.load("assets/worksheets/template-cliente.xlsx");
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     excel = Excel.decodeBytes(bytes);
   }
@@ -125,31 +125,38 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const Text(
-                'Atualizar "B2"',
+                'Atualizar "D6"',
               ),
               TextField(
                 controller: _textEditingController,
                 decoration: const InputDecoration(
-                  hintText: 'B2',
+                  hintText: 'H7',
                 ),
               ),
               ElevatedButton(
                 onPressed: () async {
 
                   excel.updateCell(
-                    'Página1',
-                     CellIndex.indexByString('B3'), 
-                     _textEditingController.text);
+                    'CLIENTE',
+                     CellIndex.indexByString('G17'), 
+                     _textEditingController.text,
+                     cellStyle: CellStyle(
+                       textWrapping: TextWrapping.WrapText,
+                       horizontalAlign: HorizontalAlign.Center,
+                       verticalAlign: VerticalAlign.Top,
+                     )
+                  );
 
-                    final List<int> bytes = excel.encode()!;
+                  final List<int> bytes = excel.encode()!;
 
-                    Uint8List data = Uint8List.fromList(bytes);
 
-                    writeFile(data, 'teste2.xlsx');
+                  Uint8List data = Uint8List.fromList(bytes);
 
-                    _downloadsDirectory != null
-                        ? print('downloadsDirectory: $_downloadsDirectory')
-                        : print('downloadsDirectory: null');
+                  await writeFile(data, 'teste3.xlsx');
+
+                  _downloadsDirectory != null
+                      ? print('downloadsDirectory: $_downloadsDirectory')
+                      : print('downloadsDirectory: null');
 
 
                   // final fileBytes = excel.save(fileName: 'teste2.xlsx');
