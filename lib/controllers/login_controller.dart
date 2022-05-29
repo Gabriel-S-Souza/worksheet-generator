@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:formulario_de_atendimento/data/data_access_object.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobx/mobx.dart';
 
@@ -34,9 +35,11 @@ abstract class LoginControllerBase with Store {
   Future<void> login() async {
     loading = true;
     DataAccessObject dao = DataAccessObject();
-    Box<dynamic> userDataBox = await dao.getBox(DefaultBoxes.userData);
+    Box<dynamic> userDataBox = GetIt.I.get<Box<dynamic>>(instanceName: DefaultBoxes.userData);
     await userDataBox.put('email', email);
     await userDataBox.put('name', name);
+    print(userDataBox.get('email'));
+    print(userDataBox.get('name'));
     loading = false;
     logged = true;
   }
