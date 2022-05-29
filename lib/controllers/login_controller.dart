@@ -1,6 +1,13 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:formulario_de_atendimento/data/data_access_object.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mobx/mobx.dart';
 
-class LoginController {
+part 'login_controller.g.dart';
+
+class LoginController = LoginControllerBase with _$LoginController;
+
+abstract class LoginControllerBase with Store {
   
   String email = '';
 
@@ -17,13 +24,19 @@ class LoginController {
 
   bool get isFormValid => isEmailValid && isNameValid;
 
+  @observable
   bool loading = false;
 
+  @observable
   bool logged = false;
 
+  @action
   Future<void> login() async {
     loading = true;
-    await Future.delayed(const Duration(seconds: 2));
+    DataAccessObject dao = DataAccessObject();
+    Box<dynamic> userDataBox = await dao.getBox(DefaultBoxes.userData);
+    await userDataBox.put('email', email);
+    await userDataBox.put('name', name);
     loading = false;
     logged = true;
   }

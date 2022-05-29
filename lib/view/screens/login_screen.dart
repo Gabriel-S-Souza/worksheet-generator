@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/controllers/login_controller.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_simple_textfield.dart';
+
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -44,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   CustomSimpleTextField(
                       label: 'Nome',
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.person),
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
                     onChanged: loginController.setName,
@@ -58,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 16),
                   CustomSimpleTextField(
                     label: 'Email',
-                    prefixIcon: Icon(Icons.email_outlined),
+                    prefixIcon: const Icon(Icons.email_outlined),
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.done,
                     onChanged: loginController.setEmail,
@@ -80,14 +83,30 @@ class _LoginScreenState extends State<LoginScreen> {
                           )
                         )
                       ),
-                      child: const Text('Entrar'),
-                      onPressed: () {
+                      child: Observer(
+                        builder: (context) {
+                          return loginController.loading
+                              ? const Padding(
+                                padding: EdgeInsets.all(2),
+                                child: CircularProgressIndicator(valueColor: 
+                                    AlwaysStoppedAnimation<Color>(Colors.white)),
+                              )
+                              : const Text('Entrar');
+                        }
+                      ),
+                      onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
+                          await loginController.login();
+                          
+                          if (!mounted) return;
+
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
+                            const SnackBar(content: Text('Login realizado')),
                           );
+
+                          Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ));
                         }
                       },
                     ),
