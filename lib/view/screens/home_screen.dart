@@ -126,9 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         context, MaterialPageRoute(
                           builder: (context) {
                             if(value == 'OUTRO') {
-                              return const FormClientScreen();
+                              return FormClientScreen(downloadsDirectory: downloadsDirectory);
                             } else {
-                              return const FormClientScreen();
+                              return FormClientScreen(downloadsDirectory: downloadsDirectory);
                             }
                           }
                         )
@@ -179,10 +179,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _initDownloadsDirectoryState() async {
-    Directory? downloadsDirectory;
+    Directory? directory;
 
     try {
-      downloadsDirectory = await DownloadsPathProvider.downloadsDirectory;
+      directory = await DownloadsPathProvider.downloadsDirectory;
     } on PlatformException {
       throw Exception('Could not get the downloads directory');
     }
@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!mounted) return;
 
     setState(() {
-      downloadsDirectory = downloadsDirectory!;
+      downloadsDirectory = directory!;
     });
   }
 

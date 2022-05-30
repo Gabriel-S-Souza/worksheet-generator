@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show ByteData, PlatformException, rootBundle;
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:permission_handler/permission_handler.dart';
 
 class SpreadsheetGenerator {
