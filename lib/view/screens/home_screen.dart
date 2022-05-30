@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 50,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Colors.black),
+                  border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(40),
                   boxShadow: const [
                     BoxShadow(
