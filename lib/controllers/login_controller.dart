@@ -34,7 +34,7 @@ abstract class LoginControllerBase with Store {
   @action
   Future<void> login() async {
     loading = true;
-    DataAccessObject dao = DataAccessObject();
+    DataAccessObject dao = GetIt.I.get<DataAccessObject>();
     Box<dynamic> userDataBox = GetIt.I.get<Box<dynamic>>(instanceName: DefaultBoxes.userData);
     await userDataBox.put('email', email);
     await userDataBox.put('name', name);

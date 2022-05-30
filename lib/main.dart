@@ -11,6 +11,8 @@ void main() async {
   await dao.openDataBase();
   Box<String> userDataBox = await dao.getBox<String>(DefaultBoxes.userData);
 
+  // userDataBox.deleteAll(userDataBox.keys);
+
   GetIt.I.registerSingleton<DataAccessObject>(dao);
   GetIt.I.registerSingleton<Box>(userDataBox, instanceName: DefaultBoxes.userData);
 

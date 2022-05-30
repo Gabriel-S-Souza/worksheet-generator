@@ -101,7 +101,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (!mounted) return;
 
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Login realizado')),
+                            const SnackBar(
+                              margin: EdgeInsets.only(bottom: 60),
+                              duration: Duration(milliseconds: 2500),
+                              behavior: SnackBarBehavior.floating,
+                              content: Text('Login realizado'),
+                            ),
                           );
 
                           Navigator.pushReplacement(context, MaterialPageRoute(
