@@ -20,6 +20,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
   final TextEditingController dateController = TextEditingController();
   final TextEditingController requesterController = TextEditingController();
   late String date;
+  String maintenance = 'Preventiva';
 
   @override
   void initState() {
@@ -92,10 +93,27 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
             ),
             const CustomTextLabel('Manutenção'),
             CustomRadioButtonGroup(
-              onChanged: (value) {},
+              onChanged: (value) {
+                setState(() {
+                  maintenance = value!;
+                });
+              },
               items: const ['Corretiva', 'Preventiva'],
               initialValue: 'Corretiva',
             ),
+            maintenance == 'Corretiva' 
+                ? const CustomTextLabel('Manutenção originada de') 
+                : Container(),
+            maintenance == 'Corretiva' 
+                ? CustomRadioButtonGroup(
+                  onChanged: (value) {},
+                  items: const [
+                    'Falha operacional', 'Falta de preventiva', 
+                    'Desg. por material carregado/ local de operação', 
+                    'Desgaste comum', 'Outros'],
+                  initialValue: 'Carregadeira',
+                )
+                : Container(),
             const CustomTextLabel('Máquina parada?'),
             CustomRadioButtonGroup(
               onChanged: (value) {},

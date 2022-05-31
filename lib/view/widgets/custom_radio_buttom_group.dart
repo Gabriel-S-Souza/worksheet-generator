@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomRadioButtonGroup extends StatefulWidget {
@@ -29,10 +30,15 @@ class _CustomRadioButtonGroupState extends State<CustomRadioButtonGroup> {
         value: item,
         groupValue: _selectedValue,
         visualDensity: VisualDensity.compact,
-        onChanged: (newValue) => setState(() => _selectedValue = newValue!),
-        title: Text(
+        onChanged: (newValue) => setState(() {
+          _selectedValue = newValue!;
+          widget.onChanged(newValue);
+        } ),
+        title: AutoSizeText(
           item,
+          maxLines: 3,
           style: const TextStyle(
+            overflow: TextOverflow.visible,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           )
