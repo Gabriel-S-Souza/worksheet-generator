@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class CustomActionFormGroup extends StatelessWidget {
+class CustomActionButtonGroup extends StatelessWidget {
   final Widget primaryChild;
   final Widget secondaryChild;
   final VoidCallback? onPrimaryPressed;
   final VoidCallback? onSecondaryPressed;
-  const CustomActionFormGroup({
+  const CustomActionButtonGroup({
     Key? key, 
     required this.primaryChild, 
     required this.secondaryChild, 

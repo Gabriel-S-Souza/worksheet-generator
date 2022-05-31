@@ -8,14 +8,15 @@ import '../widgets/custom_radio_buttom_group.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_text_label.dart';
 
-class BasicInformationsClienteForm extends StatefulWidget {
-  const BasicInformationsClienteForm({Key? key}) : super(key: key);
+class BasicInformationsClienteFormScreen extends StatefulWidget {
+  final VoidCallback onPrimaryPressed;
+  const BasicInformationsClienteFormScreen({Key? key, required this.onPrimaryPressed}) : super(key: key);
 
   @override
-  State<BasicInformationsClienteForm> createState() => _BasicInformationsClienteFormState();
+  State<BasicInformationsClienteFormScreen> createState() => _BasicInformationsClienteFormScreenState();
 }
 
-class _BasicInformationsClienteFormState extends State<BasicInformationsClienteForm> {
+class _BasicInformationsClienteFormScreenState extends State<BasicInformationsClienteFormScreen> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController requesterController = TextEditingController();
   late String date;
@@ -176,10 +177,10 @@ class _BasicInformationsClienteFormState extends State<BasicInformationsClienteF
               suggestionsCallback: (value) => [],
             ),
             const SizedBox(height: 32),
-            CustomActionFormGroup(
+            CustomActionButtonGroup(
               primaryChild: const Text('Próximo'),
               secondaryChild: const Text('Anterior'),
-              onPrimaryPressed: () {},
+              onPrimaryPressed: widget.onPrimaryPressed,
               onSecondaryPressed: null,
             ),
             const SizedBox(height: 20),
