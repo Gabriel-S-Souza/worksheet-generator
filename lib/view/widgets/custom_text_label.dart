@@ -6,11 +6,14 @@ class CustomTextLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

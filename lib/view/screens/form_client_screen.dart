@@ -45,7 +45,7 @@ class _FormClientScreenState extends State<FormClientScreen> {
         controller: pageController,
         onPageChanged: setCurrentPage,
         children: const <Widget>[
-          BasocInformationsClienteForm()
+          BasicInformationsClienteForm()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
