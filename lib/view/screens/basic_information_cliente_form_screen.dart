@@ -20,7 +20,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
   final TextEditingController dateController = TextEditingController();
   final TextEditingController requesterController = TextEditingController();
   late String date;
-  String maintenance = 'Preventiva';
+  String maintenance = 'Corretiva';
 
   @override
   void initState() {

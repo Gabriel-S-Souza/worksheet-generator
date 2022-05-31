@@ -50,7 +50,14 @@ class _FormClientScreenState extends State<FormClientScreen> {
               animatePage(1);
             },
           ),
-          const ServicesClientFormScreen()
+          ServicesClientFormScreen(
+             onPrimaryPressed: () {
+              animatePage(2);
+            },
+            onSecondaryPressed: () {
+              animatePage(0);
+            },
+          )
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
