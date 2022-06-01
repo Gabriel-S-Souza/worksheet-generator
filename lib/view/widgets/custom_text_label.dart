@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 
 class CustomTextLabel extends StatelessWidget {
   final String text;
-  const CustomTextLabel(this.text, {Key? key}) : super(key: key);
+  final double fontSize;
+  final double margin;
+  const CustomTextLabel(
+    this.text, 
+    {Key? key, 
+    this.margin = 16, 
+    this.fontSize = 20}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 16),
+      margin: EdgeInsets.symmetric(vertical: margin),
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: 20,
+        style: TextStyle(
+          fontSize: fontSize,
           fontWeight: FontWeight.bold,
         ),
       ),

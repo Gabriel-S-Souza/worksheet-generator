@@ -138,6 +138,12 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
               items: const ['Carregamento', 'Escavação', 'Terraplanagem', 'Rompedor', 'Sucata/Tesoura'],
               initialValue: 'Sucata/Tesoura',
             ),
+            const CustomTextLabel('Placa'),
+            CustomTextField(
+              hint: 'AAA-0000',
+              prefix: const Icon(Icons.rectangle_outlined),
+              onChanged: (value) {},
+            ),
             const CustomTextLabel('Frota'),
             CustomSuggestionTextField(
               hint: 'Frota',

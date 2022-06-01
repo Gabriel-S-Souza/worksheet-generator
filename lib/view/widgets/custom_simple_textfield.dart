@@ -8,6 +8,7 @@ class CustomSimpleTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? prefix;
   final TextInputAction? textInputAction;
+  final TextInputType textInputType;
   final void Function(String)? onChanged;
   final void Function(String)? onSubmitted;
   final String? Function(String?)? validator;
@@ -20,6 +21,7 @@ class CustomSimpleTextField extends StatelessWidget {
     this.prefixIcon, 
     this.prefix, 
     this.textInputAction, 
+    this.textInputType = TextInputType.text,
     this.onChanged, 
     this.onSubmitted, 
     this.validator}) : super(key: key);
@@ -36,11 +38,12 @@ class CustomSimpleTextField extends StatelessWidget {
         prefixIcon: prefixIcon,
         prefix: prefix,
       ),
-      keyboardType: TextInputType.name,
+      keyboardType: textInputType,
       textInputAction: TextInputAction.next,
       onChanged: onChanged,
       validator: validator,
       onFieldSubmitted: onSubmitted,
+      textAlignVertical: TextAlignVertical.center,
     );
   }
 }

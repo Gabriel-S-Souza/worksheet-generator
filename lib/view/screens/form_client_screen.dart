@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/view/screens/basic_information_cliente_form_screen.dart';
 import 'package:formulario_de_atendimento/view/screens/services_client_form_screen.dart';
 
+import 'registers_client_form_screen.dart';
+
 class FormClientScreen extends StatefulWidget {
   final Directory downloadsDirectory;
   const FormClientScreen({Key? key, required this.downloadsDirectory}) : super(key: key);
@@ -57,7 +59,8 @@ class _FormClientScreenState extends State<FormClientScreen> {
             onSecondaryPressed: () {
               animatePage(0);
             },
-          )
+          ),
+          const RegistersClientFormScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
