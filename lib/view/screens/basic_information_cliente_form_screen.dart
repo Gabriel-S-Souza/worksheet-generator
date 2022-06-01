@@ -3,6 +3,7 @@ import 'package:formulario_de_atendimento/view/widgets/custom_suggestion_text_fi
 import 'package:formulario_de_atendimento/view/widgets/cutom_icon_button.dart';
 import 'package:intl/intl.dart';
 
+import '../../default_values/default_values.dart';
 import '../widgets/custom_action_form_group.dart';
 import '../widgets/custom_radio_buttom_group.dart';
 import '../widgets/custom_text_field.dart';
@@ -105,8 +106,8 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   maintenance = value!;
                 });
               },
-              items: const ['Corretiva', 'Preventiva'],
-              initialValue: 'Corretiva',
+              items: const [MaintenanceTypes.corrective, MaintenanceTypes.preventive],
+              initialValue: MaintenanceTypes.corrective,
             ),
             maintenance == 'Corretiva' 
                 ? const CustomTextLabel('Manutenção originada de') 
@@ -118,7 +119,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                     'Falha operacional', 'Falta de preventiva', 
                     'Desg. por material carregado/ local de operação', 
                     'Desgaste comum', 'Outros'],
-                  initialValue: 'Carregadeira',
+                  initialValue: 'Desgaste comum',
                 )
                 : Container(),
             const CustomTextLabel('Máquina parada?'),
@@ -209,7 +210,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
             ),
             const SizedBox(height: 32),
             CustomActionButtonGroup(
-              primaryChild: const Text('Próximo'),
+              primaryChild: const Text('Salvar e avançar'),
               secondaryChild: const Text('Anterior'),
               onPrimaryPressed: widget.onPrimaryPressed,
               onSecondaryPressed: null,

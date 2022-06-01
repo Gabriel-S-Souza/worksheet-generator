@@ -50,6 +50,7 @@ class _FormClientScreenState extends State<FormClientScreen> {
         elevation: 0,
       ),
       body: PageView(
+        key: const PageStorageKey<String>('form_client'),
         controller: pageController,
         onPageChanged: setCurrentPage,
         children: <Widget>[

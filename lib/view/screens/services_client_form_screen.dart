@@ -103,7 +103,7 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
             ),
             const SizedBox(height: 32),
             CustomActionButtonGroup(
-              primaryChild: const Text('Próximo'),
+              primaryChild: const Text('Salvar e avançar'),
               secondaryChild: const Text('Anterior'),
               onPrimaryPressed: widget.onPrimaryPressed,
               onSecondaryPressed: widget.onSecondaryPressed,
