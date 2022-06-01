@@ -24,6 +24,12 @@ class _FormClientScreenState extends State<FormClientScreen> {
     pageController = PageController(initialPage: currentPage);
   }
 
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
   void setCurrentPage(int page) {
     setState(() => currentPage = page);
   }
@@ -60,7 +66,11 @@ class _FormClientScreenState extends State<FormClientScreen> {
               animatePage(0);
             },
           ),
-          const RegistersClientFormScreen(),
+          RegistersClientFormScreen(
+            onSecondaryPressed: () {
+              animatePage(1);
+            },
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -31,6 +31,13 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
   }
 
   @override
+  void dispose() {
+    dateController.dispose();
+    requesterController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
     return Padding(

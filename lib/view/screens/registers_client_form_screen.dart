@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:formulario_de_atendimento/view/widgets/custom_action_form_group.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_field.dart';
 import 'package:intl/intl.dart';
 
@@ -7,13 +8,16 @@ import '../widgets/custom_text_label.dart';
 import '../widgets/cutom_icon_button.dart';
 
 class RegistersClientFormScreen extends StatefulWidget {
-  const RegistersClientFormScreen({Key? key}) : super(key: key);
+  final VoidCallback? onSecondaryPressed;
+  const RegistersClientFormScreen({Key? key,
+  this.onSecondaryPressed}) : super(key: key);
 
   @override
   State<RegistersClientFormScreen> createState() => _RegistersClientFormScreenState();
 }
 
 class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
+  String? attendanceDate;
   String? departureDate;
   String? departureBackDate;
   String? arrivalDate;
@@ -25,6 +29,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
   TimeOfDay? attendanceStartHour;
   TimeOfDay? attendanceEndHour;
 
+  final TextEditingController attendanceDateController = TextEditingController();
   final TextEditingController departureDateController = TextEditingController();
   final TextEditingController departureBackDateController = TextEditingController();
   final TextEditingController arrivalDateController = TextEditingController();
@@ -38,8 +43,19 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
 
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    attendanceDateController.dispose();
+    departureDateController.dispose();
+    departureBackDateController.dispose();
+    arrivalDateController.dispose();
+    arrivalBackDateController.dispose();
+    departureHourController.dispose();
+    departureBackHourController.dispose();
+    arrivalHourController.dispose();
+    arrivalBackHourController.dispose();
+    attendanceStartHourController.dispose();
+    attendanceEndHourController.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,7 +69,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             const CustomTextLabel('Ida'),
             const CustomTextLabel(
               'Data e hora de saída',
-              margin: 0,
+              margin: 8,
               fontSize: 16,
             ),
             const SizedBox(height: 16),
@@ -142,10 +158,12 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 24),
+            const Divider(thickness: 1),
             const CustomTextLabel('Volta'),
             const CustomTextLabel(
               'Data e hora de saída',
-              margin: 0,
+              margin: 8,
               fontSize: 16,
             ),
             const SizedBox(height: 16),
@@ -191,7 +209,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             const SizedBox(height: 16),
             const CustomTextLabel(
               'Data e hora de chegada',
-              margin: 0,
+              margin: 8,
               fontSize: 16,
             ),
             const SizedBox(height: 16),
@@ -234,6 +252,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 24),
+            const Divider(thickness: 1,),
             const CustomTextLabel('Km'),
             Row(
               children: [
@@ -256,6 +276,140 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 24),
+            const Divider(thickness: 1,),
+            const CustomTextLabel('Atendimento'),
+            const CustomTextLabel('Data', margin: 8, fontSize: 16,),
+            CustomTextField(
+              controller: attendanceDateController,
+              hint: 'Data do atendimento',
+                suffix: CustomIconButton(
+                radius: 32, 
+                iconData: Icons.edit_calendar, 
+                onTap: () async {
+                  attendanceDate = attendanceDateController.text = await _selectDate(context);
+                } 
+              ),
+              onChanged: (value) {},
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: <Widget> [
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CustomTextLabel(
+                        'Horário de início',
+                        margin: 8,
+                        fontSize: 16,
+                      ),
+                      CustomTextField(
+                        hint: 'Ex: 09:00',
+                        controller: attendanceStartHourController,
+                        onChanged: (value) {},
+                        suffix: CustomIconButton(
+                          radius: 32, 
+                          iconData: Icons.edit_calendar, 
+                          onTap: () async {
+                            TimeOfDay? hours = await _selectHours(context, attendanceStartHour);
+                            if (hours != null) {
+                              setState(() {
+                                attendanceStartHour = hours;
+                                attendanceStartHourController.text = '${hours.hour}:${hours.minute}';
+                              });
+                            }
+                          } 
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CustomTextLabel(
+                        'Horário de término',
+                        margin: 8,
+                        fontSize: 16,
+                      ),
+                      CustomTextField(
+                        hint: 'Ex: 09:00',
+                        controller: attendanceEndHourController,
+                        onChanged: (value) {},
+                        suffix: CustomIconButton(
+                          radius: 32, 
+                          iconData: Icons.edit_calendar, 
+                          onTap: () async {
+                            TimeOfDay? hours = await _selectHours(context, attendanceEndHour);
+                            if (hours != null) {
+                              setState(() {
+                                attendanceEndHour = hours;
+                                attendanceEndHourController.text = '${hours.hour}:${hours.minute}';
+                              });
+                            }
+                          } 
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 32),
+            CustomActionButtonGroup(
+              primaryChild: const Text('Gerar planilha'), 
+              secondaryChild: const Text('Anterior'),
+              onPrimaryPressed: () {},
+              onSecondaryPressed: widget.onSecondaryPressed,
+            ),
+            const SizedBox(height: 32),
+            SizedBox(
+              height: 44,
+              child: OutlinedButton(
+                  style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    )
+                  )
+                ),
+                onPressed: null,
+                child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text('Salvar planilha'),
+                    SizedBox(width: 8),
+                    Icon(Icons.save),
+                  ],
+                ), 
+              )
+            ),
+            const SizedBox(height: 28),
+            SizedBox(
+              height: 44,
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    )
+                  )
+                ),
+                onPressed: null,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text('Receber no email'),
+                    SizedBox(width: 8),
+                    Icon(Icons.email),
+                  ],
+                ), 
+              )
+            ),
+            const SizedBox(height: 40),
           ],
         ),
       ),
