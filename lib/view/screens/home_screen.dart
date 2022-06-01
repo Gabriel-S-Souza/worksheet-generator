@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'Form_client_screen.dart';
@@ -110,18 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox( height: deviceHeight * 0.05),
             Flexible(
-              child: SizedBox(
-                height: 44,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      )
-                    )
-                  ),
-                  
-                  onPressed:  !isLoading
+              child: CustomAppButtom(
+                onPressed: !isLoading
                       ? () {
                     if(value != null) {
                       setState(() => isLoading = true);
@@ -145,7 +136,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       valueColor: AlwaysStoppedAnimation<Color>(
                         Colors.white,
                       ),
-                    )
                 ),
               ),
             )
