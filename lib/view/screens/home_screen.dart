@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'TESOURA LABOUNTY MSD-4000',
     'OUTRO'
   ];
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -119,9 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     )
                   ),
-                  child: const Text('Ir para o formulário'),
-                  onPressed: () {
+                  
+                  onPressed:  !isLoading
+                      ? () {
                     if(value != null) {
+                      setState(() => isLoading = true);
                       Navigator.push(
                         context, MaterialPageRoute(
                           builder: (context) {
@@ -132,9 +135,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                           }
                         )
-                      );
+                      ).then((value) => setState(() => isLoading = false));
                     }
-                  }, 
+                  }
+                      : null,
+                child: !isLoading
+                  ? const Text('IR PARA O FORMULÁRIO')
+                  : const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.white,
+                      ),
+                    )
                 ),
               ),
             )

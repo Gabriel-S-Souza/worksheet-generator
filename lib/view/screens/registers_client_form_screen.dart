@@ -277,10 +277,9 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
   }
 
   Future<TimeOfDay?> _selectHours(BuildContext context, TimeOfDay? initialTime) async {
-    TimeOfDay _initialTime = initialTime ?? TimeOfDay.now();
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _initialTime,
+      initialTime:  initialTime ?? TimeOfDay.now(),
     );
     if (picked != null) {
       return picked;
