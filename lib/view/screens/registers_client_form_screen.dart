@@ -258,19 +258,19 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             Row(
               children: [
                 Flexible(
-                  child: CustomSimpleTextField(
-                    label: 'Km inicial',
+                  child: CustomTextField(
+                    hint: 'Km inicial',
                     textInputType: TextInputType.number,
-                    prefixIcon: const Icon(Icons.edit_road),
+                    prefix: const Icon(Icons.edit_road),
                     onChanged: (value) {},
                   ),
                 ),
                 const SizedBox(width: 16),
                 Flexible(
-                  child: CustomSimpleTextField(
-                    label: 'Km final',
+                  child: CustomTextField(
+                    hint: 'Km final',
                     textInputType: TextInputType.number,
-                    prefixIcon: const Icon(Icons.edit_road),
+                    prefix: const Icon(Icons.edit_road),
                     onChanged: (value) {},
                   ),
                 ),
@@ -341,7 +341,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                         onChanged: (value) {},
                         suffix: CustomIconButton(
                           radius: 32, 
-                          iconData: Icons.edit_calendar, 
+                          iconData: Icons.watch_later, 
                           onTap: () async {
                             TimeOfDay? hours = await _selectHours(context, attendanceEndHour);
                             if (hours != null) {

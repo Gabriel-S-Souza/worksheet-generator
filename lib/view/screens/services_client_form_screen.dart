@@ -61,7 +61,7 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
             oilWasUsed ? const CustomTextLabel('Óleo de motor utilizado') : const SizedBox(),
             oilWasUsed 
                 ? CustomSuggestionTextField(
-                    hint: 'Nome do óleo',
+                    hint: 'Óleo de motor',
                     obscure: false,
                     prefix: const Icon(Icons.oil_barrel),
                     onChanged: (value) => {},
@@ -77,7 +77,7 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
             oilWasUsed ? const CustomTextLabel('Óleo hidráulico utilizado') : const SizedBox(),
             oilWasUsed 
                 ? CustomSuggestionTextField(
-                    hint: 'Nome do óleo',
+                    hint: 'Óleo hidráulico',
                     obscure: false,
                     prefix: const Icon(Icons.oil_barrel),
                     onChanged: (value) => {},

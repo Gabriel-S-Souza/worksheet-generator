@@ -12,9 +12,23 @@ void main() async {
   Box<String> userDataBox = await dao.getBox<String>(DefaultBoxes.userData);
 
   // userDataBox.deleteAll(userDataBox.keys);
+  final UserSettings userSettings;
+
+  userSettings = UserSettings(
+    email: userDataBox.get('email'),
+    name: userDataBox.get('name'),
+  );
 
   GetIt.I.registerSingleton<DataAccessObject>(dao);
+  GetIt.I.registerSingleton<UserSettings>(userSettings);
   GetIt.I.registerSingleton<Box>(userDataBox, instanceName: DefaultBoxes.userData);
 
   runApp(const MyApp());
+}
+
+class UserSettings {
+  final String? email;
+  final String? name;
+
+  UserSettings({this.email, this.name});
 }

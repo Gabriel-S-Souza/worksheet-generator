@@ -83,31 +83,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           )
                         )
                       ),
-                      child: Observer(
-                        builder: (context) {
-                          return loginController.loading
-                              ? const Padding(
-                                padding: EdgeInsets.all(2),
-                                child: CircularProgressIndicator(valueColor: 
-                                    AlwaysStoppedAnimation<Color>(Colors.white)),
-                              )
-                              : const Text('Entrar');
-                        }
-                      ),
+                      child: const Text('Entrar'),
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           await loginController.login();
                           
                           if (!mounted) return;
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              margin: EdgeInsets.only(bottom: 60),
-                              duration: Duration(milliseconds: 2500),
-                              behavior: SnackBarBehavior.floating,
-                              content: Text('Login realizado'),
-                            ),
-                          );
+                          _buildSnackBar(context);
 
                           Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (context) => const HomeScreen(),
@@ -121,6 +104,17 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ],
         )
+      ),
+    );
+  }
+
+  void _buildSnackBar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        margin: EdgeInsets.only(bottom: 60),
+        duration: Duration(milliseconds: 2500),
+        behavior: SnackBarBehavior.floating,
+        content: Text('Usuário registrado'),
       ),
     );
   }

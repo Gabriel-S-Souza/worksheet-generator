@@ -1,14 +1,12 @@
+import 'dart:developer';
+
 import 'package:email_validator/email_validator.dart';
-import 'package:formulario_de_atendimento/data/data_access_object.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:mobx/mobx.dart';
 
-part 'login_controller.g.dart';
+import '../data/data_access_object.dart';
 
-class LoginController = LoginControllerBase with _$LoginController;
-
-abstract class LoginControllerBase with Store {
+class LoginController {
   
   String email = '';
 
@@ -25,22 +23,11 @@ abstract class LoginControllerBase with Store {
 
   bool get isFormValid => isEmailValid && isNameValid;
 
-  @observable
-  bool loading = false;
-
-  @observable
-  bool logged = false;
-
-  @action
   Future<void> login() async {
-    loading = true;
-    DataAccessObject dao = GetIt.I.get<DataAccessObject>();
     Box<dynamic> userDataBox = GetIt.I.get<Box<dynamic>>(instanceName: DefaultBoxes.userData);
     await userDataBox.put('email', email);
     await userDataBox.put('name', name);
-    print(userDataBox.get('email'));
-    print(userDataBox.get('name'));
-    loading = false;
-    logged = true;
+    log(userDataBox.get('email'));
+    log(userDataBox.get('name'));
   }
 }
