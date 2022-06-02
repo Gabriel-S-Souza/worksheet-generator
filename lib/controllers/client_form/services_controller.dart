@@ -19,7 +19,7 @@ abstract class ServicesControllerBase with Store {
 
   String? defect;
   String? cause;
-  String? solution;
+  String? solution = Situation.released;
   String? motorOil;
   String? hydraulicOil;
   String? situation;
