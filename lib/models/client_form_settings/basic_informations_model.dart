@@ -39,10 +39,13 @@ class BasicInformationsModel {
     'cellAdress': '',
   };
   Map<String, String?> plate = {
-    'cellAdress': 'B43',
+    'cellAdress': 'B45',
   };
   Map<String, String?> fleet = {
     'cellAdress': 'B15',
+  };
+  Map<String, String?> fleetSecond = {
+    'cellAdress': 'D45',
   };
   Map<String, String?> model = {
     'cellAdress': 'D15',
@@ -130,7 +133,11 @@ class BasicInformationsModel {
       }
     }
 
-    fleet['value'] == null ? '' : fleet['value'] = 'FROTA: ${fleet['value']}';
+    if(fleet['value'] != null) {
+      fleet['value'] = 'FROTA: ${fleet['value']}';
+      fleetSecond['value'] = 'FROTA: ${fleet['value']}';
+    }
+
     model['value'] == null ? '' : model['value'] = 'MODELO: ${model['value']}';
     serie['value'] == null ? '': serie['value'] = 'SÉRIE: ${serie['value']}';
     hourMeter['value'] == null ? '' : hourMeter['value'] = 'HORÍMETRO: ${hourMeter['value']}';
@@ -152,6 +159,7 @@ class BasicInformationsModel {
     list.add(equipment);
     list.add(equipmentApplication);
     list.add(fleet);
+    list.add(fleetSecond);
     list.add(model);
     list.add(serie);
     list.add(hourMeter);
