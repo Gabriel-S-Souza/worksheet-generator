@@ -285,15 +285,4 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
       return;
     }
   }
-
-  // _buildSnackBar(BuildContext context, String path) {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       margin: const EdgeInsets.only(bottom: 60),
-  //       duration: const Duration(milliseconds: 2500),
-  //       behavior: SnackBarBehavior.floating,
-  //       content: Text('Salvo em $path'),
-  //     ),
-  //   );
-  // }
 }

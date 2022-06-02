@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:formulario_de_atendimento/controllers/client_form/services_controller.dart';
+import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_label.dart';
 
 import '../widgets/custom_action_form_group.dart';
@@ -19,98 +22,127 @@ class ServicesClientFormScreen extends StatefulWidget {
 }
 
 class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
-  bool oilWasUsed = true;
+  final ServicesController servicesController = ServicesController();
   
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CustomTextLabel('Defeito'),
-            CustomTextArea(
-              hint: 'Descreva o defeito',
-              onChanged: (value) {},
-            ),
-            const CustomTextLabel('Causa'),
-            CustomTextArea(
-              hint: 'Descreva a causa',
-              onChanged: (value) {},
-            ),
-            const CustomTextLabel('Solução'),
-            CustomTextArea(
-              hint: 'Descreva a solução',
-              onChanged: (value) {},
-            ),
-            const CustomTextLabel('Foi utilizado óleo?'),
-            CustomRadioButtonGroup(
-              onChanged: (value) {
-                if (value == 'Não') {
-                  setState(() => oilWasUsed = false);
-                } else {
-                  setState(() => oilWasUsed = true);
-                }
-              },
-              items: const <String> ['Sim', 'Não'], 
-              initialValue: 'Sim',
-              
-            ),
-            oilWasUsed ? const CustomTextLabel('Óleo de motor utilizado') : const SizedBox(),
-            oilWasUsed 
-                ? CustomSuggestionTextField(
-                    hint: 'Óleo de motor',
-                    obscure: false,
-                    prefix: const Icon(Icons.oil_barrel),
-                    onChanged: (value) => {},
-                    itemBuilder: (context, suggestion) {
-                      return const ListTile(
-                        title: Text('Suggestion'),
-                      );
-                    }, 
-                    onSuggestionSelected: (object) {  }, 
-                    suggestionsCallback: (value) => [],
-                  )
-                : Container(),
-            oilWasUsed ? const CustomTextLabel('Óleo hidráulico utilizado') : const SizedBox(),
-            oilWasUsed 
-                ? CustomSuggestionTextField(
-                    hint: 'Óleo hidráulico',
-                    obscure: false,
-                    prefix: const Icon(Icons.oil_barrel),
-                    onChanged: (value) => {},
-                    itemBuilder: (context, suggestion) {
-                      return const ListTile(
-                        title: Text('Suggestion'),
-                      );
-                    }, 
-                    onSuggestionSelected: (object) {  }, 
-                    suggestionsCallback: (value) => [],
-                  )
-                : Container(),
-            const CustomTextLabel('Situação'),
-            CustomRadioButtonGroup(
-              onChanged: (value) {},
-              items: const <String> ['Liberado', 'Liberado com restrições', 'Não liberado', 'Falta peças'], 
-              initialValue: 'Liberado',
-            ),
-            const CustomTextLabel('Pendências'),
-             CustomTextArea(
-              hint: 'Descreva as pendências',
-              onChanged: (value) {},
-            ),
-            const SizedBox(height: 32),
-            CustomActionButtonGroup(
-              primaryChild: const Text('Salvar e avançar'),
-              secondaryChild: const Text('Anterior'),
-              onPrimaryPressed: widget.onPrimaryPressed,
-              onSecondaryPressed: widget.onSecondaryPressed,
-            ),
-            const SizedBox(height: 20),
-          ],
+        child: Observer(
+          builder: (context) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CustomTextLabel('Defeito'),
+                CustomTextArea(
+                  hint: 'Descreva o defeito',
+                  onChanged: (value) => servicesController.defect = value,
+                ),
+                const CustomTextLabel('Causa'),
+                CustomTextArea(
+                  hint: 'Descreva a causa',
+                  onChanged: (value) => servicesController.cause = value,
+                ),
+                const CustomTextLabel('Solução'),
+                CustomTextArea(
+                  hint: 'Descreva a solução',
+                  onChanged: (value) => servicesController.solution = value,
+                ),
+                const CustomTextLabel('Foi utilizado óleo?'),
+                CustomRadioButtonGroup(
+                  onChanged: (value) => value != null ? servicesController.setOilWasUsed(value) : null,
+                  items: const <String> [YesNo.yes, YesNo.no], 
+                  initialValue: YesNo.no,
+                  
+                ),
+                servicesController.oilWasUsed == YesNo.yes ? const CustomTextLabel('Óleo de motor utilizado') : const SizedBox(),
+                servicesController.oilWasUsed == YesNo.yes
+                    ? CustomSuggestionTextField(
+                        hint: 'Óleo de motor',
+                        obscure: false,
+                        prefix: const Icon(Icons.oil_barrel),
+                        onChanged: (value) => servicesController.motorOil = value,
+                        itemBuilder: (context, suggestion) {
+                          return const ListTile(
+                            title: Text('Suggestion'),
+                          );
+                        }, 
+                        onSuggestionSelected: (object) {  }, 
+                        suggestionsCallback: (value) => [],
+                      )
+                    : Container(),
+                servicesController.oilWasUsed == YesNo.yes ? const CustomTextLabel('Óleo hidráulico utilizado') : const SizedBox(),
+                servicesController.oilWasUsed == YesNo.yes 
+                    ? CustomSuggestionTextField(
+                        hint: 'Óleo hidráulico',
+                        obscure: false,
+                        prefix: const Icon(Icons.oil_barrel),
+                        onChanged: (value) => servicesController.hydraulicOil = value,
+                        itemBuilder: (context, suggestion) {
+                          return const ListTile(
+                            title: Text('Suggestion'),
+                          );
+                        }, 
+                        onSuggestionSelected: (object) {  }, 
+                        suggestionsCallback: (value) => [],
+                      )
+                    : Container(),
+                const CustomTextLabel('Situação'),
+                CustomRadioButtonGroup(
+                  onChanged: (value) => servicesController.situation = value,
+                  items: const <String> [
+                    Situation.released,
+                    Situation.releasedWithRestrictions,
+                    Situation.notReleased,
+                    Situation.missingParts,
+                  ], 
+                  initialValue: Situation.released,
+                ),
+                const CustomTextLabel('Pendências'),
+                 CustomTextArea(
+                  hint: 'Descreva as pendências',
+                  onChanged: (value) => servicesController.pendencies = value,
+                ),
+                const SizedBox(height: 32),
+                CustomActionButtonGroup(
+                  primaryChild:!servicesController.isLoading
+                          ? const Text('Salvar e avançar')
+                          : const Padding( padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(),
+                          ),
+                  secondaryChild: const Text('Anterior'),
+                  onPrimaryPressed:  !servicesController.isLoading
+                          ? () async {
+                              
+                              servicesController.addToSpreedsheet()
+                                  .then((value) {
+                                    _buildSnackBar(context, value);
+                                    widget.onPrimaryPressed();
+                                  });
+
+                              widget.onPrimaryPressed();
+                            }
+                          : null,
+                  onSecondaryPressed: widget.onSecondaryPressed,
+                ),
+                const SizedBox(height: 20),
+              ],
+            );
+          }
         ),
+      ),
+    );
+  }
+
+  _buildSnackBar(BuildContext context, String path) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        margin: const EdgeInsets.only(bottom: 60),
+        duration: const Duration(milliseconds: 2500),
+        behavior: SnackBarBehavior.floating,
+        content: Text('Salvo em $path'),
       ),
     );
   }

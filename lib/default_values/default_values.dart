@@ -31,3 +31,10 @@ class YesNo {
   static const String yes = 'Sim';
   static const String no = 'Não';
 }
+
+class Situation {
+  static const String released = 'Liberado';
+  static const String releasedWithRestrictions = 'Librado com restrições';
+  static const String notReleased = 'Não liberado';
+  static const String missingParts = 'Falta peças';
+}
