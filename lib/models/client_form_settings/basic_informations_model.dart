@@ -63,6 +63,7 @@ class BasicInformationsModel {
         maintenance['cellAdress'] = 'H7';
       } else {
         maintenance['cellAdress'] = 'J7';
+        correctiveMaintenanceOrigin['value'] = null;
       }
        maintenance['value'] = '[ X ] ${maintenance['value']?.toUpperCase()}';
     }
@@ -75,7 +76,6 @@ class BasicInformationsModel {
         correctiveMaintenanceOrigin['cellAdress'] = 'F14';
       } else if (correctiveMaintenanceOrigin['value'] == CorrectiveMaintenanceOrigin.wearCommon) {
         correctiveMaintenanceOrigin['cellAdress'] = 'I14';
-        print('in conditional: ${correctiveMaintenanceOrigin['value']}');
       } else if (correctiveMaintenanceOrigin['value'] == CorrectiveMaintenanceOrigin.other) {
         correctiveMaintenanceOrigin['cellAdress'] = 'K14';
       }

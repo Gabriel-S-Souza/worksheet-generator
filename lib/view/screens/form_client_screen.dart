@@ -37,7 +37,7 @@ class _FormClientScreenState extends State<FormClientScreen> {
   @override
   void dispose() {
     pageController.dispose();
-    GetIt.I.reset();
+    GetIt.I.unregister<SpreadsheetGenerator>(instanceName: 'client_form');
     super.dispose();
   }
 
@@ -61,7 +61,7 @@ class _FormClientScreenState extends State<FormClientScreen> {
         elevation: 0,
       ),
       body: PageView(
-        key: const PageStorageKey<String>('form_client'),
+        // key: const PageStorageKey<String>('form_client'),
         controller: pageController,
         onPageChanged: setCurrentPage,
         children: <Widget>[

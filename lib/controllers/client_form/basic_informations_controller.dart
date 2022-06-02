@@ -21,7 +21,10 @@ abstract class BasicInformaTionsControllerBase with Store {
   String? os;
   String? requester;
   String? attendant;
+  
+  @observable
   String maintenance = Maintenance.corrective;
+
   String correctiveMaintenanceOrigin = CorrectiveMaintenanceOrigin.wearCommon;
   String isStoppedMachine = YesNo.no;
   String isWarranty = YesNo.no;
@@ -37,7 +40,7 @@ abstract class BasicInformaTionsControllerBase with Store {
   bool isLoading = false;
 
   @action
-  Future<String> addToSpreedsheet() async {
+  void addToSpreedsheet() {
     isLoading = true;
 
     final BasicInformationsModel basicInformations = BasicInformationsModel();
@@ -71,9 +74,7 @@ abstract class BasicInformaTionsControllerBase with Store {
         );
       }
     }
-    
-    String fileName = await spreadsheetGenerator.exportFile();
+
     isLoading = false;
-    return fileName;
   }
 }
