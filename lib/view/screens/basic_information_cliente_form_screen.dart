@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:formulario_de_atendimento/models/client_form_settings/basic_informations_model.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_suggestion_text_field.dart';
 import 'package:formulario_de_atendimento/view/widgets/cutom_icon_button.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +15,9 @@ import '../widgets/custom_text_label.dart';
 
 class BasicInformationsClienteFormScreen extends StatefulWidget {
   final VoidCallback onPrimaryPressed;
-  const BasicInformationsClienteFormScreen({Key? key, required this.onPrimaryPressed}) : super(key: key);
+  const BasicInformationsClienteFormScreen({
+    Key? key, 
+    required this.onPrimaryPressed}) : super(key: key);
 
   @override
   State<BasicInformationsClienteFormScreen> createState() => _BasicInformationsClienteFormScreenState();
@@ -79,7 +82,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
             CustomTextField(
               hint: 'Local de atendimento',
               obscure: false,
-              onChanged: (value) {},
+              onChanged: (value) => basicInformationsController.localOfAttendance = value,
               prefix: const Icon(Icons.location_on),
             ),
             const CustomTextLabel('O.S.'),
@@ -107,7 +110,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
             CustomSuggestionTextField(
               hint: 'Nome do atendente',
               obscure: false, 
-              onChanged: (value) {},
+              onChanged: (value) => basicInformationsController.attendant = value,
               prefix: const Icon(Icons.person), 
               itemBuilder: (context, suggestion) {
                 return const ListTile(
@@ -251,7 +254,8 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   onPrimaryPressed: !basicInformationsController.isLoading
                       ? () async {
                           
-                          await basicInformationsController.addToSpreedsheet();
+                          basicInformationsController.addToSpreedsheet()
+                              .then((value) => _buildSnackBar(context, value));
 
                           widget.onPrimaryPressed();
                         }
@@ -279,5 +283,16 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
     } else {
       return;
     }
+  }
+
+  _buildSnackBar(BuildContext context, String path) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        margin: const EdgeInsets.only(bottom: 60),
+        duration: const Duration(milliseconds: 2500),
+        behavior: SnackBarBehavior.floating,
+        content: Text('Salvo em $path'),
+      ),
+    );
   }
 }

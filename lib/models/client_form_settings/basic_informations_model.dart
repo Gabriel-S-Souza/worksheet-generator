@@ -54,38 +54,19 @@ class BasicInformationsModel {
     'cellAdress': 'J15',
   };
 
-  // final String dateCellAdress = 'J5';
-  // final String clientCellAdress = 'D6';
-  // final String localOfAttendanceCellAdress = 'D7';
-  // final String osCellAdress = 'I6';
-  // final String requesterCellAdress = 'D9';
-  // final String attendantCellAdress = 'I9';
-  // late final String maintenanceCellAdress;
-  // late final String correctiveMaintenanceOriginCellAdress;
-  // late final String isStoppedMachineCellAdress;
-  // late final String isWarrantyCellAdress;
-  // late final String equipmentCellAdress;
-  // late final String equipmentApplicationCellAdress;
-  // final String fleetCellAdress = 'B15';
-  // final String fleetSecondCellAdress = 'D43';
-  // final String modelCellAdress = 'D15';
-  // final String serieCellAdress = 'F15';
-  // final String hourMeterCellAdress = 'J15';
-  // final String plateCellAdress = 'B43';
-
   void treatTheProperties() {
+
     date['value'] == null ? date['value'] = 'DATA: ' : date['value'] = 'DATA: ${date['value']}';
     
     if (maintenance['value'] != null) {
-      maintenance['value'] = '[ X ] ${maintenance['value']?.toUpperCase()}';
       if (maintenance['value'] == Maintenance.corrective) {
         maintenance['cellAdress'] = 'H7';
       } else {
         maintenance['cellAdress'] = 'J7';
       }
+       maintenance['value'] = '[ X ] ${maintenance['value']?.toUpperCase()}';
     }
     if(correctiveMaintenanceOrigin['value'] != null) {
-      correctiveMaintenanceOrigin['value'] = '[ X ] ${correctiveMaintenanceOrigin['value']?.toUpperCase()}';
       if(correctiveMaintenanceOrigin['value'] == CorrectiveMaintenanceOrigin.operationalFailure) {
         correctiveMaintenanceOrigin['cellAdress'] = 'B14';
       } else if (correctiveMaintenanceOrigin['value'] == CorrectiveMaintenanceOrigin.withoutPreventive) {
@@ -94,27 +75,29 @@ class BasicInformationsModel {
         correctiveMaintenanceOrigin['cellAdress'] = 'F14';
       } else if (correctiveMaintenanceOrigin['value'] == CorrectiveMaintenanceOrigin.wearCommon) {
         correctiveMaintenanceOrigin['cellAdress'] = 'I14';
+        print('in conditional: ${correctiveMaintenanceOrigin['value']}');
       } else if (correctiveMaintenanceOrigin['value'] == CorrectiveMaintenanceOrigin.other) {
         correctiveMaintenanceOrigin['cellAdress'] = 'K14';
       }
+      correctiveMaintenanceOrigin['value'] = '[ X ] ${correctiveMaintenanceOrigin['value']?.toUpperCase()}';
     }
 
     if(isStoppedMachine['value'] != null) {
-      isStoppedMachine['value'] = '[ X ] ${isStoppedMachine['value']?.toUpperCase()}';
       if(isStoppedMachine['value'] == YesNo.yes) {
         isStoppedMachine['cellAdress'] = 'D10';
       } else {
         isStoppedMachine['cellAdress'] = 'E10';
       }
+      isStoppedMachine['value'] = '[ X ] ${isStoppedMachine['value']?.toUpperCase()}';
     }
 
     if(isWarranty['value'] != null) {
-      isWarranty['value'] = '[ X ] ${isWarranty['value']?.toUpperCase()}';
       if(isWarranty['value'] == YesNo.yes) {
         isWarranty['cellAdress'] = 'G10';
       } else {
         isWarranty['cellAdress'] = 'H10';
       }
+      isWarranty['value'] = '[ X ] ${isWarranty['value']?.toUpperCase()}';
     }
     
     if(equipment['value'] != null) {
@@ -147,15 +130,15 @@ class BasicInformationsModel {
       }
     }
 
-    fleet['value'] == null ? '' : fleet['value'] = 'FROTA: $fleet';
-    model['value'] == null ? '' : model['value'] = 'MODELO: $model';
-    serie['value'] == null ? '': serie['value'] = 'SÉRIE: $serie';
-    hourMeter['value'] == null ? '' : hourMeter['value'] = 'HORÍMETRO: $hourMeter';
-    plate['value'] == null ? '' : plate['value'] = 'PLACA: $plate';
+    fleet['value'] == null ? '' : fleet['value'] = 'FROTA: ${fleet['value']}';
+    model['value'] == null ? '' : model['value'] = 'MODELO: ${model['value']}';
+    serie['value'] == null ? '': serie['value'] = 'SÉRIE: ${serie['value']}';
+    hourMeter['value'] == null ? '' : hourMeter['value'] = 'HORÍMETRO: ${hourMeter['value']}';
+    plate['value'] == null ? '' : plate['value'] = 'PLACA: ${plate['value']}';
   }
 
   List<Map<String, String?>> toList() {
-    List<Map<String, String?>> list = [];
+    final List<Map<String, String?>> list = [];
     list.add(date);
     list.add(client);
     list.add(localOfAttendance);

@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:formulario_de_atendimento/rules/spreadsheet_generator.dart';
 import 'package:formulario_de_atendimento/view/screens/basic_information_cliente_form_screen.dart';
 import 'package:formulario_de_atendimento/view/screens/services_client_form_screen.dart';
+import 'package:get_it/get_it.dart';
 
 import 'registers_client_form_screen.dart';
 
@@ -22,11 +24,20 @@ class _FormClientScreenState extends State<FormClientScreen> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: currentPage);
+    GetIt.I.registerSingleton<SpreadsheetGenerator>(
+      SpreadsheetGenerator(
+        downloadsDirectory: widget.downloadsDirectory,
+        spreadsheetName: 'formulario_de_atendimento',
+        spredsheetTemplatePath: "assets/worksheets/template-cliente.xlsx"
+      ),
+      instanceName: 'client_form'
+    );
   }
 
   @override
   void dispose() {
     pageController.dispose();
+    GetIt.I.reset();
     super.dispose();
   }
 

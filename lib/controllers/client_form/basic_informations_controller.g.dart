@@ -30,7 +30,7 @@ mixin _$BasicInformaTionsController on BasicInformaTionsControllerBase, Store {
       context: context);
 
   @override
-  Future<void> addToSpreedsheet() {
+  Future<String> addToSpreedsheet() {
     return _$addToSpreedsheetAsyncAction.run(() => super.addToSpreedsheet());
   }
 

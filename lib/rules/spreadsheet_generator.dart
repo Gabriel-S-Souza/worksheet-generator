@@ -20,7 +20,6 @@ class SpreadsheetGenerator {
   
   late final Excel _excel;
 
-  //TODO: needs to be tested
   /// Updates the cell
   void updateCell(
     String sheetName,
@@ -39,20 +38,21 @@ class SpreadsheetGenerator {
   // TODO: needs to be implemented
   Future<void> sendByEmail() async {}
 
+  // TODO: Add a try catch block here
 
-  //TODO: needs to be tested
   /// Save the spreadsheet to the downloads directory and return the path.
   Future<String> exportFile() async {
     final List<int> bytes = _excel.encode()!;
 
     Uint8List data = Uint8List.fromList(bytes);
 
-    await _writeFile(data, '${spreadsheetName}_${UniqueKey().toString().substring(2, 7)}.xlsx');
+    File spreadsheet = await _writeFile(data, '${spreadsheetName}_${UniqueKey().toString().substring(2, 7)}.xlsx');
 
-    return downloadsDirectory.path;
+    return spreadsheet.path;
   }
 
-  //TODO: needs to be tested
+  // TODO: Add a try catch block here
+
   /// Write the file to the downloads directory.
   Future<File> _writeFile(Uint8List data, String name) async {
 
@@ -84,7 +84,7 @@ class SpreadsheetGenerator {
   //   }
   // }
   
-  /// Get the spreadsheet from the path.
+  // TODO: Add a try catch block here
   Future<void> _getSpreadsheet(String path) async {
     ByteData data = await rootBundle.load(path);
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);

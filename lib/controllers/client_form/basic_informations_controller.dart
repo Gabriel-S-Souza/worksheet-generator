@@ -1,3 +1,6 @@
+import 'package:excel/excel.dart';
+import 'package:formulario_de_atendimento/rules/spreadsheet_generator.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../default_values/default_values.dart';
@@ -8,6 +11,9 @@ part 'basic_informations_controller.g.dart';
 class BasicInformaTionsController = BasicInformaTionsControllerBase with _$BasicInformaTionsController;
 
 abstract class BasicInformaTionsControllerBase with Store {
+  BasicInformaTionsControllerBase();
+  
+  final SpreadsheetGenerator spreadsheetGenerator = GetIt.I.get<SpreadsheetGenerator>(instanceName: 'client_form');
 
   String? date;
   String? client;
@@ -31,11 +37,12 @@ abstract class BasicInformaTionsControllerBase with Store {
   bool isLoading = false;
 
   @action
-  Future<void> addToSpreedsheet() async {
+  Future<String> addToSpreedsheet() async {
     isLoading = true;
-    
+
     final BasicInformationsModel basicInformations = BasicInformationsModel();
     basicInformations.date['value'] = date;
+    basicInformations.client['value'] = client;
     basicInformations.localOfAttendance['value'] = localOfAttendance;
     basicInformations.os['value'] = os;
     basicInformations.requester['value'] = requester;
@@ -52,9 +59,21 @@ abstract class BasicInformaTionsControllerBase with Store {
     basicInformations.serie['value'] = serie;
     basicInformations.hourMeter['value'] = hourMeter;
 
-    await Future.delayed(Duration(seconds: 2), () {
-      isLoading = false;
-    });
+    basicInformations.treatTheProperties();
+
+    List<Map<String, String?>> basicInformationsList = basicInformations.toList();
+    for (Map<String, String?> element in basicInformationsList) {
+      if (element['value'] != null) {
+        spreadsheetGenerator.updateCell(
+          'CLIENTE',
+          CellIndex.indexByString(element['cellAdress']!),
+          element['value'],
+        );
+      }
+    }
+    
+    String fileName = await spreadsheetGenerator.exportFile();
     isLoading = false;
+    return fileName;
   }
 }
