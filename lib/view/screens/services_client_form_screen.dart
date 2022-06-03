@@ -74,8 +74,9 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                         suggestionsCallback: (value) => [],
                       )
                     : Container(),
-                servicesController.oilWasUsed == YesNo.yes ? const CustomTextLabel('Óleo hidráulico utilizado') : const SizedBox(),
-                servicesController.oilWasUsed == YesNo.yes 
+                    servicesController.oilWasUsed == YesNo.yes 
+                      ? const CustomTextLabel('Óleo hidráulico utilizado') : const SizedBox(),
+                    servicesController.oilWasUsed == YesNo.yes 
                     ? CustomSuggestionTextField(
                         hint: 'Óleo hidráulico',
                         obscure: false,
@@ -114,13 +115,9 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                           ),
                   secondaryChild: const Text('Anterior'),
                   onPrimaryPressed:  !servicesController.isLoading
-                          ? () async {
+                          ? () {
                               
-                              servicesController.addToSpreedsheet()
-                                  .then((value) {
-                                    _buildSnackBar(context, value);
-                                    widget.onPrimaryPressed();
-                                  });
+                              servicesController.addToSpreedsheet();
 
                               widget.onPrimaryPressed();
                             }

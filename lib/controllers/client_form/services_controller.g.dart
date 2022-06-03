@@ -45,7 +45,7 @@ mixin _$ServicesController on ServicesControllerBase, Store {
       AsyncAction('ServicesControllerBase.addToSpreedsheet', context: context);
 
   @override
-  Future<String> addToSpreedsheet() {
+  Future<void> addToSpreedsheet() {
     return _$addToSpreedsheetAsyncAction.run(() => super.addToSpreedsheet());
   }
 

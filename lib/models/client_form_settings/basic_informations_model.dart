@@ -135,7 +135,7 @@ class BasicInformationsModel {
 
     if(fleet['value'] != null) {
       fleet['value'] = 'FROTA: ${fleet['value']}';
-      fleetSecond['value'] = 'FROTA: ${fleet['value']}';
+      fleetSecond['value'] = '${fleet['value']}';
     }
 
     model['value'] == null ? '' : model['value'] = 'MODELO: ${model['value']}';

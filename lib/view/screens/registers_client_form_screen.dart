@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:formulario_de_atendimento/controllers/client_form/registers_controller.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_action_form_group.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_field.dart';
 import 'package:intl/intl.dart';
 
-import '../widgets/custom_simple_textfield.dart';
 import '../widgets/custom_text_label.dart';
 import '../widgets/cutom_icon_button.dart';
 
@@ -17,17 +18,6 @@ class RegistersClientFormScreen extends StatefulWidget {
 }
 
 class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
-  String? attendanceDate;
-  String? departureDate;
-  String? departureBackDate;
-  String? arrivalDate;
-  String? arrivalBackDate;
-  TimeOfDay? departureHour;
-  TimeOfDay? departureBackHour;
-  TimeOfDay? arrivalHour;
-  TimeOfDay? arrivalBackHour;
-  TimeOfDay? attendanceStartHour;
-  TimeOfDay? attendanceEndHour;
 
   final TextEditingController attendanceDateController = TextEditingController();
   final TextEditingController departureDateController = TextEditingController();
@@ -40,6 +30,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
   final TextEditingController arrivalBackHourController = TextEditingController();
   final TextEditingController attendanceStartHourController = TextEditingController();
   final TextEditingController attendanceEndHourController = TextEditingController();
+
+  final RegistersController registersController = RegistersController();
 
 
   @override
@@ -83,10 +75,10 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       radius: 32, 
                       iconData: Icons.edit_calendar, 
                       onTap: () async {
-                        departureDate = departureDateController.text = await _selectDate(context);
-                      } 
+                        registersController.oneWayDepartureDate = departureDateController.text = await _selectDate(context);
+                      }
                     ),
-                    onChanged: (value) {},
+                    onChanged: (value) => registersController.oneWayDepartureDate = value,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -98,16 +90,14 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       radius: 32, 
                       iconData: Icons.watch_later_rounded, 
                       onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, departureHour);
+                        TimeOfDay? hours = await _selectHours(context, registersController.departureHour);
                         if (hours != null) {
-                          setState(() {
-                            departureHour = hours;
-                            departureHourController.text = '${hours.hour}:${hours.minute}';
-                          });
+                          registersController.departureHour = hours;
+                          registersController.oneWayDepartureTime = departureHourController.text = '${hours.hour}:${hours.minute}';
                         }
                       }
                     ),
-                    onChanged: (value) => {},
+                    onChanged: (value) => registersController.oneWayDepartureTime = value,
                   ),
                 ),
               ],
@@ -129,10 +119,10 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       radius: 32, 
                       iconData: Icons.edit_calendar, 
                       onTap: () async {
-                        arrivalDate = arrivalDateController.text = await _selectDate(context);
+                        registersController.oneWayArrivalDate = arrivalDateController.text = await _selectDate(context);
                       } 
                     ),
-                    onChanged: (value) {},
+                    onChanged: (value) => registersController.oneWayArrivalDate = value,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -144,16 +134,14 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       radius: 32, 
                       iconData: Icons.watch_later_rounded, 
                       onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, arrivalHour);
+                        TimeOfDay? hours = await _selectHours(context, registersController.arrivalHour);
                         if (hours != null) {
-                          setState(() {
-                            arrivalHour = hours;
-                            arrivalHourController.text = '${hours.hour}:${hours.minute}';
-                          });
+                          registersController.arrivalHour = hours;
+                          registersController.oneWayArrivalTime = arrivalHourController.text = '${hours.hour}:${hours.minute}';
                         }
                       },
                     ),
-                    onChanged: (value) => {},
+                    onChanged: (value) => registersController.oneWayArrivalTime = value,
                   ),
                 ),
               ],
@@ -177,10 +165,10 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       radius: 32, 
                       iconData: Icons.edit_calendar, 
                       onTap: () async {
-                        departureBackDate = departureBackDateController.text = await _selectDate(context);
+                        registersController.returnDepartureDate = departureBackDateController.text = await _selectDate(context);
                       },
                     ),
-                    onChanged: (value) {},
+                    onChanged: (value) => registersController.returnDepartureDate = value,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -192,16 +180,14 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       radius: 32, 
                       iconData: Icons.watch_later_rounded, 
                       onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, departureBackHour);
+                        TimeOfDay? hours = await _selectHours(context, registersController.departureBackHour);
                         if (hours != null) {
-                          setState(() {
-                            departureBackHour = hours;
-                            departureBackHourController.text = '${hours.hour}:${hours.minute}';
-                          });
+                          registersController.departureBackHour = hours;
+                          registersController.returnDepartureTime = departureBackHourController.text = '${hours.hour}:${hours.minute}';
                         }
                       },
                     ),
-                    onChanged: (value) => {},
+                    onChanged: (value) => registersController.returnDepartureTime = value,
                   ),
                 ),
               ],
@@ -223,10 +209,10 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       radius: 32, 
                       iconData: Icons.edit_calendar, 
                       onTap: () async {
-                        arrivalBackDate = arrivalBackDateController.text = await _selectDate(context);
+                        registersController.returnArrivalDate = arrivalBackDateController.text = await _selectDate(context);
                       },
                     ),
-                    onChanged: (value) {},
+                    onChanged: (value) => registersController.returnArrivalDate = value,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -238,16 +224,14 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       radius: 32, 
                       iconData: Icons.watch_later_rounded, 
                       onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, arrivalBackHour);
+                        TimeOfDay? hours = await _selectHours(context, registersController.arrivalBackHour);
                         if (hours != null) {
-                          setState(() {
-                            arrivalBackHour = hours;
-                            arrivalBackHourController.text = '${hours.hour}:${hours.minute}';
-                          });
+                          registersController.arrivalBackHour = hours;
+                          registersController.returnArrivalTime = arrivalBackHourController.text = '${hours.hour}:${hours.minute}';
                         }
                       } 
                     ),
-                    onChanged: (value) => {},
+                    onChanged: (value) => registersController.returnArrivalTime = value,
                   ),
                 ),
               ],
@@ -262,7 +246,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                     hint: 'Km inicial',
                     textInputType: TextInputType.number,
                     prefix: const Icon(Icons.edit_road),
-                    onChanged: (value) {},
+                    onChanged: (value) => registersController.initialKm = value,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -271,7 +255,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                     hint: 'Km final',
                     textInputType: TextInputType.number,
                     prefix: const Icon(Icons.edit_road),
-                    onChanged: (value) {},
+                    onChanged: (value) => registersController.finalKm = value,
                   ),
                 ),
               ],
@@ -287,10 +271,10 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 radius: 32, 
                 iconData: Icons.edit_calendar, 
                 onTap: () async {
-                  attendanceDate = attendanceDateController.text = await _selectDate(context);
+                  registersController.attendanceDate = attendanceDateController.text = await _selectDate(context);
                 } 
               ),
-              onChanged: (value) {},
+              onChanged: (value) => registersController.attendanceDate = value,
             ),
             const SizedBox(height: 16),
             Row(
@@ -307,17 +291,15 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       CustomTextField(
                         hint: 'Ex: 09:00',
                         controller: attendanceStartHourController,
-                        onChanged: (value) {},
+                        onChanged: (value) => registersController.attendanceStartTime = value,
                         suffix: CustomIconButton(
                           radius: 32, 
                           iconData: Icons.edit_calendar, 
                           onTap: () async {
-                            TimeOfDay? hours = await _selectHours(context, attendanceStartHour);
+                            TimeOfDay? hours = await _selectHours(context, registersController.attendanceStartHour);
                             if (hours != null) {
-                              setState(() {
-                                attendanceStartHour = hours;
-                                attendanceStartHourController.text = '${hours.hour}:${hours.minute}';
-                              });
+                              registersController.attendanceStartHour = hours;
+                              registersController.attendanceStartTime = attendanceStartHourController.text = '${hours.hour}:${hours.minute}';
                             }
                           } 
                         ),
@@ -338,17 +320,15 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       CustomTextField(
                         hint: 'Ex: 09:00',
                         controller: attendanceEndHourController,
-                        onChanged: (value) {},
+                        onChanged: (value) => registersController.attendanceEndTime = value,
                         suffix: CustomIconButton(
                           radius: 32, 
                           iconData: Icons.watch_later, 
                           onTap: () async {
-                            TimeOfDay? hours = await _selectHours(context, attendanceEndHour);
+                            TimeOfDay? hours = await _selectHours(context, registersController.attendanceEndHour);
                             if (hours != null) {
-                              setState(() {
-                                attendanceEndHour = hours;
-                                attendanceEndHourController.text = '${hours.hour}:${hours.minute}';
-                              });
+                              registersController.attendanceEndHour = hours;
+                              registersController.attendanceEndTime = attendanceEndHourController.text = '${hours.hour}:${hours.minute}';
                             }
                           } 
                         ),
@@ -358,12 +338,25 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 32),
-            CustomActionButtonGroup(
-              primaryChild: const Text('Gerar planilha'), 
-              secondaryChild: const Text('Anterior'),
-              onPrimaryPressed: () {},
-              onSecondaryPressed: widget.onSecondaryPressed,
+            const SizedBox(height: 40),
+            Observer(
+              builder: (context) {
+                return CustomActionButtonGroup(
+                  primaryChild: !registersController.isLoading
+                      ? const Text('Gerar planilha')
+                      : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()), 
+                  secondaryChild: const Text('Anterior'),
+                  onSecondaryPressed:  widget.onSecondaryPressed,
+                  onPrimaryPressed: !registersController.isLoading
+                      ? () {
+                        registersController.addToSpreedsheet()
+                            .then((value) {
+                              _buildSnackBar(context, value);
+                            });
+                      }
+                      : null,
+                );
+              }
             ),
             const SizedBox(height: 32),
             SizedBox(
@@ -424,7 +417,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
       lastDate: DateTime(DateTime.now().year + 5),
     );
     if (picked != null) {
-        return departureDateController.text = DateFormat('dd/MM/yyyy').format(picked);
+        return DateFormat('dd/MM/yyyy').format(picked);
     } else {
       return '';
     }
@@ -440,5 +433,16 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
     } else {
       return null;
     }
+  }
+
+  _buildSnackBar(BuildContext context, String path) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        margin: const EdgeInsets.only(bottom: 60),
+        duration: const Duration(milliseconds: 2500),
+        behavior: SnackBarBehavior.floating,
+        content: Text('Salvo em $path'),
+      ),
+    );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:excel/excel.dart';
 import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:formulario_de_atendimento/models/client_form_settings/services_model.dart';
@@ -21,8 +23,8 @@ abstract class ServicesControllerBase with Store {
   String? cause;
   String? solution;
   String? motorOil;
-  String? hydraulicOil = Situation.released;
-  String? situation;
+  String? hydraulicOil;
+  String? situation = Situation.released;
   String? pendencies;
 
   @observable
@@ -38,7 +40,7 @@ abstract class ServicesControllerBase with Store {
   }
 
   @action
-  Future<String> addToSpreedsheet() async {
+  Future<void> addToSpreedsheet() async {
     isLoading = true;
 
     final ServicesModel services = ServicesModel();
@@ -62,10 +64,7 @@ abstract class ServicesControllerBase with Store {
         );
       }
     }
-    
-    String path = await spreadsheetGenerator.exportFile();
 
     isLoading = false;
-    return path;
   }
 }
