@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/registers_controller.dart';
@@ -5,13 +7,15 @@ import 'package:formulario_de_atendimento/view/widgets/custom_action_form_group.
 import 'package:formulario_de_atendimento/view/widgets/custom_text_field.dart';
 import 'package:intl/intl.dart';
 
+import '../../rules/spreedsheet_pdf_genarator.dart';
 import '../widgets/custom_text_label.dart';
 import '../widgets/cutom_icon_button.dart';
 
 class RegistersClientFormScreen extends StatefulWidget {
   final VoidCallback? onSecondaryPressed;
+  final Directory downloadsDirectory;
   const RegistersClientFormScreen({Key? key,
-  this.onSecondaryPressed}) : super(key: key);
+  this.onSecondaryPressed, required this.downloadsDirectory}) : super(key: key);
 
   @override
   State<RegistersClientFormScreen> createState() => _RegistersClientFormScreenState();
@@ -369,7 +373,11 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                     )
                   )
                 ),
-                onPressed: null,
+                 onPressed: () async {
+                  SpreadsheetPdfGenerator spreadsheetPdfGenerator = SpreadsheetPdfGenerator(widget.downloadsDirectory);
+                  spreadsheetPdfGenerator.clientSheetCreate()
+                      .then((value) => _buildSnackBar(context, value));
+                },
                 child:  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [

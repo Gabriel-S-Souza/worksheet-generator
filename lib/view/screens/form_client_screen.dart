@@ -79,6 +79,7 @@ class _FormClientScreenState extends State<FormClientScreen> {
             },
           ),
           RegistersClientFormScreen(
+            downloadsDirectory: widget.downloadsDirectory,
             onSecondaryPressed: () {
               animatePage(1);
             },

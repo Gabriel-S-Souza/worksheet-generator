@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:formulario_de_atendimento/rules/spreadsheet_generator.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../rules/spreedsheet_pdf_genarator.dart';
 import 'Form_client_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -138,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
