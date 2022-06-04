@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:formulario_de_atendimento/view/screens/equipment_form/equipment_form_screen.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -123,7 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             if(value == 'OUTRO') {
                               return FormClientScreen(downloadsDirectory: downloadsDirectory);
                             } else {
-                              return FormClientScreen(downloadsDirectory: downloadsDirectory);
+                              return EquipmentFormScreen(
+                                downloadsDirectory: downloadsDirectory, 
+                                equipmentName: value ?? 'Erro ao selecionar o equipamento',
+                              );
                             }
                           }
                         )

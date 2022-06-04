@@ -11,6 +11,14 @@ class CorrectiveMaintenanceOrigin {
   static const String other = 'Outros';
 }
 
+class CorrectiveMaintenanceOriginEquipment {
+  static const String operationalFailure = 'Falha operacional';
+  static const String withoutPreventive = 'Falta de preventiva';
+  static const String maintenanceFailure = 'Falha manutenção';
+  static const String wearCommon = 'Desgaste comum';
+  static const String other = 'Outros';
+}
+
 class Equipment {
   static const String loader = 'Carregadeira';
   static const String excavator = 'Escavadeira';
