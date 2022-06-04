@@ -15,6 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
+  android_path_provider:
+    dependency: "direct main"
+    description:
+      name: android_path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   archive:
     dependency: transitive
     description:
@@ -183,13 +190,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
-  downloads_path_provider_28:
-    dependency: "direct main"
-    description:
-      name: downloads_path_provider_28
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
   email_validator:
     dependency: "direct main"
     description:
@@ -472,7 +472,7 @@ packages:
     source: hosted
     version: "1.0.0"
   path_provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path_provider
       url: "https://pub.dartlang.org"

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/rules/spreadsheet_generator.dart';
 import 'package:formulario_de_atendimento/view/screens/basic_information_cliente_form_screen.dart';
@@ -9,7 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'registers_client_form_screen.dart';
 
 class FormClientScreen extends StatefulWidget {
-  final Directory downloadsDirectory;
+  final String downloadsDirectory;
   const FormClientScreen({Key? key, required this.downloadsDirectory}) : super(key: key);
 
   @override
@@ -61,7 +59,6 @@ class _FormClientScreenState extends State<FormClientScreen> {
         elevation: 0,
       ),
       body: PageView(
-        // key: const PageStorageKey<String>('form_client'),
         controller: pageController,
         onPageChanged: setCurrentPage,
         children: <Widget>[

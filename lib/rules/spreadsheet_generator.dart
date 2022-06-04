@@ -9,7 +9,8 @@ import 'package:permission_handler/permission_handler.dart';
 class SpreadsheetGenerator {
   final String spredsheetTemplatePath;
   final String spreadsheetName;
-  final Directory downloadsDirectory;
+  // final Directory downloadsDirectory;
+  final String downloadsDirectory;
   SpreadsheetGenerator({
     required this.spredsheetTemplatePath,
     required this.spreadsheetName,
@@ -61,9 +62,9 @@ class SpreadsheetGenerator {
       await Permission.storage.request();
     }
 
-    Directory tempDir = downloadsDirectory;
-    String tempPath = tempDir.path;
-    var filePath = '$tempPath/$name';
+    // Directory tempDir = downloadsDirectory;
+    // String tempPath = tempDir.path;
+    var filePath = '$downloadsDirectory/$name';
 
     var bytes = ByteData.view(data.buffer);
     final buffer = bytes.buffer;

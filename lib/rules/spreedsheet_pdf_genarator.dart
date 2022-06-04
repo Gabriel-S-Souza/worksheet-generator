@@ -1,15 +1,14 @@
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
-import 'package:formulario_de_atendimento/default_values/default_values.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 class SpreadsheetPdfGenerator {
-  final Directory downloadsDirectory;
+  final String downloadsDirectory;
   SpreadsheetPdfGenerator(this.downloadsDirectory);
 
   //TODO: GLOBAIS DE TESTE
@@ -47,12 +46,6 @@ class SpreadsheetPdfGenerator {
   Future<void> _loadImages() async {
     logoBytes = await rootBundle.load('assets/images/logo.png');
     logoByteList = logoBytes.buffer.asUint8List();
-
-    // arrowRedBytes = await rootBundle.load('assets/images/arrow-red.png');
-    // arrowRedByteList = arrowRedBytes.buffer.asUint8List();
-
-    // arrowGreenBytes = await rootBundle.load('assets/images/arrow-green.png');
-    // arrowGreenByteList = arrowGreenBytes.buffer.asUint8List();
     
     return;
   }
@@ -64,11 +57,10 @@ class SpreadsheetPdfGenerator {
     arrowLeft = await imageFromAssetBundle('assets/images/arrow-red.png');
     arrowRight = await imageFromAssetBundle('assets/images/arrow-green.png');
 
-    Directory tempDir = downloadsDirectory;
-    String tempPath = tempDir.path;
-    var filePath = '$tempPath/$name';
+    var filePath = '$downloadsDirectory/$name';
 
-    final pdf = pw.Document();
+    try {
+      final pdf = pw.Document();
     pdf.addPage(
       pw.MultiPage(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -100,9 +92,16 @@ class SpreadsheetPdfGenerator {
       ),
     );
 
-    final file = File(filePath);
+    final file = io.File(filePath);
     await file.writeAsBytes(await pdf.save());
-    return file.path;
+    return 'Salvo em: ${file.path}';
+
+
+    } catch (e) {
+      return 'Houve um erro: ${e.toString()}';
+    }
+
+    
   }
   
 

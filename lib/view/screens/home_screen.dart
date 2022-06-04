@@ -1,14 +1,12 @@
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+
+import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:formulario_de_atendimento/rules/spreadsheet_generator.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../rules/spreedsheet_pdf_genarator.dart';
 import 'Form_client_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +18,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   PermissionStatus permissionStatus = PermissionStatus.denied;
-  late Directory downloadsDirectory;
+  // late Directory downloadsDirectory;
+  late String downloadsDirectory;
   String? value;
   final List<String> equipment = [
     'TESOURA VTN 4000',
@@ -182,10 +181,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _initDownloadsDirectoryState() async {
-    Directory? directory;
+    String? directory;
 
     try {
-      directory = await DownloadsPathProvider.downloadsDirectory;
+      directory = await AndroidPathProvider.downloadsPath;
     } on PlatformException {
       throw Exception('Could not get the downloads directory');
     }

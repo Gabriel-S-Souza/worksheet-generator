@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 class RegistersModel {
 
   final Map<String, String?> _oneWayDepartureDateTime = {

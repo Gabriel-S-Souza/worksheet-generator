@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/registers_controller.dart';
@@ -13,7 +11,8 @@ import '../widgets/cutom_icon_button.dart';
 
 class RegistersClientFormScreen extends StatefulWidget {
   final VoidCallback? onSecondaryPressed;
-  final Directory downloadsDirectory;
+  // final Directory downloadsDirectory;
+  final String downloadsDirectory;
   const RegistersClientFormScreen({Key? key,
   this.onSecondaryPressed, required this.downloadsDirectory}) : super(key: key);
 
@@ -443,13 +442,13 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
     }
   }
 
-  _buildSnackBar(BuildContext context, String path) {
+  _buildSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         margin: const EdgeInsets.only(bottom: 60),
         duration: const Duration(milliseconds: 2500),
         behavior: SnackBarBehavior.floating,
-        content: Text('Salvo em $path'),
+        content: Text(message),
       ),
     );
   }
