@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/registers_controller.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_action_form_group.dart';
+import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
+import 'package:formulario_de_atendimento/view/widgets/custom_outlined_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_field.dart';
 import 'package:intl/intl.dart';
 
-import '../../rules/spreedsheet_pdf_genarator.dart';
-import '../widgets/custom_text_label.dart';
-import '../widgets/cutom_icon_button.dart';
+import '../../../rules/spreedsheet_pdf_genarator.dart';
+import '../../widgets/custom_text_label.dart';
+import '../../widgets/custom_icon_button.dart';
 
 class RegistersClientFormScreen extends StatefulWidget {
   final VoidCallback? onSecondaryPressed;
@@ -350,7 +352,29 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()), 
                   secondaryChild: const Text('Anterior'),
                   onSecondaryPressed:  widget.onSecondaryPressed,
-                  onPrimaryPressed: !registersController.isLoading
+                  onPrimaryPressed: null,
+                );
+              }
+            ),
+            const SizedBox(height: 32),
+            CustomOutlinedButtom(
+              onPressed: () async {
+                  SpreadsheetPdfGenerator spreadsheetPdfGenerator = SpreadsheetPdfGenerator(widget.downloadsDirectory);
+                  spreadsheetPdfGenerator.clientSheetCreate()
+                      .then((value) => _buildSnackBar(context, value));
+                },
+              child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text('Salvar planilha (pdf)'),
+                    SizedBox(width: 8),
+                    Icon(Icons.save),
+                  ],
+                ), 
+            ),
+            const SizedBox(height: 28),
+            CustomOutlinedButtom(
+              onPressed: !registersController.isLoading
                       ? () {
                         registersController.addToSpreedsheet()
                             .then((value) {
@@ -358,48 +382,19 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                             });
                       }
                       : null,
-                );
-              }
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              height: 44,
-              child: OutlinedButton(
-                  style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    )
-                  )
-                ),
-                 onPressed: () async {
-                  SpreadsheetPdfGenerator spreadsheetPdfGenerator = SpreadsheetPdfGenerator(widget.downloadsDirectory);
-                  spreadsheetPdfGenerator.clientSheetCreate()
-                      .then((value) => _buildSnackBar(context, value));
-                },
-                child:  Row(
+              child:  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Text('Salvar planilha'),
+                    Text('Salvar planilha (xlsx)'),
                     SizedBox(width: 8),
                     Icon(Icons.save),
                   ],
                 ), 
-              )
             ),
             const SizedBox(height: 28),
-            SizedBox(
-              height: 44,
-              child: ElevatedButton(
-                  style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    )
-                  )
-                ),
-                onPressed: null,
-                child: Row(
+            CustomAppButtom(
+              onPressed: null,
+              child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     Text('Receber no email'),
@@ -407,7 +402,6 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                     Icon(Icons.email),
                   ],
                 ), 
-              )
             ),
             const SizedBox(height: 40),
           ],

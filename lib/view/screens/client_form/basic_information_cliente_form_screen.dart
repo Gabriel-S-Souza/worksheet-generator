@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_suggestion_text_field.dart';
-import 'package:formulario_de_atendimento/view/widgets/cutom_icon_button.dart';
+import 'package:formulario_de_atendimento/view/widgets/custom_icon_button.dart';
 import 'package:intl/intl.dart';
 
-import '../../controllers/client_form/basic_informations_controller.dart';
-import '../../default_values/default_values.dart';
-import '../widgets/custom_action_form_group.dart';
-import '../widgets/custom_radio_buttom_group.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/custom_text_label.dart';
+import '../../../controllers/client_form/basic_informations_controller.dart';
+import '../../../default_values/default_values.dart';
+import '../../widgets/custom_action_form_group.dart';
+import '../../widgets/custom_radio_buttom_group.dart';
+import '../../widgets/custom_text_field.dart';
+import '../../widgets/custom_text_label.dart';
 
 class BasicInformationsClienteFormScreen extends StatefulWidget {
   final VoidCallback onPrimaryPressed;

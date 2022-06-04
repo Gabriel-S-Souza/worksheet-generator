@@ -4,10 +4,10 @@ import 'package:formulario_de_atendimento/controllers/client_form/services_contr
 import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_label.dart';
 
-import '../widgets/custom_action_form_group.dart';
-import '../widgets/custom_radio_buttom_group.dart';
-import '../widgets/custom_suggestion_text_field.dart';
-import '../widgets/custom_text_area.dart';
+import '../../widgets/custom_action_form_group.dart';
+import '../../widgets/custom_radio_buttom_group.dart';
+import '../../widgets/custom_suggestion_text_field.dart';
+import '../../widgets/custom_text_area.dart';
 
 class ServicesClientFormScreen extends StatefulWidget {
   final VoidCallback onPrimaryPressed;
@@ -129,17 +129,6 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
             );
           }
         ),
-      ),
-    );
-  }
-
-  _buildSnackBar(BuildContext context, String path) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        margin: const EdgeInsets.only(bottom: 60),
-        duration: const Duration(milliseconds: 2500),
-        behavior: SnackBarBehavior.floating,
-        content: Text('Salvo em $path'),
       ),
     );
   }

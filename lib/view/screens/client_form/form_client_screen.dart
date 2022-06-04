@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/rules/spreadsheet_generator.dart';
-import 'package:formulario_de_atendimento/view/screens/basic_information_cliente_form_screen.dart';
-import 'package:formulario_de_atendimento/view/screens/services_client_form_screen.dart';
 import 'package:get_it/get_it.dart';
 
+import 'basic_information_cliente_form_screen.dart';
 import 'registers_client_form_screen.dart';
+import 'services_client_form_screen.dart';
+
 
 class FormClientScreen extends StatefulWidget {
   final String downloadsDirectory;
