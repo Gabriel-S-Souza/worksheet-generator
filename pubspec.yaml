@@ -49,6 +49,7 @@ dependencies:
   intl: ^0.17.0
   auto_size_text: ^3.0.0
   pdf: ^3.8.1
+  printing: ^5.9.1
 
 dev_dependencies:
   flutter_test:
@@ -89,9 +90,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
-  #   - family: Schyler
+  #   - family: MaterialIcons-Regular
   #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: 'assets/fonts/MaterialIcons-Regular.ttf'
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
