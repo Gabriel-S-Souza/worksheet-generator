@@ -66,7 +66,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             const CustomTextLabel('Ida'),
             const CustomTextLabel(
               'Data e hora de saída',
-              margin: 8,
+              marginTop: 8,
+              marginBottom: 8,
               fontSize: 16,
             ),
             const SizedBox(height: 16),
@@ -110,7 +111,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             const SizedBox(height: 16),
             const CustomTextLabel(
               'Data e hora de chegada',
-              margin: 8,
+             marginTop: 8,
+              marginBottom: 8,
               fontSize: 16,
             ),
             const SizedBox(height: 16),
@@ -156,7 +158,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             const CustomTextLabel('Volta'),
             const CustomTextLabel(
               'Data e hora de saída',
-              margin: 8,
+              marginTop: 8,
+              marginBottom: 8,
               fontSize: 16,
             ),
             const SizedBox(height: 16),
@@ -200,7 +203,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             const SizedBox(height: 16),
             const CustomTextLabel(
               'Data e hora de chegada',
-              margin: 8,
+              marginTop: 8,
+              marginBottom: 8,
               fontSize: 16,
             ),
             const SizedBox(height: 16),
@@ -268,7 +272,10 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             const SizedBox(height: 24),
             const Divider(thickness: 1,),
             const CustomTextLabel('Atendimento'),
-            const CustomTextLabel('Data', margin: 8, fontSize: 16,),
+            const CustomTextLabel('Data', 
+              marginTop: 8,
+              marginBottom: 8, 
+              fontSize: 16,),
             CustomTextField(
               controller: attendanceDateController,
               hint: 'Data do atendimento',
@@ -290,7 +297,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                     children: [
                       const CustomTextLabel(
                         'Horário de início',
-                        margin: 8,
+                        marginTop: 8,
+                        marginBottom: 8,
                         fontSize: 16,
                       ),
                       CustomTextField(
@@ -319,7 +327,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                     children: [
                       const CustomTextLabel(
                         'Horário de término',
-                        margin: 8,
+                        marginTop: 8,
+                        marginBottom: 8,
                         fontSize: 16,
                       ),
                       CustomTextField(
