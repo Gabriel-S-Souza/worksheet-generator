@@ -65,7 +65,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                   onTap: () => _selectDate(context),
               )
             ),
-            const CustomTextLabel('UNIDADE'),
+            const CustomTextLabel('Unidade'),
               CustomSuggestionTextField(
                 obscure: false, 
                 onChanged: (value) {},
@@ -115,7 +115,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                 items: const [YesNo.yes, YesNo.no],
                 initialValue: YesNo.no,
               ),
-              const CustomTextLabel('VIRADA DE FACA?'),
+              const CustomTextLabel('Virada de faca?'),
               CustomRadioButtonGroup(
                 onChanged: (value) => knifeTurn = value!,
                 items: const [YesNo.yes, YesNo.no],
@@ -184,7 +184,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                   hint: 'Tesoura',
                   obscure: false,
                   onChanged: (value) =>  setState(() =>   scissors = value),
-                  prefix: const Icon(Icons.content_cut), 
+                  prefix: const Icon(Icons.architecture), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
                       title: Text('Suggestion'),

@@ -18,6 +18,7 @@ class CustomSuggestionTextField extends StatelessWidget {
   final void Function(dynamic) onSuggestionSelected;
   final FutureOr<Iterable<dynamic>> Function(String) suggestionsCallback;
   final Widget Function(BuildContext, dynamic) itemBuilder;
+  final TextStyle? style;
   const CustomSuggestionTextField({
     Key? key, 
     this.controller, 
@@ -33,7 +34,8 @@ class CustomSuggestionTextField extends StatelessWidget {
     required this.onSuggestionSelected, 
     required this.suggestionsCallback, 
     required this.itemBuilder, 
-    this.textInputAction = TextInputAction.next}) : super(key: key);
+    this.textInputAction = TextInputAction.next, 
+    this.style}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +60,7 @@ class CustomSuggestionTextField extends StatelessWidget {
             onChanged: onChanged,
             enabled: enabled,
             autofocus: false,
+            style: style,
             onSubmitted: (value) {
               if (value.isNotEmpty) {
                 onSubmitted?.call();
