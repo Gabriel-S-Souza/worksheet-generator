@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import 'basic_informations_equipment_screen.dart';
@@ -37,9 +38,10 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: AutoSizeText(
           widget.equipmentName, 
-          style: TextStyle(color: Theme.of(context).textTheme.titleLarge!.color ?? Colors.black),
+          style: TextStyle(
+            color: Theme.of(context).textTheme.titleLarge!.color ?? Colors.black),
         ),
         iconTheme: IconThemeData(
           color: Theme.of(context).textTheme.titleLarge!.color ?? Colors.black,
@@ -57,7 +59,14 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
               animatePage(1);
             },
           ),
-          const ServicesEquipmentScreen(),
+          ServicesEquipmentScreen(
+            onPrimaryPressed: () {
+              animatePage(2);
+            },
+            onSecondaryPressed: () {
+              animatePage(0);
+            },
+          ),
           const RegistersEquipmentScreen(),
         ],
       ),

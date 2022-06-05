@@ -19,6 +19,7 @@ class CustomSuggestionTextField extends StatelessWidget {
   final FutureOr<Iterable<dynamic>> Function(String) suggestionsCallback;
   final Widget Function(BuildContext, dynamic) itemBuilder;
   final TextStyle? style;
+  final EdgeInsetsGeometry? contentPadding;
   const CustomSuggestionTextField({
     Key? key, 
     this.controller, 
@@ -35,7 +36,8 @@ class CustomSuggestionTextField extends StatelessWidget {
     required this.suggestionsCallback, 
     required this.itemBuilder, 
     this.textInputAction = TextInputAction.next, 
-    this.style}) : super(key: key);
+    this.style, 
+    this.contentPadding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +69,11 @@ class CustomSuggestionTextField extends StatelessWidget {
               }
             },
             decoration: InputDecoration(
-            hintText: hint,
-            border: InputBorder.none,
-            prefixIcon: prefix,
-            suffixIcon: suffix,
+              contentPadding: contentPadding,
+              hintText: hint,
+              border: InputBorder.none,
+              prefixIcon: prefix,
+              suffixIcon: suffix,
             ),
             textAlignVertical: TextAlignVertical.center,
           ),
