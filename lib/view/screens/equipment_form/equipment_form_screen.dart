@@ -50,6 +50,10 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.home),
+          onPressed: () => Navigator.maybePop(context),
+        ),
       ),
       body: PageView(
         controller: pageController,

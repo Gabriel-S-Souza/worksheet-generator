@@ -8,6 +8,7 @@ import 'package:formulario_de_atendimento/view/screens/equipment_form/equipment_
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../widgets/custom_dropdown_buttom.dart';
 import 'client_form/form_client_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -67,49 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Flexible(
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(40),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    hint: const Text(
-                      'SELECIONE O EQUIPAMENTO',
-                         style: TextStyle(
-                          fontWeight: FontWeight.bold
-                        ),
-                    ),
-                    
-                    value: value,
-                    isExpanded: true,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    onChanged: (value) => setState(() => this.value = value),
-                    items: equipment.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
+             child: CustomDropdownButtom(
+               hint: 'Selecione o equipamento',
+               value: value,
+               onChanged: (value) => setState(() => this.value = value),
+               items: equipment,
+             ),
             ),
             SizedBox( height: deviceHeight * 0.05),
             Flexible(

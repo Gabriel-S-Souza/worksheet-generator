@@ -6,12 +6,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Formulário de Atendimento',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-      ),
-      home: const CustomLoginCheck(),
+      home: CustomLoginCheck(),
     );
   }
 }
