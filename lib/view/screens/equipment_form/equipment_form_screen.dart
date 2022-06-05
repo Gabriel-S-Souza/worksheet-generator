@@ -39,7 +39,8 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: AutoSizeText(
-          widget.equipmentName, 
+          widget.equipmentName,
+          maxLines: 1, 
           style: TextStyle(
             color: Theme.of(context).textTheme.titleLarge!.color ?? Colors.black),
         ),
@@ -67,7 +68,12 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
               animatePage(0);
             },
           ),
-          const RegistersEquipmentScreen(),
+          RegistersEquipmentScreen(
+            onSecondaryPressed: () {
+              animatePage(1);
+              print('onSecondaryPressed');
+            },
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

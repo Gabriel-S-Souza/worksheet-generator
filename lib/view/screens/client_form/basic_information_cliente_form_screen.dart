@@ -107,18 +107,11 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   suggestionsCallback: (value) => [],
                 ),
                 const CustomTextLabel('Atendido por'),
-                CustomSuggestionTextField(
+                CustomTextField(
                   hint: 'Nome do atendente',
                   obscure: false, 
                   onChanged: (value) => basicInformationsController.attendant = value,
-                  prefix: const Icon(Icons.person), 
-                  itemBuilder: (context, suggestion) {
-                    return const ListTile(
-                      title: Text('Suggestion'),
-                    );
-                  }, 
-                  onSuggestionSelected: (object) {  }, 
-                  suggestionsCallback: (value) => [],
+                  prefix: const Icon(Icons.person)
                 ),
                 const CustomTextLabel('Manutenção'),
                 CustomRadioButtonGroup(
