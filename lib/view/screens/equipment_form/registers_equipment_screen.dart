@@ -54,6 +54,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
               hint: 'Nome do atendente',
               obscure: false, 
               onChanged: (value) => {},
+              onSubmitted: () => FocusScope.of(context).nextFocus(),
               prefix: const Icon(Icons.person)
             ),
             const CustomTextLabel(
@@ -74,6 +75,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                       }
                     ),
                     onChanged: (value) => {},
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -93,6 +95,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                       },
                     ),
                     onChanged: (value) => {},
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
               ],
@@ -115,6 +118,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                       }
                     ),
                     onChanged: (value) => {},
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -134,6 +138,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                       },
                     ),
                     onChanged: (value) => {},
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
               ],

@@ -59,6 +59,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
               CustomTextField(
                 controller: dateController,
                 onChanged: (value) {},
+                onSubmitted: () => FocusScope.of(context).nextFocus(),
                 suffix: CustomIconButton(
                   radius: 32, 
                   iconData: Icons.edit_calendar, 
@@ -69,6 +70,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
               CustomSuggestionTextField(
                 obscure: false, 
                 onChanged: (value) {},
+                onSubmitted: () => FocusScope.of(context).nextFocus(),
                 prefix: const Icon(Icons.business), 
                 itemBuilder: (context, suggestion) {
                   return const ListTile(
@@ -83,6 +85,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                 hint: 'Local de atendimento',
                 obscure: false,
                 onChanged: (value) {},
+                onSubmitted: () => FocusScope.of(context).nextFocus(),
                 prefix: const Icon(Icons.location_on),
               ),
               const CustomTextLabel('Manutenção'),
@@ -142,6 +145,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                   hint: 'Frota',
                   obscure: false,
                   onChanged: (value) =>  setState(() => fleet = value),
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.onetwothree), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
@@ -156,6 +160,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                   hint: 'Modelo',
                   obscure: false,
                   onChanged: (value) =>  setState(() => model = value),
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.onetwothree), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
@@ -170,6 +175,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                   hint: 'Horímetro',
                   obscure: false,
                   onChanged: (value) =>  setState(() => odometer = value),
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.speed), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
@@ -184,6 +190,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                   hint: 'Tesoura',
                   obscure: false,
                   onChanged: (value) =>  setState(() =>   scissors = value),
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.architecture), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(

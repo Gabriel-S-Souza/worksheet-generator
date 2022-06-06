@@ -23,6 +23,21 @@ class ServicesClientFormScreen extends StatefulWidget {
 
 class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
   final ServicesController servicesController = ServicesController();
+  late final FocusNode focusNodeCause;
+  late final FocusNode focusNodeSolution;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNodeCause = FocusNode();
+    focusNodeSolution = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    focusNodeCause.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -40,16 +55,21 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                 CustomTextArea(
                   hint: 'Descreva o defeito',
                   onChanged: (value) => servicesController.defect = value,
+                  onSubmitted: () => FocusScope.of(context).requestFocus(focusNodeCause),
                 ),
                 const CustomTextLabel('Causa'),
                 CustomTextArea(
                   hint: 'Descreva a causa',
+                  focusNode: focusNodeCause,
                   onChanged: (value) => servicesController.cause = value,
+                  onSubmitted: () => FocusScope.of(context).requestFocus(focusNodeSolution),
                 ),
                 const CustomTextLabel('Solução'),
                 CustomTextArea(
                   hint: 'Descreva a solução',
+                  focusNode: focusNodeSolution,
                   onChanged: (value) => servicesController.solution = value,
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                 ),
                 const CustomTextLabel('Foi utilizado óleo?'),
                 CustomRadioButtonGroup(
@@ -65,6 +85,7 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                         obscure: false,
                         prefix: const Icon(Icons.oil_barrel),
                         onChanged: (value) => servicesController.motorOil = value,
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         itemBuilder: (context, suggestion) {
                           return const ListTile(
                             title: Text('Suggestion'),
@@ -82,6 +103,7 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                         obscure: false,
                         prefix: const Icon(Icons.oil_barrel),
                         onChanged: (value) => servicesController.hydraulicOil = value,
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         itemBuilder: (context, suggestion) {
                           return const ListTile(
                             title: Text('Suggestion'),

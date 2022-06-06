@@ -29,9 +29,6 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
   final TextEditingController requesterController = TextEditingController();
   final BasicInformaTionsController basicInformationsController = BasicInformaTionsController();
   final UserSettings userSettings = GetIt.I.get<UserSettings>();
-  
-  
-
 
   @override
   void initState() {
@@ -63,6 +60,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                 CustomTextField(
                   controller: dateController,
                   onChanged: (value) {},
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   suffix: CustomIconButton(
                     radius: 32, 
                     iconData: Icons.edit_calendar, 
@@ -73,6 +71,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                 CustomSuggestionTextField(
                   obscure: false, 
                   onChanged: (value) => basicInformationsController.client = value,
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.person), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
@@ -87,6 +86,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   controller: requesterController,
                   obscure: false, 
                   onChanged: (value) {},
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.person), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
@@ -101,6 +101,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   hint: 'Nome do atendente',
                   obscure: false, 
                   onChanged: (value) => basicInformationsController.attendant = value,
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.person)
                 ),
                 const CustomTextLabel('Manutenção'),
@@ -217,12 +218,14 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   hint: 'AAA-0000',
                   prefix: const Icon(Icons.rectangle_outlined),
                   onChanged: (value) => basicInformationsController.plate = value,
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                 ),
                 const CustomTextLabel('Frota'),
                 CustomSuggestionTextField(
                   hint: 'Frota',
                   obscure: false,
                   onChanged: (value) => basicInformationsController.fleet = value,
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.onetwothree), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
@@ -237,6 +240,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   hint: 'Modelo',
                   obscure: false,
                   onChanged: (value) => basicInformationsController.model = value,
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.onetwothree), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
@@ -251,6 +255,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   hint: 'Série',
                   obscure: false,
                   onChanged: (value) => basicInformationsController.serie = value,
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.onetwothree), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
@@ -265,6 +270,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   hint: 'Horímetro',
                   obscure: false,
                   onChanged: (value) => basicInformationsController.hourMeter = value,
+                  onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.speed), 
                   itemBuilder: (context, suggestion) {
                     return const ListTile(
@@ -287,7 +293,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                           ? () {
                               
                               basicInformationsController.addToSpreedsheet();
-
+            
                               widget.onPrimaryPressed();
                             }
                           : null,

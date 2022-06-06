@@ -38,6 +38,16 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
 
   final RegistersController registersController = RegistersController();
 
+  late final FocusNode focusNodeFinalKm;
+  late final FocusNode focusAttendanceDate;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNodeFinalKm = FocusNode();
+    focusAttendanceDate = FocusNode();
+  }
+
 
   @override
   void dispose() {
@@ -52,6 +62,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
     arrivalBackHourController.dispose();
     attendanceStartHourController.dispose();
     attendanceEndHourController.dispose();
+    focusNodeFinalKm.dispose();
+    focusAttendanceDate.dispose();
     super.dispose();
   }
 
@@ -85,6 +97,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       }
                     ),
                     onChanged: (value) => registersController.oneWayDepartureDate = value,
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -104,6 +117,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       }
                     ),
                     onChanged: (value) => registersController.oneWayDepartureTime = value,
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
               ],
@@ -130,6 +144,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       } 
                     ),
                     onChanged: (value) => registersController.oneWayArrivalDate = value,
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -149,6 +164,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       },
                     ),
                     onChanged: (value) => registersController.oneWayArrivalTime = value,
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
               ],
@@ -177,6 +193,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       },
                     ),
                     onChanged: (value) => registersController.returnDepartureDate = value,
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -196,6 +213,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       },
                     ),
                     onChanged: (value) => registersController.returnDepartureTime = value,
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
               ],
@@ -222,6 +240,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       },
                     ),
                     onChanged: (value) => registersController.returnArrivalDate = value,
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -241,6 +260,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       } 
                     ),
                     onChanged: (value) => registersController.returnArrivalTime = value,
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                 ),
               ],
@@ -256,15 +276,18 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                     textInputType: TextInputType.number,
                     prefix: const Icon(Icons.edit_road),
                     onChanged: (value) => registersController.initialKm = value,
+                    onSubmitted: () => FocusScope.of(context).requestFocus(focusNodeFinalKm),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Flexible(
                   child: CustomTextField(
                     hint: 'Km final',
+                    focusNode: focusNodeFinalKm,
                     textInputType: TextInputType.number,
                     prefix: const Icon(Icons.edit_road),
                     onChanged: (value) => registersController.finalKm = value,
+                    onSubmitted: () => FocusScope.of(context).requestFocus(focusAttendanceDate),
                   ),
                 ),
               ],
@@ -278,6 +301,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
               fontSize: 16,),
             CustomTextField(
               controller: attendanceDateController,
+              focusNode: focusAttendanceDate,
               hint: 'Data do atendimento',
                 suffix: CustomIconButton(
                 radius: 32, 
@@ -287,6 +311,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 } 
               ),
               onChanged: (value) => registersController.attendanceDate = value,
+              onSubmitted: () => FocusScope.of(context).nextFocus(),
             ),
             const SizedBox(height: 16),
             Row(
@@ -305,6 +330,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                         hint: 'Ex: 09:00',
                         controller: attendanceStartHourController,
                         onChanged: (value) => registersController.attendanceStartTime = value,
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         suffix: CustomIconButton(
                           radius: 32, 
                           iconData: Icons.edit_calendar, 
@@ -335,6 +361,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                         hint: 'Ex: 09:00',
                         controller: attendanceEndHourController,
                         onChanged: (value) => registersController.attendanceEndTime = value,
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         suffix: CustomIconButton(
                           radius: 32, 
                           iconData: Icons.watch_later, 

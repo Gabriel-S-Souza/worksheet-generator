@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomTextArea extends StatelessWidget {
   final String hint;
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final TextInputAction textInputAction;
   final Function()? onSubmitted;
   final void Function(String?) onChanged;
@@ -12,7 +13,8 @@ class CustomTextArea extends StatelessWidget {
     required this.onChanged, 
     this.controller, 
     this.textInputAction = TextInputAction.next, 
-    this.onSubmitted}) : super(key: key);
+    this.onSubmitted, 
+    this.focusNode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class CustomTextArea extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TextFormField(
+        focusNode: focusNode ?? FocusNode(),
         maxLines: null,
         decoration: InputDecoration(
           hintText: hint,
@@ -38,9 +41,7 @@ class CustomTextArea extends StatelessWidget {
         autofocus: false,
         textInputAction: textInputAction,
         onFieldSubmitted: (value) {
-          if (value.isNotEmpty) {
-            onSubmitted?.call();
-          }
+          onSubmitted?.call();
         },
       ),
     );

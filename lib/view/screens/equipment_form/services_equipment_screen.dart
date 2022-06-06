@@ -33,6 +33,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
   String oilWasUsed = YesNo.no;
   String? motorOil;
   String? hydraulicOil;
+  late final FocusNode focusNodeReadyServices;
   
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
     _controllerQuantityScrew.text = quantityScrew.toString();
     _controllerQuantityShim.text = quantityShim.toString();
     _controllerQuantityknives.text = quantityknives.toString();
+    focusNodeReadyServices = FocusNode();
   }
 
   @override
@@ -47,6 +49,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
     _controllerQuantityScrew.dispose();
     _controllerQuantityShim.dispose();
     _controllerQuantityknives.dispose();
+    focusNodeReadyServices.dispose();
     super.dispose();
   }
 
@@ -64,11 +67,14 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
               CustomTextArea(
                 hint: 'Descreva o defeito / causa',
                 onChanged: (value) => {},
+                onSubmitted: () => FocusScope.of(context).requestFocus(focusNodeReadyServices),
               ),
               const CustomTextLabel('Serviço realizado'),
               CustomTextArea(
                 hint: 'Descreva o serviço realizado',
+                focusNode: focusNodeReadyServices,
                 onChanged: (value) => {},
+                onSubmitted: () => FocusScope.of(context).nextFocus(),
               ),
               const CustomTextLabel('Foi utilizado óleo?'),
               CustomRadioButtonGroup(
@@ -83,6 +89,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       obscure: false,
                       prefix: const Icon(Icons.oil_barrel),
                       onChanged: (value) => setState(()=> motorOil = value),
+                      onSubmitted: () => FocusScope.of(context).nextFocus(),
                       itemBuilder: (context, suggestion) {
                         return const ListTile(
                           title: Text('Suggestion'),
@@ -100,6 +107,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       obscure: false,
                       prefix: const Icon(Icons.oil_barrel),
                       onChanged: (value) => setState(()=> hydraulicOil = value),
+                      onSubmitted: () => FocusScope.of(context).nextFocus(),
                       itemBuilder: (context, suggestion) {
                         return const ListTile(
                           title: Text('Suggestion'),
@@ -136,6 +144,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                         contentPadding: const EdgeInsets.only(bottom: 15),
                         style: const TextStyle(fontSize: 14),
                         onChanged: (value) {}, 
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         onSuggestionSelected: (object) {},
                         suggestionsCallback: (value) => [], 
                         itemBuilder: (context, suggestion) {
@@ -156,6 +165,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                         contentPadding: const EdgeInsets.only(bottom: 15),
                         style: const TextStyle(fontSize: 14),
                         onChanged: (value) {}, 
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         onSuggestionSelected: (object) {},
                         suggestionsCallback: (value) => [], 
                         itemBuilder: (context, suggestion) {
@@ -209,6 +219,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                         contentPadding: const EdgeInsets.only(bottom: 15),
                         style: const TextStyle(fontSize: 14),
                         onChanged: (value) {}, 
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         onSuggestionSelected: (object) {},
                         suggestionsCallback: (value) => [], 
                         itemBuilder: (context, suggestion) {
@@ -229,6 +240,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                         contentPadding: const EdgeInsets.only(bottom: 15),
                         style: const TextStyle(fontSize: 14),
                         onChanged: (value) {}, 
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         onSuggestionSelected: (object) {},
                         suggestionsCallback: (value) => [], 
                         itemBuilder: (context, suggestion) {
@@ -282,6 +294,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                         contentPadding: const EdgeInsets.only(bottom: 15),
                         style: const TextStyle(fontSize: 14),
                         onChanged: (value) {}, 
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         onSuggestionSelected: (object) {},
                         suggestionsCallback: (value) => [], 
                         itemBuilder: (context, suggestion) {
@@ -302,6 +315,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                         contentPadding: const EdgeInsets.only(bottom: 15),
                         style: const TextStyle(fontSize: 14),
                         onChanged: (value) {}, 
+                        onSubmitted: () => FocusScope.of(context).nextFocus(),
                         onSuggestionSelected: (object) {},
                         suggestionsCallback: (value) => [], 
                         itemBuilder: (context, suggestion) {
@@ -333,6 +347,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
               CustomTextArea(
                 hint: 'Descreva as pendências',
                 onChanged: (value) => {},
+                onSubmitted: () => FocusScope.of(context).nextFocus(),
               ),
               const SizedBox(height: 32),
               CustomActionButtonGroup(
