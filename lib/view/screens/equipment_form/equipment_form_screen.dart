@@ -47,13 +47,13 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
         iconTheme: IconThemeData(
           color: Theme.of(context).textTheme.titleLarge!.color ?? Colors.black,
         ),
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.home),
           onPressed: () => Navigator.maybePop(context),
         ),
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        elevation: 0,
       ),
       body: PageView(
         controller: pageController,
@@ -81,6 +81,8 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        elevation: 0,
         currentIndex: currentPage,
         items: const [
           BottomNavigationBarItem(

@@ -1,3 +1,9 @@
+class LocalOfAttendance {
+  static const String piracicaba = 'Piracicaba';
+  static const String iracenopolis = 'Iracemápolis';
+  static const String other = 'Outro';
+}
+
 class Maintenance {
   static const String corrective = 'Corretiva';
   static const String preventive = 'Preventiva';

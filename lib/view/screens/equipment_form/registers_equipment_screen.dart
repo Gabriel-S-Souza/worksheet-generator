@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:formulario_de_atendimento/main.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../widgets/custom_action_form_group.dart';
@@ -22,6 +24,9 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
   final TextEditingController dateEndController = TextEditingController();
   final TextEditingController timeStartController = TextEditingController();
   final TextEditingController timeEndController = TextEditingController();
+
+  final UserSettings userSettings = GetIt.I<UserSettings>();
+
   TimeOfDay? timeStart;
   TimeOfDay? timeEnd;
 
@@ -30,6 +35,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
   void initState() {
     super.initState();
     dateStartController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    attendantController.text = userSettings.name ?? '';
   }
 
   @override

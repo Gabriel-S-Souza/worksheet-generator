@@ -4,16 +4,15 @@ import 'dart:typed_data';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SpreadsheetGenerator {
   final String spredsheetTemplatePath;
-  final String spreadsheetName;
   // final Directory downloadsDirectory;
   final String downloadsDirectory;
   SpreadsheetGenerator({
     required this.spredsheetTemplatePath,
-    required this.spreadsheetName,
     required this.downloadsDirectory
   }) {
     _getSpreadsheet(spredsheetTemplatePath);
@@ -43,11 +42,15 @@ class SpreadsheetGenerator {
 
   /// Save the spreadsheet to the downloads directory and return the path.
   Future<String> exportFile() async {
+    final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
+    final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
+    final String spreadsheetName = 'cliente_${date}_$time';
+
     final List<int> bytes = _excel.encode()!;
 
     Uint8List data = Uint8List.fromList(bytes);
 
-    File spreadsheet = await _writeFile(data, '${spreadsheetName}_${UniqueKey().toString().substring(2, 7)}.xlsx');
+    File spreadsheet = await _writeFile(data, '$spreadsheetName.xlsx');
 
     return spreadsheet.path;
   }

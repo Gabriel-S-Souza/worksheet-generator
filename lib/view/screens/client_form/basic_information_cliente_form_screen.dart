@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:formulario_de_atendimento/view/screens/os_screen.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_suggestion_text_field.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_icon_button.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../../controllers/client_form/basic_informations_controller.dart';
 import '../../../default_values/default_values.dart';
+import '../../../main.dart';
 import '../../widgets/custom_action_form_group.dart';
 import '../../widgets/custom_radio_buttom_group.dart';
 import '../../widgets/custom_text_field.dart';
@@ -25,6 +28,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
   final TextEditingController dateController = TextEditingController();
   final TextEditingController requesterController = TextEditingController();
   final BasicInformaTionsController basicInformationsController = BasicInformaTionsController();
+  final UserSettings userSettings = GetIt.I.get<UserSettings>();
   
   
 
@@ -34,7 +38,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
     super.initState();
     basicInformationsController.date = DateFormat('dd/MM/yyyy').format(DateTime.now());
     dateController.text = basicInformationsController.date ?? '';
-    basicInformationsController.requester = requesterController.text = 'Alan';
+    basicInformationsController.requester = requesterController.text = userSettings.name ?? '';
   }
 
   @override
@@ -77,20 +81,6 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   }, 
                   onSuggestionSelected: (object) {  }, 
                   suggestionsCallback: (value) => [],
-                ),
-                const CustomTextLabel('Local de atendimento'),
-                CustomTextField(
-                  hint: 'Local de atendimento',
-                  obscure: false,
-                  onChanged: (value) => basicInformationsController.localOfAttendance = value,
-                  prefix: const Icon(Icons.location_on),
-                ),
-                const CustomTextLabel('O.S.'),
-                CustomTextField(
-                  hint: 'O.S.',
-                  obscure: false, 
-                  onChanged: (value) {},
-                  prefix: const Icon(Icons.info),
                 ),
                 const CustomTextLabel('Solicitado por'),
                 CustomSuggestionTextField(
@@ -159,7 +149,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                     Equipment.tractor,
                     Equipment.other
                   ],
-                  initialValue: Equipment.loader,
+                  initialValue: Equipment.excavator,
                 ),
                 const CustomTextLabel('Aplicação'),
                 CustomRadioButtonGroup(
@@ -173,6 +163,55 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   ],
                   initialValue: EquipmentApplication.scrap,
                 ),
+                const CustomTextLabel('Local de Atendimento'),
+                 CustomRadioButtonGroup(
+                  onChanged: (value) => basicInformationsController.localOfAttendance = value!,
+                  items: const [
+                    LocalOfAttendance.piracicaba,
+                    LocalOfAttendance.iracenopolis,
+                    LocalOfAttendance.other,
+                  ],
+                  initialValue: basicInformationsController.localOfAttendance!,
+                ),
+                basicInformationsController.localOfAttendance == LocalOfAttendance.other
+                    ? const CustomTextLabel('Local de atendimento')
+                    : Container(),
+                basicInformationsController.localOfAttendance == LocalOfAttendance.other
+                    ? CustomTextField(
+                        hint: 'Local de atendimento',
+                        obscure: false,
+                        onChanged: (value) => basicInformationsController.localOfAttendance = value,
+                        prefix: const Icon(Icons.location_on),
+                      )
+                    : Container(),
+                const CustomTextLabel('O.S.'),
+                basicInformationsController.localOfAttendance == LocalOfAttendance.other
+                    ? CustomTextField(
+                      hint: 'O.S.',
+                      obscure: false, 
+                      onChanged: (value) {},
+                      prefix: const Icon(Icons.info),
+                    )
+                    : Container(),
+                basicInformationsController.localOfAttendance != LocalOfAttendance.other
+                    ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center, 
+                      children: [
+                        const CustomTextLabel('202201 - PIRACI'),
+                        const SizedBox(width: 16),
+                        CustomIconButton(
+                          iconData: Icons.edit, 
+                          radius: 38, 
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => 
+                                const OSScreen()
+                            )
+                          ),
+                        )
+                      ]
+                    )
+                    : Container(),
                 const CustomTextLabel('Placa'),
                 CustomTextField(
                   hint: 'AAA-0000',

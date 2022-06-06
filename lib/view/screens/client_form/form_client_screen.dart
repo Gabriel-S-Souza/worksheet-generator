@@ -26,7 +26,6 @@ class _FormClientScreenState extends State<FormClientScreen> {
     GetIt.I.registerSingleton<SpreadsheetGenerator>(
       SpreadsheetGenerator(
         downloadsDirectory: widget.downloadsDirectory,
-        spreadsheetName: 'formulario_de_atendimento',
         spredsheetTemplatePath: "assets/worksheets/template-cliente.xlsx"
       ),
       instanceName: 'client_form'
@@ -89,6 +88,8 @@ class _FormClientScreenState extends State<FormClientScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        elevation: 0,
         currentIndex: currentPage,
         items: const [
           BottomNavigationBarItem(

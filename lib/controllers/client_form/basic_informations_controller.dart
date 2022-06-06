@@ -17,7 +17,10 @@ abstract class BasicInformaTionsControllerBase with Store {
 
   String? date;
   String? client;
-  String? localOfAttendance;
+
+  @observable
+  String? localOfAttendance = LocalOfAttendance.piracicaba;
+
   String? os;
   String? requester;
   String? attendant;
@@ -28,7 +31,7 @@ abstract class BasicInformaTionsControllerBase with Store {
   String correctiveMaintenanceOrigin = CorrectiveMaintenanceOrigin.wearCommon;
   String isStoppedMachine = YesNo.no;
   String isWarranty = YesNo.no;
-  String equipment = Equipment.loader;
+  String equipment = Equipment.excavator;
   String equipmentApplication = EquipmentApplication.scrap;
   String? plate;
   String? fleet;

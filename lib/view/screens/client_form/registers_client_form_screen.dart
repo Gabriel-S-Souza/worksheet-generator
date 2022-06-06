@@ -357,7 +357,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
               builder: (context) {
                 return CustomActionButtonGroup(
                   primaryChild: !registersController.isLoading
-                      ? const Text('Gerar planilha')
+                      ? const Text('Salvar e avançar')
                       : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()), 
                   secondaryChild: const Text('Anterior'),
                   onSecondaryPressed:  widget.onSecondaryPressed,

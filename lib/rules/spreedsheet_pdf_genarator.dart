@@ -2,6 +2,7 @@ import 'dart:io' as io;
 
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -51,48 +52,50 @@ class SpreadsheetPdfGenerator {
   }
   
   clientSheetCreate() async {
-    const String name = 'teste.pdf';
+    final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
+    final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
+    final String name = 'cliente_${date}_$time.pdf';
 
     await _loadImages();
     arrowLeft = await imageFromAssetBundle('assets/images/arrow-red.png');
     arrowRight = await imageFromAssetBundle('assets/images/arrow-green.png');
 
-    var filePath = '$downloadsDirectory/$name';
+    final String filePath = '$downloadsDirectory/$name';
 
     try {
       final pdf = pw.Document();
-    pdf.addPage(
-      pw.MultiPage(
-        crossAxisAlignment: pw.CrossAxisAlignment.center,
-        mainAxisAlignment: pw.MainAxisAlignment.start,
-        pageTheme: pw.PageTheme(
-          pageFormat: PdfPageFormat.a4,
-          margin: const pw.EdgeInsets.symmetric(horizontal: 18, vertical: 22),
-          theme: pw.ThemeData.withFont(
-            base: await PdfGoogleFonts.robotoMedium(),
-            bold: await PdfGoogleFonts.robotoBold(),
+      pdf.addPage(
+        pw.MultiPage(
+          crossAxisAlignment: pw.CrossAxisAlignment.center,
+          mainAxisAlignment: pw.MainAxisAlignment.start,
+          pageTheme: pw.PageTheme(
+            pageFormat: PdfPageFormat.a4,
+            margin: const pw.EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+            theme: pw.ThemeData.withFont(
+              base: await PdfGoogleFonts.robotoMedium(),
+              bold: await PdfGoogleFonts.robotoBold(),
+            ),
           ),
+          build: (context) => [
+            _contentHeader(context, logoByteList, 'RELATÓRIO DE ATENDIMENTO', 'XXXXX', '00/00/0000'),
+            _contentBasicInfo(
+              context: context, 
+              client: cliente,
+              os: os,
+              localOfAttendance: localOfAttendance,
+              correctiveValue: correctiveValue,
+              preventiveValue: preventiveValue,
+              requester: requester,
+              attendant: attendant,
+              fleet: fleet,
+            ),
+            _contentServices(context),
+            _termsRegisters(context),
+          ], 
         ),
-        build: (context) => [
-          _contentHeader(context, logoByteList, 'RELATÓRIO DE ATENDIMENTO', 'XXXXX', '00/00/0000'),
-          _contentBasicInfo(
-            context: context, 
-            client: cliente,
-            os: os,
-            localOfAttendance: localOfAttendance,
-            correctiveValue: correctiveValue,
-            preventiveValue: preventiveValue,
-            requester: requester,
-            attendant: attendant,
-            fleet: fleet,
-          ),
-          _contentServices(context),
-          _termsRegisters(context),
-        ], 
-      ),
-    );
+      );
 
-    final file = io.File(filePath);
+    final io.File file = io.File(filePath);
     await file.writeAsBytes(await pdf.save());
     return 'Salvo em: ${file.path}';
 

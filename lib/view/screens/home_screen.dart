@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:formulario_de_atendimento/main.dart';
 import 'package:formulario_de_atendimento/view/screens/equipment_form/equipment_form_screen.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
+import 'package:get_it/get_it.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../widgets/custom_dropdown_buttom.dart';
@@ -19,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final UserSettings userSettings = GetIt.I.get<UserSettings>();
   PermissionStatus permissionStatus = PermissionStatus.denied;
   // late Directory downloadsDirectory;
   late String downloadsDirectory;
@@ -53,61 +56,110 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Flexible(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, deviceWidth * 0.2),
-                alignment: Alignment.topCenter,
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  width: deviceWidth * 0.6,
+        child: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, deviceWidth * 0.2),
+                    alignment: Alignment.topCenter,
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      width: deviceWidth * 0.6,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Flexible(
-             child: CustomDropdownButtom(
-               hint: 'Selecione o equipamento',
-               value: value,
-               onChanged: (value) => setState(() => this.value = value),
-               items: equipment,
-             ),
-            ),
-            SizedBox( height: deviceHeight * 0.05),
-            Flexible(
-              child: CustomAppButtom(
-                onPressed: !isLoading
-                      ? () {
-                    if(value != null) {
-                      setState(() => isLoading = true);
-                      Navigator.push(
-                        context, MaterialPageRoute(
-                          builder: (context) {
-                            if(value == 'OUTRO') {
-                              return FormClientScreen(downloadsDirectory: downloadsDirectory);
-                            } else {
-                              return EquipmentFormScreen(
-                                downloadsDirectory: downloadsDirectory, 
-                                equipmentName: value ?? 'Erro ao selecionar o equipamento',
-                              );
-                            }
-                          }
-                        )
-                      ).then((value) => setState(() => isLoading = false));
-                    }
-                  }
-                      : null,
-                child: !isLoading
-                  ? const Text('IR PARA O FORMULÁRIO')
-                  : const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.white,
-                      ),
+                Flexible(
+                 child: CustomDropdownButtom(
+                   hint: 'SELECIONE O EQUIPAMENTO',
+                   value: value,
+                   onChanged: (value) => setState(() => this.value = value),
+                   items: equipment,
+                 ),
                 ),
-              ),
+                SizedBox( height: deviceHeight * 0.05),
+                Flexible(
+                  child: CustomAppButtom(
+                    onPressed: !isLoading
+                          ? () {
+                        if(value != null) {
+                          setState(() => isLoading = true);
+                          Navigator.push(
+                            context, MaterialPageRoute(
+                              builder: (context) {
+                                if(value == 'OUTRO') {
+                                  return FormClientScreen(downloadsDirectory: downloadsDirectory);
+                                } else {
+                                  return EquipmentFormScreen(
+                                    downloadsDirectory: downloadsDirectory, 
+                                    equipmentName: value ?? 'Erro ao selecionar o equipamento',
+                                  );
+                                }
+                              }
+                            )
+                          ).then((value) => setState(() => isLoading = false));
+                        }
+                      }
+                          : null,
+                    child: !isLoading
+                      ? const Text('IR PARA O FORMULÁRIO')
+                      : const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                    ),
+                  ),
+                ),
+              ],
             ),
+            // Positioned(
+            //   bottom: 24,
+            //   child: Column(
+            //     children: [
+            //       Container(
+            //         constraints: BoxConstraints(
+            //           maxWidth: deviceWidth - (deviceWidth * 0.05) * 2,
+            //         ),
+            //         alignment: Alignment.center,
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             Text(
+            //               userSettings.name != null ? 'User:  ' : '',
+            //               style: TextStyle(
+            //                 fontSize: 12,
+            //                 color: Colors.black87,
+            //               )),
+            //             Text(
+            //               userSettings.name ?? '',
+            //               style: TextStyle(
+            //                 fontSize: 12,
+            //                 color: Colors.black87,
+            //                 fontWeight: FontWeight.bold
+            //               )),
+            //           ],
+            //         ),
+            //       ),
+            //       ConstrainedBox(
+            //         constraints: BoxConstraints(
+            //           maxHeight: 34,
+            //         ),
+            //         child: TextButton(
+            //           onPressed: () {}, 
+            //           child: Text(
+            //             'Sair',
+            //             style: TextStyle(
+            //               fontSize: 12,
+            //             ),
+            //           ),
+            //         ),
+            //       )
+            //     ],
+            //   ),
+            // )
           ],
         ),
       ),
