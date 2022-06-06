@@ -51,6 +51,22 @@ dependencies:
   auto_size_text: ^3.0.0
   pdf: ^3.8.1
   printing: ^5.9.1
+  flutter_launcher_icons: ^0.9.2
+  flutter_native_splash: ^2.1.1
+
+flutter_icons:
+  image_path: "assets/images/icon.png"
+  ios: true
+  remove_alpha_ios: true
+  android: "launcher_icon"
+  adaptative_icon_background: "#353131FF"
+  adaptative_icon_forenground: "assets/images/adaptative.png"
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: "assets/images/splash.png"
+  android: true
+  ios: true
 
 dev_dependencies:
   flutter_test:
