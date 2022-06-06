@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/controllers/login_controller.dart';
+import 'package:formulario_de_atendimento/view/widgets/custom_login_check.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_simple_textfield.dart';
 
 import 'home_screen.dart';
@@ -93,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           _buildSnackBar(context);
 
                           Navigator.pushReplacement(context, MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
+                            builder: (context) => const CustomLoginCheck(),
                           ));
                         }
                       },
