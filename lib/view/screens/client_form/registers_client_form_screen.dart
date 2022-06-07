@@ -13,7 +13,6 @@ import '../../widgets/custom_icon_button.dart';
 
 class RegistersClientFormScreen extends StatefulWidget {
   final VoidCallback? onSecondaryPressed;
-  // final Directory downloadsDirectory;
   final String downloadsDirectory;
   const RegistersClientFormScreen({Key? key,
   this.onSecondaryPressed, required this.downloadsDirectory}) : super(key: key);
