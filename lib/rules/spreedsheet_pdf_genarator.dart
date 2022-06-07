@@ -97,7 +97,7 @@ class SpreadsheetPdfGenerator {
 
     final io.File file = io.File(filePath);
     await file.writeAsBytes(await pdf.save());
-    return 'Salvo em: ${file.path}';
+    return file.path;
 
 
     } catch (e) {

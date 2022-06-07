@@ -397,7 +397,11 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
               onPressed: () async {
                   SpreadsheetPdfGenerator spreadsheetPdfGenerator = SpreadsheetPdfGenerator(widget.downloadsDirectory);
                   spreadsheetPdfGenerator.clientSheetCreate()
-                      .then((value) => _buildSnackBar(context, value));
+                      .then((value) {
+                              _buildSnackBar(
+                                context, 'Salvo $value'
+                              );
+                            });
                 },
               child:  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -414,7 +418,9 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       ? () {
                         registersController.addToSpreedsheet()
                             .then((value) {
-                              _buildSnackBar(context, value);
+                              _buildSnackBar(
+                                context, 'Salvo $value'
+                              );
                             });
                       }
                       : null,

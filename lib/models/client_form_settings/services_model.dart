@@ -28,13 +28,13 @@ class ServicesModel {
 
     if (situation['value'] != null) {
       if(situation['value'] == Situation.released) {
-        situation['value'] = '[ X ] LIBERADO                     [   ] LIBERADO COM RESTRIÇÕES                [   ] NÃO LIBERADO                [   ] FALTA PEÇAS';
+        situation['value'] = '[ X ] LIBERADO     [   ] LIBERADO COM RESTRIÇÕES     [   ] NÃO LIBERADO     [   ] FALTA PEÇAS';
       } else if(situation['value'] == Situation.releasedWithRestrictions) {
-        situation['value'] = '[   ] LIBERADO                     [ X ] LIBERADO COM RESTRIÇÕES                [   ] NÃO LIBERADO                [   ] FALTA PEÇAS';
+        situation['value'] = '[   ] LIBERADO     [ X ] LIBERADO COM RESTRIÇÕES     [   ] NÃO LIBERADO     [   ] FALTA PEÇAS';
       } else if(situation['value'] == Situation.notReleased) {
-        situation['value'] = '[   ] LIBERADO                     [   ] LIBERADO COM RESTRIÇÕES                [ X ] NÃO LIBERADO                [   ] FALTA PEÇAS';
+        situation['value'] = '[   ] LIBERADO     [   ] LIBERADO COM RESTRIÇÕES     [ X ] NÃO LIBERADO     [   ] FALTA PEÇAS';
       } else if(situation['value'] == Situation.missingParts) {
-        situation['value'] = '[   ] LIBERADO                     [   ] LIBERADO COM RESTRIÇÕES                [   ] NÃO LIBERADO                [ X ] FALTA PEÇAS';
+        situation['value'] = '[   ] LIBERADO     [   ] LIBERADO COM RESTRIÇÕES     [   ] NÃO LIBERADO     [ X ] FALTA PEÇAS';
       }
     }
   }
