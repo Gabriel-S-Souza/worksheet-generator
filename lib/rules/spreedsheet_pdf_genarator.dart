@@ -21,11 +21,23 @@ class SpreadsheetPdfGenerator {
   final String requester = 'Alan';
   final String attendant = 'Jão da Silva';
   final String fleet = 'F-1234';
+  final String serie = 'S-1234';
+  final String model = 'M-1234';
+  final String odometer = 'C-1234';
+
+  final String defect = 'Defeito de teste';
+  final String cause = 'Causa de teste';
+  final String solution =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+  final String motorOil = 'Lorem ipsum doodfdsfdfsafsa Lorem ipsum doodfdsfdfsafsa';
+  final String hydraulicOil = '400400df';
+  final String pendencies =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
 
-  final double cellLargeHeight = 22;
-  final double cellHeight = 18;
-  final double cellSmallHeight = 14;
+  final double cellLargeHeight = 20;
+  final double cellHeight = 16;
+  final double cellSmallHeight = 12;
 
   final double fontLargeSize = 16;
   final double fontLargeMediumSize = 12;
@@ -88,11 +100,20 @@ class SpreadsheetPdfGenerator {
               requester: requester,
               attendant: attendant,
               fleet: fleet,
+              series: serie,
+              model: model,
+              odometer: odometer,
             ),
             _contentServices(
               context: context,
+              defect: defect,
+              cause: cause,
+              solution: solution,
+              motorOil: motorOil,
+              hydraulicOil: hydraulicOil,
+              pendencies: pendencies,
             ),
-            _termsRegisters(context),
+            _buildRegisters(context),
           ], 
         ),
       );
@@ -109,89 +130,6 @@ class SpreadsheetPdfGenerator {
     
   }
 
-
-  pw.Widget _contentServices({
-    required pw.Context context,
-    String defect = '',
-    String cause = '',
-    String solution = '',
-  }) {
-    return pw.Column(
-      children: [
-        _generateRow(
-          context: context,
-          height: cellHeight,
-          borderBottom: 1.5,
-          color: PdfColors.grey300,
-          child: pw.Row(
-            crossAxisAlignment: pw.CrossAxisAlignment.center,
-            children: [
-              pw.Text('DEFEITO:', style: pw.TextStyle(fontSize: fontMediumSize)),
-            ]
-          ),
-        ),
-        _generateRow(
-          context: context,
-          height: cellHeight * 2,
-          borderBottom: 1.5,
-          child: pw.Row(
-            crossAxisAlignment: pw.CrossAxisAlignment.center,
-            children: [
-              pw.Text(defect, style: pw.TextStyle(fontSize: fontMediumSize)),
-            ]
-          ),
-        ),
-        _generateRow(
-          context: context,
-          height: cellHeight,
-          borderBottom: 1.5,
-          color: PdfColors.grey300,
-          child: pw.Row(
-            crossAxisAlignment: pw.CrossAxisAlignment.center,
-            children:[
-              pw.Text('CAUSA:', style: pw.TextStyle(fontSize: fontMediumSize)),
-            ]
-          ),
-        ),
-        _generateRow(
-          context: context,
-          height: cellHeight * 2,
-          borderBottom: 1.5,
-          child: pw.Row(
-            crossAxisAlignment: pw.CrossAxisAlignment.center,
-            children: [
-              pw.Text(cause, style: pw.TextStyle(fontSize: fontMediumSize)),
-            ]
-          ),
-        ),
-        _generateRow(
-          context: context,
-          height: cellHeight,
-          borderBottom: 1.5,
-          color: PdfColors.grey300,
-          child: pw.Row(
-            crossAxisAlignment: pw.CrossAxisAlignment.center,
-            children: [
-              pw.Text('SOLUÇÃO:', style: pw.TextStyle(fontSize: fontMediumSize)),
-            ]
-          ),
-        ),
-        _generateRow(
-          context: context,
-          height: cellHeight * 2,
-          borderBottom: 1.5,
-          child: pw.Row(
-            crossAxisAlignment: pw.CrossAxisAlignment.center,
-            children: [
-              pw.Text(solution, style: pw.TextStyle(fontSize: fontMediumSize)),
-            ]
-          ),
-        ),
-        
-      ]
-    );
-  }
-  
 
    pw.Widget _contentHeader(pw.Context context, Uint8List bytelist, String title, String sheetCode, String date) {
 
@@ -268,8 +206,8 @@ class SpreadsheetPdfGenerator {
       ),
     );
   }
-  
-  
+
+
   pw.Widget _contentBasicInfo({
     required pw.Context context, required String client, required String os, 
     String localOfAttendance = '', required String correctiveValue, required String preventiveValue,
@@ -338,7 +276,7 @@ class SpreadsheetPdfGenerator {
         ),
         _generateRow(
           context: context,
-          height: cellLargeHeight,
+          height: cellLargeHeight + 2,
           child: pw.Row(
             crossAxisAlignment: pw.CrossAxisAlignment.center,
             children: [
@@ -461,7 +399,6 @@ class SpreadsheetPdfGenerator {
         _generateRow(
           context: context,
           height: cellSmallHeight * 1.8,
-          borderBottom: 1.5,
           child: pw.Column(
             mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
             children: [
@@ -490,6 +427,7 @@ class SpreadsheetPdfGenerator {
         _generateRow(
           context: context,
           height: cellHeight,
+          borderTop: 1.5,
           borderBottom: 1.5,
           color: PdfColors.grey300,
           child: pw.Column(
@@ -584,22 +522,300 @@ class SpreadsheetPdfGenerator {
   }
 
 
+  pw.Widget _contentServices({
+    required pw.Context context,
+    String defect = '',
+    String cause = '',
+    String solution = '',
+    String motorOil = '',
+    String hydraulicOil = '',
+    String situation = '[   ] LIBERADO    [   ] LIBERADO COM RESTRIÇÕES    [   ] NÃO LIBERADO     [   ] FALTA PEÇAS',
+    String pendencies = '',
+  }) {
+    double fontSizeMotorOil = fontLargeSize;
+    double fontSizeHydraulicOil = fontLargeSize;
+
+    motorOil.length < 7 ? fontSizeMotorOil = fontLargeSize * 2 : '';
+    motorOil.length > 7 && motorOil.length < 14 ? fontSizeMotorOil = fontLargeSize : '';
+    motorOil.length > 14 ? fontSizeMotorOil = fontLargeMediumSize : '';
+
+    hydraulicOil.length < 7 ? fontSizeHydraulicOil = fontLargeSize * 2 : '';
+    hydraulicOil.length > 7 && hydraulicOil.length < 14 ? fontSizeHydraulicOil = fontLargeSize : '';
+    hydraulicOil.length > 14 ? fontSizeHydraulicOil = fontLargeMediumSize : '';
 
 
-  pw.Widget _termsRegisters(pw.Context context) {
+    return pw.Column(
+      children: [
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          borderTop: 1.5,
+          borderBottom: 1.5,
+          color: PdfColors.grey300,
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children: [
+              pw.Text('DEFEITO:', style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          borderBottom: 1.5,
+          paddingTop: 4,
+          paddingBottom: 4,
+          paddingRight: 4,
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children: [
+               pw.Expanded(
+                child: pw.Text(defect, style: pw.TextStyle(fontSize: fontMediumSize), textAlign: pw.TextAlign.center),
+              ),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          borderTop: 1.5,
+          borderBottom: 1.5,
+          color: PdfColors.grey300,
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children:[
+              pw.Text('CAUSA:', style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          borderBottom: 1.5,
+          paddingTop: 4,
+          paddingBottom: 4,
+          paddingRight: 4,
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children: [
+               pw.Expanded(
+                child: pw.Text(cause, style: pw.TextStyle(fontSize: fontMediumSize), textAlign: pw.TextAlign.center),
+              ),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          borderTop: 1.5,
+          borderBottom: 1.5,
+          color: PdfColors.grey300,
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children: [
+              pw.Text('SOLUÇÃO:', style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          paddingTop: 4,
+          paddingBottom: 4,
+          paddingRight: 4,
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children: [
+              pw.Expanded(
+                child: pw.Text(solution, style: pw.TextStyle(fontSize: fontMediumSize), textAlign: pw.TextAlign.center),
+              ),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          paddingLeft: 0,
+          child: pw.Row(
+            children: [
+              pw.SizedBox(
+                width: 140,
+                child: pw.Column(
+                  children: [
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                    ),
+                  ],
+                ),
+              ),
+              pw.Expanded(
+                child: pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.SizedBox(
+                    width: 170,
+                    child: pw.Column(
+                      children: [
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          borderTop: 1.5,
+                          borderBottom: 1.5,
+                          child: pw.Align(
+                            alignment: pw.Alignment.center,
+                            child: pw.Text('ÓLEO DE MOTOR UTILIZADO', style: pw.TextStyle(fontSize: fontMediumSize)),
+                          )
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight * 3,
+                          borderTop: 1.5,
+                           child: pw.Row(
+                            crossAxisAlignment: pw.CrossAxisAlignment.center,
+                            mainAxisAlignment: pw.MainAxisAlignment.center,
+                            children: [
+                              pw.Expanded(
+                                child: pw.Text(motorOil, style: pw.TextStyle(fontSize: fontSizeMotorOil, color: PdfColors.red) , textAlign: pw.TextAlign.center),
+                              )
+                            ]
+                          )
+                        ),
+                      ]
+                    )
+                  ),
+                  pw.Expanded(
+                    child: pw.Column(
+                      children: [
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          paddingLeft: 0,
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          paddingLeft: 0,
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          paddingLeft: 0,
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          paddingLeft: 0,
+                        ),
+                      ],
+                    ),
+                  ),
+                  pw.SizedBox(
+                    width: 170,
+                    child: pw.Column(
+                      children: [
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          borderTop: 1.5,
+                          borderBottom: 1.5,
+                          child: pw.Align(
+                            alignment: pw.Alignment.center,
+                            child: pw.Text('ÓLEO DE HIDRÁULICO UTILIZADO', style: pw.TextStyle(fontSize: fontMediumSize)),
+                          )
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight * 3,
+                          borderTop: 1.5,
+                          child: pw.Row(
+                            crossAxisAlignment: pw.CrossAxisAlignment.center,
+                            mainAxisAlignment: pw.MainAxisAlignment.center,
+                            children: [
+                              pw.Expanded(
+                                child: pw.Text(hydraulicOil, style: pw.TextStyle(fontSize: fontSizeHydraulicOil, color: PdfColors.red) , textAlign: pw.TextAlign.center),
+                              )
+                            ]
+                          )
+                        ),
+                      ]
+                    )
+                  ),
+                ]
+              )
+              )
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          borderBottom: 1.5,
+          child: pw.Row(
+            children: [
+              pw.Text('SITUAÇÃO:    ', style: pw.TextStyle(fontSize: fontMediumSize)),
+              pw.Text(situation, style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          borderTop: 1.5,
+          borderBottom: 1.5,
+          color: PdfColors.grey300,
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children:[
+              pw.Text('PENDÊNCIAS:', style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          paddingTop: 4,
+          paddingBottom: 4,
+          paddingRight: 4,
+          borderBottom: 1.5,
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children: [
+              pw.Expanded(
+                child: pw.Text(pendencies, style: pw.TextStyle(fontSize: fontMediumSize), textAlign: pw.TextAlign.center),
+              ),
+            ]
+          ),
+        ),
+      ]
+    );
+  }
+
+
+
+  pw.Widget _buildRegisters(pw.Context context) {
     return pw.SizedBox();
   }
 
   pw.Widget _generateRow({
     required pw.Context context, pw.Widget? child, double? height, PdfColor? color,
-    double borderLeft = 1.5, double borderRight = 1.5, double borderBottom = 1}) {
+    double borderTop = 0, double borderLeft = 1.5, double borderRight = 1.5, double borderBottom = 1,
+    double paddingLeft = 4, double paddingRight = 0, double paddingBottom = 0, double paddingTop = 0}) {
     return pw.Container(
       height: height,
       alignment: pw.Alignment.center,
-      padding: const pw.EdgeInsets.only(left: 4,),
+      padding: pw.EdgeInsets.only(left: paddingLeft, bottom: paddingBottom, top: paddingTop, right: paddingRight),
       decoration: pw.BoxDecoration(
         color: color,
         border: pw.Border(
+          top: pw.BorderSide(width: borderTop),
           left: pw.BorderSide(width: borderLeft),
           bottom: pw.BorderSide(width: borderBottom),
           right: pw.BorderSide(width: borderRight),
