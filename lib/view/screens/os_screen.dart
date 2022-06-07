@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_quantity_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_label.dart';

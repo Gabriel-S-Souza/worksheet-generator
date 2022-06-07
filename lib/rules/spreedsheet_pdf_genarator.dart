@@ -89,7 +89,9 @@ class SpreadsheetPdfGenerator {
               attendant: attendant,
               fleet: fleet,
             ),
-            _contentServices(context),
+            _contentServices(
+              context: context,
+            ),
             _termsRegisters(context),
           ], 
         ),
@@ -105,6 +107,89 @@ class SpreadsheetPdfGenerator {
     }
 
     
+  }
+
+
+  pw.Widget _contentServices({
+    required pw.Context context,
+    String defect = '',
+    String cause = '',
+    String solution = '',
+  }) {
+    return pw.Column(
+      children: [
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          borderBottom: 1.5,
+          color: PdfColors.grey300,
+          child: pw.Row(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            children: [
+              pw.Text('DEFEITO:', style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight * 2,
+          borderBottom: 1.5,
+          child: pw.Row(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            children: [
+              pw.Text(defect, style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          borderBottom: 1.5,
+          color: PdfColors.grey300,
+          child: pw.Row(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            children:[
+              pw.Text('CAUSA:', style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight * 2,
+          borderBottom: 1.5,
+          child: pw.Row(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            children: [
+              pw.Text(cause, style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          borderBottom: 1.5,
+          color: PdfColors.grey300,
+          child: pw.Row(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            children: [
+              pw.Text('SOLUÇÃO:', style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight * 2,
+          borderBottom: 1.5,
+          child: pw.Row(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            children: [
+              pw.Text(solution, style: pw.TextStyle(fontSize: fontMediumSize)),
+            ]
+          ),
+        ),
+        
+      ]
+    );
   }
   
 
@@ -450,6 +535,7 @@ class SpreadsheetPdfGenerator {
         _generateRow(
           context: context,
           height: cellHeight,
+          borderBottom: 1.5,
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children: [
@@ -498,9 +584,7 @@ class SpreadsheetPdfGenerator {
   }
 
 
-  pw.Widget _contentServices(pw.Context context) {
-    return pw.SizedBox();
-  }
+
 
   pw.Widget _termsRegisters(pw.Context context) {
     return pw.SizedBox();
