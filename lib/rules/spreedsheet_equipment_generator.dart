@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io' as io;
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -26,7 +27,7 @@ class SpreadsheetEquipmentGenerator {
   final String serviceCarried =
       ' Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
   final String motorOil = '300';
-  final String hydraulicOil = '400400df';
+  final String hydraulicOil = '400 - B';
   final String pendencies = ' laborum.';
 
 
@@ -34,27 +35,27 @@ class SpreadsheetEquipmentGenerator {
     ['123456', '24X150', '10'],
     ['123456', '24X150', '10'],
     ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
+    ['123456123456', '24X150', '10'],
+    ['12345123456', '24X150', '10'],
     ['123456', '24X150', '10'],
   ];
   final List<List<String>> shims = [
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
+    ['S5B1D2123456', '24X150', '10'],
+    ['S5B1D2123456', '24X150', '10'],
+    ['S5B1D2123456W1', '24X150', '10'],
+    ['S5B1D2123456W', '24X150', '10'],
+    ['S5B1D2123456', '24X150', '10'],
+    ['S5B1D2123456', '24X15024X150', '10'],
+    ['S5B1D2123456', '24X150', '10'],
+    ['S5B1D2123456', '24X150', '10'],
+    ['S5B1D2123456', '24X150', '10'],
   ];
   final List<List<String>> knives = [
     ['123456', '6 FUROS', '10'],
     ['123456', '6 FUROS', '10'],
     ['123456', '6 BICOS', '10'],
     ['123456', '6 BICOS', '10'],
-    ['123456', 'LOSANGO', '10'],
+    ['123456', 'LOSANGO X LOSANGO', '10'],
     ['123456', 'LOSANGO', '10'],
   ];
 
@@ -74,7 +75,6 @@ class SpreadsheetEquipmentGenerator {
   final double fontLargeMediumSize = 12;
   final double fontMediumSize = 8;
   final double fontSmallSize = 6;
-  final double fontSuperSmallSize = 4;
 
   late final pw.ImageProvider logo; 
 
@@ -564,6 +564,7 @@ class SpreadsheetEquipmentGenerator {
   }
 
 
+
   pw.Widget _contentServices({
     required pw.Context context,
     String defectCause = '',
@@ -586,6 +587,10 @@ class SpreadsheetEquipmentGenerator {
     hydraulicOil.length < 7 ? fontSizeHydraulicOil = fontLargeSize * 2 : '';
     hydraulicOil.length > 7 && hydraulicOil.length < 14 ? fontSizeHydraulicOil = fontLargeSize : '';
     hydraulicOil.length > 14 ? fontSizeHydraulicOil = fontLargeMediumSize : '';
+
+    final int tableLength = [screws, shims, knives].reduce((a, b) => a.length > b.length ? a : b).length;
+
+    // final List<List<List<String>>> tableItens = [screws, shims, knives];
 
     return pw.Column(
       children: [
@@ -641,6 +646,133 @@ class SpreadsheetEquipmentGenerator {
               pw.Expanded(
                 child: pw.Text(serviceCarried, style: pw.TextStyle(fontSize: fontMediumSize), textAlign: pw.TextAlign.center),
               ),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          paddingLeft: 0,
+          child: pw.Row(
+            children: [
+              pw.SizedBox(
+                width: 140,
+                child: pw.Column(
+                  children: [
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                    ),
+                  ],
+                ),
+              ),
+              pw.Expanded(
+                child: pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.SizedBox(
+                    width: 170,
+                    child: pw.Column(
+                      children: [
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          borderTop: 1.5,
+                          borderBottom: 1.5,
+                          child: pw.Align(
+                            alignment: pw.Alignment.center,
+                            child: pw.Text('ÓLEO DE MOTOR UTILIZADO', style: pw.TextStyle(fontSize: fontMediumSize)),
+                          )
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight * 3,
+                          borderTop: 1.5,
+                           child: pw.Row(
+                            crossAxisAlignment: pw.CrossAxisAlignment.center,
+                            mainAxisAlignment: pw.MainAxisAlignment.center,
+                            children: [
+                              pw.Expanded(
+                                child: pw.Text(motorOil, style: pw.TextStyle(fontSize: fontSizeMotorOil, color: PdfColors.red) , textAlign: pw.TextAlign.center),
+                              )
+                            ]
+                          )
+                        ),
+                      ]
+                    )
+                  ),
+                  pw.Expanded(
+                    child: pw.Column(
+                      children: [
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          paddingLeft: 0,
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          paddingLeft: 0,
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          paddingLeft: 0,
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          paddingLeft: 0,
+                        ),
+                      ],
+                    ),
+                  ),
+                  pw.SizedBox(
+                    width: 170,
+                    child: pw.Column(
+                      children: [
+                        _generateRow(
+                          context: context,
+                          height: cellHeight,
+                          borderTop: 1.5,
+                          borderBottom: 1.5,
+                          child: pw.Align(
+                            alignment: pw.Alignment.center,
+                            child: pw.Text('ÓLEO HIDRÁULICO UTILIZADO', style: pw.TextStyle(fontSize: fontMediumSize)),
+                          )
+                        ),
+                        _generateRow(
+                          context: context,
+                          height: cellHeight * 3,
+                          borderTop: 1.5,
+                          child: pw.Row(
+                            crossAxisAlignment: pw.CrossAxisAlignment.center,
+                            mainAxisAlignment: pw.MainAxisAlignment.center,
+                            children: [
+                              pw.Expanded(
+                                child: pw.Text(hydraulicOil, style: pw.TextStyle(fontSize: fontSizeHydraulicOil, color: PdfColors.red) , textAlign: pw.TextAlign.center),
+                              )
+                            ]
+                          )
+                        ),
+                      ]
+                    )
+                  ),
+                ]
+                )
+              ),
+
             ]
           ),
         ),
@@ -712,8 +844,7 @@ class SpreadsheetEquipmentGenerator {
                       width: 40,
                       child: _generateCell(
                         context: context,
-                        content: 'QUANTIDADE',
-                        fontSize: fontSmallSize,
+                        content: 'QUANTID.',
                       )
                     ),
                   ]
@@ -738,8 +869,7 @@ class SpreadsheetEquipmentGenerator {
                       width: 40,
                       child: _generateCell(
                         context: context,
-                        content: 'QUANTIDADE',
-                        fontSize: fontSmallSize,
+                        content: 'QUANTID.',
                       )
                     ),
                   ]
@@ -764,8 +894,7 @@ class SpreadsheetEquipmentGenerator {
                       width: 40,
                       child: _generateCell(
                         context: context,
-                        content: 'QUANTIDADE',
-                        fontSize: fontSmallSize,
+                        content: 'QUANTID.',
                       )
                     ),
                   ]
@@ -774,6 +903,95 @@ class SpreadsheetEquipmentGenerator {
             ]
           ),
         ),
+        pw.ListView.builder(
+          itemCount: tableLength,
+          itemBuilder: (context, index) {
+            return _generateRow(
+              context: context,
+              height: cellHeight,
+              paddingLeft: 0,
+              child: pw.Row(
+                children: [
+                  pw.Expanded(
+                    child: pw.Row(
+                      children: [
+                        pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: screws.length - 1 >= index ? screws[index][0] : '',
+                      )
+                    ),
+                    pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: screws.length - 1 >= index ? screws[index][1] : '',
+                      )
+                    ),
+                    pw.SizedBox(
+                      width: 40,
+                      child: _generateCell(
+                        context: context,
+                        content: screws.length - 1 >= index ? screws[index][2] : '',
+                      )
+                    ),
+                      ] 
+                    )
+                  ),
+                  pw.Expanded(
+                    child: pw.Row(
+                      children: [
+                        pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: shims.length - 1 >= index ? shims[index][0] : '',
+                      )
+                    ),
+                    pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: shims.length - 1 >= index ? shims[index][1] : '',
+                      )
+                    ),
+                    pw.SizedBox(
+                      width: 40,
+                      child: _generateCell(
+                        context: context,
+                        content: shims.length - 1 >= index ? shims[index][2] : '',
+                      )
+                    ),
+                      ] 
+                    )
+                  ),
+                  pw.Expanded(
+                    child: pw.Row(
+                      children: [
+                        pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: knives.length - 1 >= index ? knives[index][0] : '',
+                      )
+                    ),
+                    pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: knives.length - 1 >= index ? knives[index][1] : '',
+                      )
+                    ),
+                    pw.SizedBox(
+                      width: 40,
+                      child: _generateCell(
+                        context: context,
+                        content: knives.length - 1 >= index ? knives[index][2] : '',
+                      )
+                    ),
+                      ] 
+                    )
+                  ),
+                ]
+              )
+            );
+          }, 
+        )
       ]
     );
   }
@@ -815,7 +1033,7 @@ class SpreadsheetEquipmentGenerator {
     // bool isBorderRight = false,
   }) {
 
-    fontSize ??= content.length <= 12 ? fontMediumSize : fontSmallSize;
+    fontSize ??= content.length <= 13 ? fontMediumSize : fontSmallSize;
 
     return _generateRow(
       context: context,
