@@ -19,8 +19,9 @@ class SpreadsheetPdfGenerator {
   final String correctiveValue = '[ X ] CORRETIVA';
   final String preventiveValue = '[   ] PREVENTIVA';
   final String requester = 'Alan';
-  final String attendant = 'Jão da Silva';
+  final String attendant = 'João da Silva';
   final String fleet = 'F-1234';
+  final String plate = 'ABC-1234';
   final String serie = 'S-1234';
   final String model = 'M-1234';
   final String odometer = 'C-1234';
@@ -28,11 +29,14 @@ class SpreadsheetPdfGenerator {
   final String defect = 'Defeito de teste';
   final String cause = 'Causa de teste';
   final String solution =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-  final String motorOil = 'Lorem ipsum doodfdsfdfsafsa Lorem ipsum doodfdsfdfsafsa';
+      ' Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
+  final String motorOil = '300';
   final String hydraulicOil = '400400df';
-  final String pendencies =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+  final String pendencies = ' laborum.';
+
+  final String attedanceDate = '01/01/2020';
+  final String attedanceStartHour = '12:00';
+  final String attedanceEndHour = '13:00';
 
 
   final double cellLargeHeight = 20;
@@ -56,6 +60,8 @@ class SpreadsheetPdfGenerator {
   late final pw.ImageProvider arrowLeft;
   late final pw.ImageProvider arrowRight;
 
+  late final pw.ImageProvider signature;
+
   Future<void> _loadImages() async {
     logoBytes = await rootBundle.load('assets/images/logo.png');
     logoByteList = logoBytes.buffer.asUint8List();
@@ -71,6 +77,9 @@ class SpreadsheetPdfGenerator {
     await _loadImages();
     arrowLeft = await imageFromAssetBundle('assets/images/arrow-red.png');
     arrowRight = await imageFromAssetBundle('assets/images/arrow-green.png');
+    signature = await imageFromAssetBundle('assets/images/signature.png');
+
+    double extraSpace = cellLargeHeight;
 
     final String filePath = '$downloadsDirectory/$name';
 
@@ -82,7 +91,7 @@ class SpreadsheetPdfGenerator {
           mainAxisAlignment: pw.MainAxisAlignment.start,
           pageTheme: pw.PageTheme(
             pageFormat: PdfPageFormat.a4,
-            margin: const pw.EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+            margin: const pw.EdgeInsets.symmetric(horizontal: 32, vertical: 24),
             theme: pw.ThemeData.withFont(
               base: await PdfGoogleFonts.robotoMedium(),
               bold: await PdfGoogleFonts.robotoBold(),
@@ -113,7 +122,15 @@ class SpreadsheetPdfGenerator {
               hydraulicOil: hydraulicOil,
               pendencies: pendencies,
             ),
-            _buildRegisters(context),
+            _buildRegisters(
+              context: context,
+              fleet: fleet,
+              plate: plate,
+              attedanceDate: attedanceDate,
+              attedanceStartHour: attedanceStartHour,
+              attedanceEndHour: attedanceEndHour,
+              extraSpace: extraSpace
+            ),
           ], 
         ),
       );
@@ -126,7 +143,6 @@ class SpreadsheetPdfGenerator {
     } catch (e) {
       return 'Houve um erro: ${e.toString()}';
     }
-
     
   }
 
@@ -134,7 +150,7 @@ class SpreadsheetPdfGenerator {
    pw.Widget _contentHeader(pw.Context context, Uint8List bytelist, String title, String sheetCode, String date) {
 
     return pw.SizedBox(
-      height: cellHeight * 3,
+      height: cellLargeHeight * 3,
       child: pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
@@ -224,8 +240,6 @@ class SpreadsheetPdfGenerator {
     String model = '',
     String series = '',
     String odometer = '',
-
-
     }) {
     return pw.Column(
       children: [
@@ -398,7 +412,7 @@ class SpreadsheetPdfGenerator {
         ),
         _generateRow(
           context: context,
-          height: cellSmallHeight * 1.8,
+          height: cellSmallHeight * 2,
           child: pw.Column(
             mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
             children: [
@@ -444,7 +458,7 @@ class SpreadsheetPdfGenerator {
         ),
         _generateRow(
           context: context,
-          height: cellLargeHeight,
+          height: cellHeight + cellSmallHeight,
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children: [
@@ -529,7 +543,7 @@ class SpreadsheetPdfGenerator {
     String solution = '',
     String motorOil = '',
     String hydraulicOil = '',
-    String situation = '[   ] LIBERADO    [   ] LIBERADO COM RESTRIÇÕES    [   ] NÃO LIBERADO     [   ] FALTA PEÇAS',
+    String situation = '[   ] LIBERADO          [   ] LIBERADO COM RESTRIÇÕES          [   ] NÃO LIBERADO           [   ] FALTA PEÇAS',
     String pendencies = '',
   }) {
     double fontSizeMotorOil = fontLargeSize;
@@ -555,7 +569,7 @@ class SpreadsheetPdfGenerator {
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children: [
-              pw.Text('DEFEITO:', style: pw.TextStyle(fontSize: fontMediumSize)),
+              pw.Text('DEFEITO:', style: pw.TextStyle(fontSize: fontMediumSize, fontWeight: pw.FontWeight.bold)),
             ]
           ),
         ),
@@ -563,7 +577,7 @@ class SpreadsheetPdfGenerator {
           context: context,
           borderBottom: 1.5,
           paddingTop: 4,
-          paddingBottom: 4,
+          paddingBottom: cellHeight,
           paddingRight: 4,
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
@@ -583,7 +597,7 @@ class SpreadsheetPdfGenerator {
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children:[
-              pw.Text('CAUSA:', style: pw.TextStyle(fontSize: fontMediumSize)),
+              pw.Text('CAUSA:', style: pw.TextStyle(fontSize: fontMediumSize, fontWeight: pw.FontWeight.bold)),
             ]
           ),
         ),
@@ -591,8 +605,8 @@ class SpreadsheetPdfGenerator {
           context: context,
           borderBottom: 1.5,
           paddingTop: 4,
-          paddingBottom: 4,
           paddingRight: 4,
+          paddingBottom: cellHeight,
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children: [
@@ -611,15 +625,15 @@ class SpreadsheetPdfGenerator {
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children: [
-              pw.Text('SOLUÇÃO:', style: pw.TextStyle(fontSize: fontMediumSize)),
+              pw.Text('SOLUÇÃO:', style: pw.TextStyle(fontSize: fontMediumSize, fontWeight: pw.FontWeight.bold)),
             ]
           ),
         ),
         _generateRow(
           context: context,
           paddingTop: 4,
-          paddingBottom: 4,
           paddingRight: 4,
+          paddingBottom: solution.length < 300 ? cellHeight * 2 : cellHeight,
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children: [
@@ -729,7 +743,7 @@ class SpreadsheetPdfGenerator {
                           borderBottom: 1.5,
                           child: pw.Align(
                             alignment: pw.Alignment.center,
-                            child: pw.Text('ÓLEO DE HIDRÁULICO UTILIZADO', style: pw.TextStyle(fontSize: fontMediumSize)),
+                            child: pw.Text('ÓLEO HIDRÁULICO UTILIZADO', style: pw.TextStyle(fontSize: fontMediumSize)),
                           )
                         ),
                         _generateRow(
@@ -775,15 +789,15 @@ class SpreadsheetPdfGenerator {
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children:[
-              pw.Text('PENDÊNCIAS:', style: pw.TextStyle(fontSize: fontMediumSize)),
+              pw.Text('PENDÊNCIAS:', style: pw.TextStyle(fontSize: fontMediumSize, fontWeight: pw.FontWeight.bold)),
             ]
           ),
         ),
         _generateRow(
           context: context,
           paddingTop: 4,
-          paddingBottom: 4,
           paddingRight: 4,
+          paddingBottom: pendencies.length < 300 ? cellHeight * 2 : cellHeight,
           borderBottom: 1.5,
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
@@ -800,9 +814,285 @@ class SpreadsheetPdfGenerator {
 
 
 
-  pw.Widget _buildRegisters(pw.Context context) {
-    return pw.SizedBox();
+    pw.Widget _buildRegisters({
+    required pw.Context context,
+    String plate = '',
+    String fleet = '',
+    String attedanceDate = '',
+    String attedanceStartHour = '',
+    String attedanceEndHour = '',
+    String totalOfHours = '',
+    double extraSpace = 0,
+  }) {
+
+    return pw.Column(
+      children: [
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          child: pw.Row(
+            children: [
+              pw.Expanded(
+                child: pw.Text(
+                  'PLACA: $plate',
+                  style: pw.TextStyle(fontSize: fontMediumSize,),
+                ),
+              ),
+              pw.VerticalDivider(thickness: 1, width: 1),
+              pw.Expanded(
+                child: pw.Text(
+                  '  FROTA: $fleet',
+                  style: pw.TextStyle(fontSize: fontMediumSize,),
+                ),
+              ),
+            ]
+          )
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight * 4,
+          borderTop: 1.5,
+          borderBottom: 1.5,
+          paddingLeft: 0,
+          child: pw.Row(
+            children: [
+              pw.SizedBox(
+                width: 80,
+                child: _generateRow(
+                  context: context,
+                  paddingLeft: 0,
+                  borderBottom: 1.5,
+                  borderTop: 1.5,
+                  borderLeft: 1.5,
+                  borderRight: 0,
+                  color: PdfColors.grey300,
+                  child: pw.Text(
+                    'ATENDIMENTO',
+                    style: pw.TextStyle(fontSize: fontMediumSize, fontWeight: pw.FontWeight.bold),
+                  )
+                )
+              ),
+              pw.Expanded(
+                child: pw.Column(
+                  children: [
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text('DATA', style: pw.TextStyle(fontSize: fontMediumSize)),
+                      ) 
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(attedanceDate, style: pw.TextStyle(fontSize: fontMediumSize)),
+                      )
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                    ),
+                  ]
+                )
+              ),
+              pw.Expanded(
+                child: pw.Column(
+                  children: [
+                   _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text('HORA DE INÍCIO', style: pw.TextStyle(fontSize: fontMediumSize)),
+                      ) 
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(attedanceStartHour, style: pw.TextStyle(fontSize: fontMediumSize)),
+                      )
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                    ),
+                  ]
+                )
+              ),
+              pw.Expanded(
+                child: pw.Column(
+                  children: [
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text('HORA DE TÉRMICO', style: pw.TextStyle(fontSize: fontMediumSize)),
+                      ) 
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(attedanceEndHour, style: pw.TextStyle(fontSize: fontMediumSize)),
+                      )
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                    ),
+                  ]
+                )
+              ),
+              pw.Expanded(
+                child: pw.Column(
+                  children: [
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text('TOTAL DE HORAS', style: pw.TextStyle(fontSize: fontMediumSize)),
+                      ) 
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(totalOfHours, style: pw.TextStyle(fontSize: fontMediumSize)),
+                      )
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                    ),
+                    _generateRow(
+                      context: context,
+                      height: cellHeight,
+                      borderLeft: 1,
+                      borderRight: 1,
+                    ),
+                  ]
+                )
+              )
+            ]
+          )
+        ),
+        _generateRow(
+          context: context,
+          height: cellSmallHeight * 4,
+          borderTop: 1.5,
+          paddingLeft: 0,
+          child: pw.Row(
+            children: [
+              pw.Expanded(
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [
+                    pw.Image(signature, alignment: pw.Alignment.bottomCenter, width: 75),
+                    pw.Divider(thickness: 0.5, height: 8, indent: 40, endIndent: 40,),
+                    pw.SizedBox(height: 4),
+                    pw.Text('CHB - Responsável pelo atendimento', style: pw.TextStyle(fontSize: fontSmallSize)),
+                  ]
+                )
+              ),
+              pw.Expanded(
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [
+                    pw.Image(signature, alignment: pw.Alignment.bottomCenter, width: 75),
+                    pw.Divider(thickness: 0.5, height: 8, indent: 40, endIndent: 40,),
+                    pw.SizedBox(height: 4),
+                    pw.Text('Autorização do Cliente', style: pw.TextStyle(fontSize: fontSmallSize)),
+                  ]
+                )
+              ),
+            ]
+          )
+        ),
+        _generateRow(
+          context: context,
+          height: extraSpace,
+        ),
+        _generateRow(
+          context: context,
+          height: cellLargeHeight * 2,
+          borderTop: 1.5,
+          borderBottom: 1.5,
+          paddingLeft: 0,
+          paddingBottom: 4,
+          child: pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.center,
+            mainAxisAlignment: pw.MainAxisAlignment.end,
+            children: [
+              pw.Text('CHB LOCAÇÕES, SERVIÇOS E COMÉRCIO LTDA.', 
+              style: pw.TextStyle(
+                fontSize: fontMediumSize, 
+                fontWeight: pw.FontWeight.bold,)),
+              pw.SizedBox(height: 4),
+              pw.Text('R: Certa, N°163 - Bairro: Jardim Doraly - CEP: 07075-180 Tel.: (11) 2909-1757 locações@chbequipamentos - www.chbequipamentos.com.br',
+              style: pw.TextStyle(
+                fontSize: fontMediumSize,)),
+            ]
+          )
+        )
+
+      ]
+    );
   }
+
+
 
   pw.Widget _generateRow({
     required pw.Context context, pw.Widget? child, double? height, PdfColor? color,
