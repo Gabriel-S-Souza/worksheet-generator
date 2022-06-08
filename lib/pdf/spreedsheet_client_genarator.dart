@@ -823,27 +823,6 @@ class SpreadsheetClientGenerator {
       children: [
         _generateRow(
           context: context,
-          height: cellHeight,
-          child: pw.Row(
-            children: [
-              pw.Expanded(
-                child: pw.Text(
-                  'PLACA: $plate',
-                  style: pw.TextStyle(fontSize: fontMediumSize,),
-                ),
-              ),
-              pw.VerticalDivider(thickness: 1, width: 1),
-              pw.Expanded(
-                child: pw.Text(
-                  '  FROTA: $fleet',
-                  style: pw.TextStyle(fontSize: fontMediumSize,),
-                ),
-              ),
-            ]
-          )
-        ),
-        _generateRow(
-          context: context,
           height: cellHeight * 4,
           borderTop: 1.5,
           borderBottom: 1.5,

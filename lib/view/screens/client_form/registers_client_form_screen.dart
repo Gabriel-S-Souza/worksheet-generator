@@ -7,7 +7,7 @@ import 'package:formulario_de_atendimento/view/widgets/custom_outlined_buttom.da
 import 'package:formulario_de_atendimento/view/widgets/custom_text_field.dart';
 import 'package:intl/intl.dart';
 
-import '../../../rules/spreedsheet_client_genarator.dart';
+import '../../../pdf/spreedsheet_client_genarator.dart';
 import '../../widgets/custom_text_label.dart';
 import '../../widgets/custom_icon_button.dart';
 

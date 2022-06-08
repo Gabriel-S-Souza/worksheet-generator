@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/main.dart';
-import 'package:formulario_de_atendimento/rules/spreedsheet_equipment_generator.dart';
+import 'package:formulario_de_atendimento/pdf/spreedsheet_equipment_generator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-
-import '../../../rules/spreedsheet_client_genarator.dart';
 import '../../widgets/custom_action_form_group.dart';
 import '../../widgets/custom_app_buttom.dart';
 import '../../widgets/custom_icon_button.dart';

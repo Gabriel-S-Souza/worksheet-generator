@@ -1,5 +1,5 @@
 import 'package:excel/excel.dart';
-import 'package:formulario_de_atendimento/rules/spreadsheet_xlsx_generator.dart';
+import 'package:formulario_de_atendimento/pdf/spreadsheet_xlsx_generator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 

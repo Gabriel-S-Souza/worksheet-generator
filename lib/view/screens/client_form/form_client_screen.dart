@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:formulario_de_atendimento/rules/spreadsheet_xlsx_generator.dart';
+import 'package:formulario_de_atendimento/pdf/spreadsheet_xlsx_generator.dart';
 import 'package:get_it/get_it.dart';
 
 import 'basic_information_cliente_form_screen.dart';

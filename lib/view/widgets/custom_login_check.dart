@@ -26,10 +26,8 @@ class CustomLoginCheck extends StatelessWidget {
         email: userDataBox.get('email'),
         name: userDataBox.get('name'),
       );
-      print('fora');
 
       if (!GetIt.I.isRegistered<UserSettings>()) {
-        print('Registering user settings');
         GetIt.I.registerSingleton<UserSettings>(userSettings);
       }
 
