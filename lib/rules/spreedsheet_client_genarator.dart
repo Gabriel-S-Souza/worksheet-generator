@@ -8,9 +8,9 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-class SpreadsheetPdfGenerator {
+class SpreadsheetClientGenerator {
   final String downloadsDirectory;
-  SpreadsheetPdfGenerator(this.downloadsDirectory);
+  SpreadsheetClientGenerator(this.downloadsDirectory);
 
   //TODO: GLOBAIS DE TESTE
   final String cliente = 'ARCELORMITAL PIRACICABA';

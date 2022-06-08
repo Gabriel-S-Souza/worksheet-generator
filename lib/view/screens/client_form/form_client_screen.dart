@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:formulario_de_atendimento/rules/spreadsheet_generator.dart';
+import 'package:formulario_de_atendimento/rules/spreadsheet_xlsx_generator.dart';
 import 'package:get_it/get_it.dart';
 
 import 'basic_information_cliente_form_screen.dart';
@@ -23,8 +23,8 @@ class _FormClientScreenState extends State<FormClientScreen> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: currentPage);
-    GetIt.I.registerSingleton<SpreadsheetGenerator>(
-      SpreadsheetGenerator(
+    GetIt.I.registerSingleton<SpreadsheetXlsxGenerator>(
+      SpreadsheetXlsxGenerator(
         downloadsDirectory: widget.downloadsDirectory,
         spredsheetTemplatePath: "assets/worksheets/template-cliente.xlsx"
       ),
@@ -35,7 +35,7 @@ class _FormClientScreenState extends State<FormClientScreen> {
   @override
   void dispose() {
     pageController.dispose();
-    GetIt.I.unregister<SpreadsheetGenerator>(instanceName: 'client_form');
+    GetIt.I.unregister<SpreadsheetXlsxGenerator>(instanceName: 'client_form');
     super.dispose();
   }
 

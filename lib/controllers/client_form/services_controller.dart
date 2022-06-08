@@ -6,7 +6,7 @@ import 'package:formulario_de_atendimento/models/client_form_settings/services_m
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../rules/spreadsheet_generator.dart';
+import '../../rules/spreadsheet_xlsx_generator.dart';
 
 part 'services_controller.g.dart';
 
@@ -14,7 +14,7 @@ class ServicesController = ServicesControllerBase with _$ServicesController;
 
 abstract class ServicesControllerBase with Store {
 
-  final SpreadsheetGenerator spreadsheetGenerator = GetIt.I.get<SpreadsheetGenerator>(instanceName: 'client_form');
+  final SpreadsheetXlsxGenerator spreadsheetXlsxGenerator = GetIt.I.get<SpreadsheetXlsxGenerator>(instanceName: 'client_form');
   
   @observable
   String oilWasUsed = YesNo.no;
@@ -57,7 +57,7 @@ abstract class ServicesControllerBase with Store {
     List<Map<String, String?>> servicesList = services.toList();
     for (Map<String, String?> element in servicesList) {
       if (element['value'] != null) {
-        spreadsheetGenerator.updateCell(
+        spreadsheetXlsxGenerator.updateCell(
           'CLIENTE',
           CellIndex.indexByString(element['cellAdress']!),
           element['value'],

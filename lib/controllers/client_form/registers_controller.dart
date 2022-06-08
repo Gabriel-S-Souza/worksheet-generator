@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:formulario_de_atendimento/rules/spreadsheet_generator.dart';
+import 'package:formulario_de_atendimento/rules/spreadsheet_xlsx_generator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
@@ -14,7 +14,7 @@ class RegistersController = RegistersControllerBase with _$RegistersController;
 
 abstract class RegistersControllerBase with Store {
 
-  final SpreadsheetGenerator spreadsheetGenerator = GetIt.I.get<SpreadsheetGenerator>(instanceName: 'client_form');
+  final SpreadsheetXlsxGenerator spreadsheetXlsxGenerator = GetIt.I.get<SpreadsheetXlsxGenerator>(instanceName: 'client_form');
 
   TimeOfDay? departureHour;
   TimeOfDay? departureBackHour;
@@ -73,7 +73,7 @@ abstract class RegistersControllerBase with Store {
     List<Map<String, String?>> registersList = registers.toList();
     for (Map<String, String?> element in registersList) {
       if (element['value'] != null) {
-        spreadsheetGenerator.updateCell(
+        spreadsheetXlsxGenerator.updateCell(
           'CLIENTE',
           CellIndex.indexByString(element['cellAdress']!),
           element['value'],
@@ -81,7 +81,7 @@ abstract class RegistersControllerBase with Store {
       }
     }
 
-    String path = await spreadsheetGenerator.exportFile();
+    String path = await spreadsheetXlsxGenerator.exportFile();
 
     isLoading = false;
     return path;

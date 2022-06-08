@@ -7,11 +7,11 @@ import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class SpreadsheetGenerator {
+class SpreadsheetXlsxGenerator {
   final String spredsheetTemplatePath;
   // final Directory downloadsDirectory;
   final String downloadsDirectory;
-  SpreadsheetGenerator({
+  SpreadsheetXlsxGenerator({
     required this.spredsheetTemplatePath,
     required this.downloadsDirectory
   }) {

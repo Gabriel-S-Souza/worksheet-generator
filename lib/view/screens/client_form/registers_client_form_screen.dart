@@ -7,7 +7,7 @@ import 'package:formulario_de_atendimento/view/widgets/custom_outlined_buttom.da
 import 'package:formulario_de_atendimento/view/widgets/custom_text_field.dart';
 import 'package:intl/intl.dart';
 
-import '../../../rules/spreedsheet_pdf_genarator.dart';
+import '../../../rules/spreedsheet_client_genarator.dart';
 import '../../widgets/custom_text_label.dart';
 import '../../widgets/custom_icon_button.dart';
 
@@ -394,8 +394,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             const SizedBox(height: 32),
             CustomOutlinedButtom(
               onPressed: () async {
-                  SpreadsheetPdfGenerator spreadsheetPdfGenerator = SpreadsheetPdfGenerator(widget.downloadsDirectory);
-                  spreadsheetPdfGenerator.clientSheetCreate()
+                  SpreadsheetClientGenerator spreadsheetClientGenerator = SpreadsheetClientGenerator(widget.downloadsDirectory);
+                  spreadsheetClientGenerator.clientSheetCreate()
                       .then((value) {
                               _buildSnackBar(
                                 context, 'Salvo $value'
