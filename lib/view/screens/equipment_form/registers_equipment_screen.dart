@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/main.dart';
+import 'package:formulario_de_atendimento/rules/spreedsheet_equipment_generator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
+import '../../../rules/spreedsheet_client_genarator.dart';
 import '../../widgets/custom_action_form_group.dart';
 import '../../widgets/custom_app_buttom.dart';
 import '../../widgets/custom_icon_button.dart';
@@ -12,7 +14,8 @@ import '../../widgets/custom_text_label.dart';
 
 class RegistersEquipmentScreen extends StatefulWidget {
   final VoidCallback? onSecondaryPressed;
-  const RegistersEquipmentScreen({Key? key, this.onSecondaryPressed}) : super(key: key);
+  final String downloadsDirectory;
+  const RegistersEquipmentScreen({Key? key, this.onSecondaryPressed, required this.downloadsDirectory}) : super(key: key);
 
   @override
   State<RegistersEquipmentScreen> createState() => _RegistersEquipmentScreenState();
@@ -152,7 +155,18 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
             ),
             const SizedBox(height: 32),
             CustomOutlinedButtom(
-              onPressed: null,
+               onPressed: () async {
+                  SpreadsheetEquipmentGenerator spreadsheetClientGenerator 
+                      = SpreadsheetEquipmentGenerator(
+                        downloadsDirectory: widget.downloadsDirectory
+                      );
+                  spreadsheetClientGenerator.createSheet()
+                      .then((value) {
+                          _buildSnackBar(
+                            context, 'Salvo $value'
+                          );
+                        });
+                      },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -205,5 +219,16 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
     } else {
       return null;
     }
+  }
+
+  _buildSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        margin: const EdgeInsets.only(bottom: 60),
+        duration: const Duration(milliseconds: 2500),
+        behavior: SnackBarBehavior.floating,
+        content: Text(message),
+      ),
+    );
   }
 }

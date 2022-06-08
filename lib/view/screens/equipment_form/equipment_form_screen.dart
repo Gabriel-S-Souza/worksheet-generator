@@ -73,6 +73,7 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
             },
           ),
           RegistersEquipmentScreen(
+            downloadsDirectory: widget.downloadsDirectory,
             onSecondaryPressed: () {
               animatePage(1);
               print('onSecondaryPressed');

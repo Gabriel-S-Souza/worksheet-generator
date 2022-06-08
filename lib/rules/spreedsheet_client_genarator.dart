@@ -51,12 +51,6 @@ class SpreadsheetClientGenerator {
   late final ByteData logoBytes; 
   late final Uint8List logoByteList;
 
-  late final ByteData arrowRedBytes; 
-  late final Uint8List arrowRedByteList;
-
-  late final ByteData arrowGreenBytes; 
-  late final Uint8List arrowGreenByteList;
-
   late final pw.ImageProvider arrowLeft;
   late final pw.ImageProvider arrowRight;
 
@@ -65,23 +59,23 @@ class SpreadsheetClientGenerator {
   Future<void> _loadImages() async {
     logoBytes = await rootBundle.load('assets/images/logo.png');
     logoByteList = logoBytes.buffer.asUint8List();
+    arrowLeft = await imageFromAssetBundle('assets/images/arrow-red.png');
+    arrowRight = await imageFromAssetBundle('assets/images/arrow-green.png');
+    signature = await imageFromAssetBundle('assets/images/signature.png');
     
     return;
   }
   
-  clientSheetCreate() async {
+  Future<String> clientSheetCreate() async {
     final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
     final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
     final String name = 'cliente_${date}_$time.pdf';
 
-    await _loadImages();
-    arrowLeft = await imageFromAssetBundle('assets/images/arrow-red.png');
-    arrowRight = await imageFromAssetBundle('assets/images/arrow-green.png');
-    signature = await imageFromAssetBundle('assets/images/signature.png');
-
     double extraSpace = cellLargeHeight;
 
     final String filePath = '$downloadsDirectory/$name';
+    
+    await _loadImages();
 
     try {
       final pdf = pw.Document();

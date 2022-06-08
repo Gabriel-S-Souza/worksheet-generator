@@ -2,14 +2,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:excel/excel.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SpreadsheetXlsxGenerator {
   final String spredsheetTemplatePath;
-  // final Directory downloadsDirectory;
   final String downloadsDirectory;
   SpreadsheetXlsxGenerator({
     required this.spredsheetTemplatePath,
