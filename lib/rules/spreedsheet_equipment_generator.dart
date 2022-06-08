@@ -74,6 +74,7 @@ class SpreadsheetEquipmentGenerator {
   final double fontLargeMediumSize = 12;
   final double fontMediumSize = 8;
   final double fontSmallSize = 6;
+  final double fontSuperSmallSize = 4;
 
   late final pw.ImageProvider logo; 
 
@@ -109,7 +110,7 @@ class SpreadsheetEquipmentGenerator {
           mainAxisAlignment: pw.MainAxisAlignment.start,
           pageTheme: pw.PageTheme(
             pageFormat: PdfPageFormat.a4,
-            margin: const pw.EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+            margin: const pw.EdgeInsets.symmetric(horizontal: 24, vertical: 24),
             theme: pw.ThemeData.withFont(
               base: await PdfGoogleFonts.robotoMedium(),
               bold: await PdfGoogleFonts.robotoBold(),
@@ -656,6 +657,123 @@ class SpreadsheetEquipmentGenerator {
             ]
           ),
         ),
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          borderTop: 1.5,
+          paddingLeft: 1,
+          child: pw.Row(
+            children:[
+              pw.Expanded(
+                child: pw.Align(
+                  alignment: pw.Alignment.center,
+                  child: pw.Text('PARAFUSOS', style: pw.TextStyle(fontSize: fontLargeMediumSize, fontWeight: pw.FontWeight.bold)),
+                )
+              ),
+              pw.VerticalDivider(thickness: 1, width: 1),
+               pw.Expanded(
+                child: pw.Align(
+                  alignment: pw.Alignment.center,
+                  child: pw.Text('CALÇOS', style: pw.TextStyle(fontSize: fontLargeMediumSize, fontWeight: pw.FontWeight.bold)),
+                )
+              ),
+              pw.VerticalDivider(thickness: 1, width: 1),
+              pw.Expanded(
+                child: pw.Align(
+                  alignment: pw.Alignment.center,
+                  child: pw.Text('FACAS', style: pw.TextStyle(fontSize: fontLargeMediumSize, fontWeight: pw.FontWeight.bold)),
+                )
+              ),
+            ]
+          ),
+        ),
+        _generateRow(
+          context: context,
+          height: cellHeight,
+          paddingLeft: 0,
+          child: pw.Row(
+            children:[
+              pw.Expanded(
+                child: pw.Row(
+                  children: [
+                    pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: 'CÓDIGO',
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: 'TAMANHO',
+                      )
+                    ),
+                    pw.SizedBox(
+                      width: 40,
+                      child: _generateCell(
+                        context: context,
+                        content: 'QUANTIDADE',
+                        fontSize: fontSmallSize,
+                      )
+                    ),
+                  ]
+                )
+              ),
+              pw.Expanded(
+                child: pw.Row(
+                  children: [
+                    pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: 'CÓDIGO',
+                      )
+                    ),
+                    pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: 'TAMANHO',
+                      )
+                    ),
+                    pw.SizedBox(
+                      width: 40,
+                      child: _generateCell(
+                        context: context,
+                        content: 'QUANTIDADE',
+                        fontSize: fontSmallSize,
+                      )
+                    ),
+                  ]
+                )
+              ),
+              pw.Expanded(
+                child: pw.Row(
+                  children: [
+                    pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: 'CÓDIGO',
+                      )
+                    ),
+                    pw.Expanded(
+                      child: _generateCell(
+                        context: context,
+                        content: 'FURAÇÃO',
+                      )
+                    ),
+                    pw.SizedBox(
+                      width: 40,
+                      child: _generateCell(
+                        context: context,
+                        content: 'QUANTIDADE',
+                        fontSize: fontSmallSize,
+                      )
+                    ),
+                  ]
+                )
+              ),
+            ]
+          ),
+        ),
       ]
     );
   }
@@ -686,6 +804,38 @@ class SpreadsheetEquipmentGenerator {
         ),
       ),
       child: child,
+    );
+  }
+
+  pw.Widget _generateCell({
+    required pw.Context context,
+    String content = '',
+    double? fontSize,
+    // bool isBorderLeft = false,
+    // bool isBorderRight = false,
+  }) {
+
+    fontSize ??= content.length <= 12 ? fontMediumSize : fontSmallSize;
+
+    return _generateRow(
+      context: context,
+      paddingLeft: 0,
+      // borderLeft: isBorderLeft ? 0 : 1,
+      // borderRight: isBorderRight ? 0 : 1,
+      borderLeft: 1,
+      borderRight: 1,
+      borderTop: 0,
+      borderBottom: 0,
+      child: pw.Align(
+        alignment: pw.Alignment.center,
+        child: pw.Text(
+          content, 
+          style: pw.TextStyle(
+            fontSize: fontSize,
+            fontWeight: pw.FontWeight.bold
+          ),
+        textAlign: pw.TextAlign.center),
+      ),
     );
   }
 }
