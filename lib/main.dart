@@ -23,7 +23,7 @@ void main() async {
   if (osBox.isEmpty) {
     await osBox.put(DefaultKeys.osPiracicaba, 1);
     await osBox.put(DefaultKeys.osIracemapolis, 1);
-    await osBox.put(DefaultKeys.piracicabaSufix, 'PIRACI');
+    await osBox.put(DefaultKeys.piracicabaSufix, 'PIRA');
     await osBox.put(DefaultKeys.iracemapolisSufix, 'IRACE');
     log('OS BOX WAS EMPTY');
     log(osBox.get(DefaultKeys.osPiracicaba));

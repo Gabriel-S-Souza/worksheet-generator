@@ -203,6 +203,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                     ? Row(
                       mainAxisAlignment: MainAxisAlignment.center, 
                       children: [
+                        const CustomTextLabel( 'O.S:   ',),
                         CustomTextLabel(basicInformationsController.osWasGenerated ? basicInformationsController.osGenerated : 'Gerando...'),
                         const SizedBox(width: 16),
                         CustomIconButton(
