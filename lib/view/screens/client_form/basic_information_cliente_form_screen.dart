@@ -208,12 +208,14 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                         CustomIconButton(
                           iconData: Icons.edit, 
                           radius: 38, 
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => 
-                                const OSScreen()
-                            )
-                          ),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => 
+                                  const OSScreen()
+                              )
+                            );
+                          }
                         )
                       ]
                     )

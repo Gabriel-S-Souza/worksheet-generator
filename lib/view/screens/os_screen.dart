@@ -1,8 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:formulario_de_atendimento/controllers/client_form/basic_informations_controller.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_quantity_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_label.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../data/data_access_object.dart';
+import '../../default_values/default_values.dart';
 
 class OSScreen extends StatefulWidget {
   const OSScreen({Key? key}) : super(key: key);
@@ -20,20 +26,57 @@ class _OSScreenState extends State<OSScreen> {
 
   final TextEditingController iracemapolisSufixController = TextEditingController();
 
+  final BasicInformaTionsController basicInformationsController = GetIt.I.get<BasicInformaTionsController>(instanceName: DefaultKeys.basicInfoControllerClient);
+  final Box<dynamic> osBox = GetIt.I.get<Box<dynamic>>(instanceName: DefaultBoxes.os);
+
   late int countPiracicaba;
   late int countIracemapolis;
   ButtomQuantityOS buttomCountPressed = ButtomQuantityOS.none;
-  String year = '2022';
-  String piracicabaSufix = 'PIRACI';
-  String iracemapolisSufix = 'IRACE';
+  String year = DateTime.now().year.toString();
+  late String piracicabaSufix;
+  late String iracemapolisSufix;
+
+  bool isChanged = false;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    countPiracicaba = 0;
-    countIracemapolis = 0;
-    piracicabaCountController.text = '00';
-    iracemapolisCountController.text = '00';
+    _getInputValues();
+    piracicabaSufixController.text = osBox.get(DefaultKeys.piracicabaSufix);
+    iracemapolisSufixController.text = osBox.get(DefaultKeys.iracemapolisSufix);
+  }
+
+  @override
+  void dispose() {
+    piracicabaCountController.dispose();
+    iracemapolisCountController.dispose();
+    piracicabaSufixController.dispose();
+    iracemapolisSufixController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _updateOs() async {
+    isLoading = true;
+    await osBox.put(DefaultKeys.osPiracicaba, countPiracicaba);
+    await osBox.put(DefaultKeys.osIracemapolis, countIracemapolis);
+    await osBox.put(DefaultKeys.piracicabaSufix, piracicabaSufixController.text);
+    await osBox.put(DefaultKeys.iracemapolisSufix, iracemapolisSufixController.text);
+    isLoading = false;
+    isChanged = false;
+    basicInformationsController.generateOs();
+    _getInputValues();
+  }
+
+  void _getInputValues() {
+    setState(() {
+      countPiracicaba = osBox.get(DefaultKeys.osPiracicaba);
+      countIracemapolis = osBox.get(DefaultKeys.osIracemapolis);
+      piracicabaCountController.text = countPiracicaba < 10 ? '0$countPiracicaba' : countPiracicaba.toString();
+      iracemapolisCountController.text = countIracemapolis < 10 ? '0$countIracemapolis' : countIracemapolis.toString();
+      piracicabaSufix = osBox.get(DefaultKeys.piracicabaSufix);
+      iracemapolisSufix = osBox.get(DefaultKeys.iracemapolisSufix);
+    });
   }
 
   @override
@@ -84,7 +127,7 @@ class _OSScreenState extends State<OSScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         child: _buildInput(
-                          year,
+                          value: year,
                           readOnly: true,
                         ),
                       ),
@@ -94,6 +137,7 @@ class _OSScreenState extends State<OSScreen> {
                           controller: piracicabaCountController,
                           onChanged: (value) {
                             countPiracicaba = int.tryParse(value) ?? countPiracicaba;
+                            isChanged = true;
                           },
                           onIncrementTap: () =>  _incrementQuantity(ButtomQuantityOS.piracicaba, piracicabaCountController),
                           onDecrementTap: () => _decrementQuantity(ButtomQuantityOS.piracicaba, piracicabaCountController),
@@ -117,7 +161,14 @@ class _OSScreenState extends State<OSScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: _buildInput(piracicabaSufix, controller: piracicabaSufixController,),
+                        child: _buildInput(
+                          controller: piracicabaSufixController,
+                          onChanged: (value) {
+                            setState(() {
+                              isChanged = value != osBox.get(DefaultKeys.piracicabaSufix);
+                            });
+                          } 
+                        ),
                       ),
                     ],
                   ),
@@ -157,7 +208,7 @@ class _OSScreenState extends State<OSScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         child: _buildInput(
-                          year,
+                          value: year,
                           readOnly: true,
                         ),
                       ),
@@ -167,6 +218,7 @@ class _OSScreenState extends State<OSScreen> {
                           controller: iracemapolisCountController,
                           onChanged: (value) {
                             countIracemapolis = int.tryParse(value) ?? countIracemapolis;
+                            isChanged = true;
                           },
                           onIncrementTap: () =>  _incrementQuantity(ButtomQuantityOS.iracemapolis, iracemapolisCountController),
                           onDecrementTap: () => _decrementQuantity(ButtomQuantityOS.iracemapolis, iracemapolisCountController),
@@ -190,15 +242,30 @@ class _OSScreenState extends State<OSScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: _buildInput(iracemapolisSufix, controller: iracemapolisSufixController,),
+                        child: _buildInput(
+                          controller: iracemapolisSufixController,
+                          onChanged: (value) {
+                            setState(() {
+                              isChanged = value != osBox.get(DefaultKeys.iracemapolisSufix);
+                            });
+                          }
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
               const SizedBox(height: 40),
-              const CustomAppButtom(
-                child: Text('Salvar'),
+              CustomAppButtom(
+                onPressed: isChanged
+                    ? () async {
+                        _updateOs()
+                            .then((value) => _buildSnackBar(context, 'OS atualizado!'));
+                      }
+                    : null,
+                child: !isLoading 
+                    ? const Text('Salvar')
+                    : const CircularProgressIndicator(),
               ),
               const SizedBox(height: 40),
             ],
@@ -208,18 +275,24 @@ class _OSScreenState extends State<OSScreen> {
     );
   }
 
-  _buildInput(String value, {bool readOnly = false, TextEditingController? controller}) {
-    final TextEditingController internalController = controller ?? TextEditingController();
-    internalController.text = value;
+  _buildInput({
+    String? value, 
+    bool readOnly = false, 
+    TextEditingController? controller,
+    void Function(String)? onChanged
+  }) {
+    controller ??= TextEditingController(text: value);
+
     return Container(
       constraints: const BoxConstraints(
         maxHeight: 34,
       ),
       margin: const EdgeInsets.symmetric(vertical: 20),
       child: TextField(
-        controller: internalController,
+        controller: controller,
         readOnly: readOnly,
         textAlign: TextAlign.center,
+        onChanged: onChanged,
         decoration: const InputDecoration(
           isDense: true,
           contentPadding: EdgeInsets.only(bottom: 10, top: 10),
@@ -235,35 +308,55 @@ class _OSScreenState extends State<OSScreen> {
         if (buttom == ButtomQuantityOS.piracicaba) {
           countPiracicaba = 1;
           controller.text = countPiracicaba < 10 ? '0$countPiracicaba' : '$countPiracicaba';
+          isChanged = countPiracicaba != osBox.get(DefaultKeys.osPiracicaba);
         } 
         if (buttom == ButtomQuantityOS.iracemapolis) {
           countIracemapolis = 1;
           controller.text = countIracemapolis < 10 ? '0$countIracemapolis' : '$countIracemapolis';
+          isChanged = countIracemapolis != osBox.get(DefaultKeys.osIracemapolis);
         } 
       } else {
         if (buttom == ButtomQuantityOS.piracicaba) {
           countPiracicaba += 1;
           controller.text = countPiracicaba < 10 ? '0$countPiracicaba' : '$countPiracicaba';
+          isChanged = countPiracicaba != osBox.get(DefaultKeys.osPiracicaba);
         } 
         if (buttom == ButtomQuantityOS.iracemapolis) {
           countIracemapolis += 1;
           controller.text = countIracemapolis < 10 ? '0$countIracemapolis' : '$countIracemapolis';
+          isChanged = countIracemapolis != osBox.get(DefaultKeys.osIracemapolis);
         } 
       }
     });
   }
 
   void _decrementQuantity(ButtomQuantityOS buttom, TextEditingController controller) {
+    
     if (controller.text != '') {
-      if (buttom == ButtomQuantityOS.piracicaba) {
-        countPiracicaba > 0 ? countPiracicaba -= 1 : null;
-        controller.text = countPiracicaba < 10 ? '0$countPiracicaba' : '$countPiracicaba';
-      } 
-      if (buttom == ButtomQuantityOS.iracemapolis) {
-        countIracemapolis > 0 ? countIracemapolis -= 1 : null;
-        controller.text = countIracemapolis < 10 ? '0$countIracemapolis' : '$countIracemapolis';;
-      }
+      setState(() {
+        if (buttom == ButtomQuantityOS.piracicaba) {
+          countPiracicaba > 0 ? countPiracicaba -= 1 : null;
+          controller.text = countPiracicaba < 10 ? '0$countPiracicaba' : '$countPiracicaba';
+          isChanged = countPiracicaba != osBox.get(DefaultKeys.osPiracicaba);
+        } 
+        if (buttom == ButtomQuantityOS.iracemapolis) {
+          countIracemapolis > 0 ? countIracemapolis -= 1 : null;
+          controller.text = countIracemapolis < 10 ? '0$countIracemapolis' : '$countIracemapolis';
+          isChanged = countIracemapolis != osBox.get(DefaultKeys.osIracemapolis);
+        }
+    });
     }
+  }
+
+  _buildSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        margin: const EdgeInsets.only(bottom: 60),
+        duration: const Duration(milliseconds: 2500),
+        behavior: SnackBarBehavior.floating,
+        content: Text(message),
+      ),
+    );
   }
 }
 
