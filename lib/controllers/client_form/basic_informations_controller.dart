@@ -15,10 +15,12 @@ abstract class BasicInformaTionsControllerBase with Store {
   // SpreadsheetClientGenerator spreadsheetClientGenerator = SpreadsheetClientGenerator(widget.downloadsDirectory);
   GeneralClientController clientController = GetIt.I.get<GeneralClientController>();
 
+  @observable
+  bool isAutoOS = true;
+
   String? spreedsheetDate;
   String? client;
 
-  @observable
   String? localOfAttendance = LocalOfAttendance.piracicaba;
 
   String? os;
@@ -66,7 +68,7 @@ abstract class BasicInformaTionsControllerBase with Store {
     
     basicInformations.treatTheProperties();
 
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
 
 
     clientController.basicInformations = basicInformations;

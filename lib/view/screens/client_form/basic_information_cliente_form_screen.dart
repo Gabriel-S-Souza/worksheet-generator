@@ -105,7 +105,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   prefix: const Icon(Icons.person)
                 ),
                 const CustomTextLabel('Manutenção'),
-                CustomRadioButtonGroup(
+                  CustomRadioButtonGroup(
                   onChanged: (value) {
                     basicInformationsController.isCorrective = value! == Maintenance.corrective;
                   },
@@ -128,6 +128,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                       initialValue: CorrectiveMaintenanceOrigin.wearCommon,
                     )
                     : Container(),
+                
                 const CustomTextLabel('Máquina parada?'),
                 CustomRadioButtonGroup(
                   onChanged: (value) => basicInformationsController.isStoppedMachine = value!,
@@ -165,8 +166,11 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   initialValue: EquipmentApplication.scrap,
                 ),
                 const CustomTextLabel('Local de Atendimento'),
-                 CustomRadioButtonGroup(
-                  onChanged: (value) => basicInformationsController.localOfAttendance = value!,
+                  CustomRadioButtonGroup(
+                  onChanged: (value) => {
+                    basicInformationsController.localOfAttendance = value!,
+                    basicInformationsController.isAutoOS = value != LocalOfAttendance.other,
+                  },
                   items: const [
                     LocalOfAttendance.piracicaba,
                     LocalOfAttendance.iracenopolis,
@@ -174,10 +178,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   ],
                   initialValue: basicInformationsController.localOfAttendance!,
                 ),
-                basicInformationsController.localOfAttendance == LocalOfAttendance.other
-                    ? const CustomTextLabel('Local de atendimento')
-                    : Container(),
-                basicInformationsController.localOfAttendance == LocalOfAttendance.other
+                !basicInformationsController.isAutoOS
                     ? CustomTextField(
                         hint: 'Local de atendimento',
                         obscure: false,
@@ -186,15 +187,15 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                       )
                     : Container(),
                 const CustomTextLabel('O.S.'),
-                basicInformationsController.localOfAttendance == LocalOfAttendance.other
+                !basicInformationsController.isAutoOS
                     ? CustomTextField(
                       hint: 'O.S.',
                       obscure: false, 
-                      onChanged: (value) {},
+                      onChanged: (value) => basicInformationsController.localOfAttendance = value,
                       prefix: const Icon(Icons.info),
                     )
                     : Container(),
-                basicInformationsController.localOfAttendance != LocalOfAttendance.other
+                !basicInformationsController.isAutoOS
                     ? Row(
                       mainAxisAlignment: MainAxisAlignment.center, 
                       children: [
@@ -213,13 +214,6 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                       ]
                     )
                     : Container(),
-                const CustomTextLabel('Placa'),
-                CustomTextField(
-                  hint: 'AAA-0000',
-                  prefix: const Icon(Icons.rectangle_outlined),
-                  onChanged: (value) => basicInformationsController.plate = value,
-                  onSubmitted: () => FocusScope.of(context).nextFocus(),
-                ),
                 const CustomTextLabel('Frota'),
                 CustomSuggestionTextField(
                   hint: 'Frota',
@@ -290,9 +284,9 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                           ),
                       secondaryChild: const Text('Anterior'),
                       onPrimaryPressed: !basicInformationsController.isLoading
-                          ? () {
+                          ? () async {
                               
-                              basicInformationsController.save();
+                              await basicInformationsController.save();
             
                               widget.onPrimaryPressed();
                             }

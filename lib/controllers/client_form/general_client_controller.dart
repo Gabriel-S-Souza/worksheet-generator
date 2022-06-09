@@ -24,7 +24,7 @@ class GeneralClientController {
     //  else if (services == null) {
     //   return 'A página de serviços não foi salva';
     // } else if (registers == null) {
-    //   return 'A página de registros não foi salva';
+    //   return 'A página de atendimento não foi salva';
     // } 
     else {
       spreedsheetClientGenerator.createDocumentBase();
