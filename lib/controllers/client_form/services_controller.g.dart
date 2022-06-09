@@ -41,6 +41,14 @@ mixin _$ServicesController on ServicesControllerBase, Store {
     });
   }
 
+  late final _$saveAsyncAction =
+      AsyncAction('ServicesControllerBase.save', context: context);
+
+  @override
+  Future<void> save() {
+    return _$saveAsyncAction.run(() => super.save());
+  }
+
   late final _$ServicesControllerBaseActionController =
       ActionController(name: 'ServicesControllerBase', context: context);
 

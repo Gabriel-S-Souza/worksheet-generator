@@ -131,13 +131,20 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                 ),
                 const SizedBox(height: 32),
                 CustomActionButtonGroup(
+                  onPrimaryPressed:!servicesController.isLoading
+                      ? () async {
+                        
+                          await servicesController.save();
+        
+                          widget.onPrimaryPressed();
+                        }
+                      : null,
+                  onSecondaryPressed: widget.onSecondaryPressed,
+                  secondaryChild: const Text('Anterior'),
                   primaryChild:!servicesController.isLoading
                           ? const Text('Salvar e avançar')
-                          : const Padding( padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(),
+                          : const Padding(padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(),
                           ),
-                  secondaryChild: const Text('Anterior'),
-                  onPrimaryPressed: null,
-                  onSecondaryPressed: widget.onSecondaryPressed,
                 ),
                 const SizedBox(height: 20),
               ],

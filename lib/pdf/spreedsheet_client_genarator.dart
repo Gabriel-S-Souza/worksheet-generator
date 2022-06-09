@@ -92,13 +92,17 @@ class SpreedsheetClientGenerator {
     String? model,
     String? series,
     String? odometer,
+
+
     String? defect,
     String? cause,
     String? solution,
     String? motorOil,
     String? hydraulicOil,
-    String situation = Situation.released,
+    String? situation,
     String? pendencies,
+
+
     String? attedanceDate,
     String? attedanceStartHour,
     String? attedanceEndHour,
@@ -153,6 +157,7 @@ class SpreedsheetClientGenerator {
               solution: solution ?? '',
               motorOil: motorOil ?? '',
               hydraulicOil: hydraulicOil ?? '',
+              situation: situation,
               pendencies: pendencies ?? '',
             ),
             _buildRegisters(
@@ -614,9 +619,12 @@ class SpreedsheetClientGenerator {
     String solution = '',
     String motorOil = '',
     String hydraulicOil = '',
-    String situation = '[   ] LIBERADO          [   ] LIBERADO COM RESTRIÇÕES          [   ] NÃO LIBERADO           [   ] FALTA PEÇAS',
+    String? situation,
     String pendencies = '',
   }) {
+
+    situation ??= '[   ] LIBERADO          [   ] LIBERADO COM RESTRIÇÕES          [   ] NÃO LIBERADO           [   ] FALTA PEÇAS';
+
     double fontSizeMotorOil = fontLargeSize;
     double fontSizeHydraulicOil = fontLargeSize;
 
