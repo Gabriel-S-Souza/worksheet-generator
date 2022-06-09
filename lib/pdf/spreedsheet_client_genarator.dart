@@ -1,17 +1,22 @@
 import 'dart:io' as io;
 
 import 'package:formulario_de_atendimento/default_values/default_values.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
+import '../controllers/client_form/basic_informations_controller.dart';
+
 class SpreedsheetClientGenerator {
   final String downloadsDirectory;
   SpreedsheetClientGenerator(this.downloadsDirectory) {
     _loadImages();
   }
+
+  final BasicInformaTionsController basicInformationsController = GetIt.I.get<BasicInformaTionsController>(instanceName: DefaultKeys.basicInfoControllerClient);
   
   late pw.Document pdf;
 
@@ -160,9 +165,14 @@ class SpreedsheetClientGenerator {
           ], 
         ),
       );
+      
 
     final io.File file = io.File(filePath);
     await file.writeAsBytes(await pdf.save());
+
+    await basicInformationsController.updateOs();
+    basicInformationsController.generateOs();
+
     return file.path;
 
 

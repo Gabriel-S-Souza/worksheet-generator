@@ -27,7 +27,7 @@ class BasicInformationsClienteFormScreen extends StatefulWidget {
 class _BasicInformationsClienteFormScreenState extends State<BasicInformationsClienteFormScreen> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController requesterController = TextEditingController();
-  final BasicInformaTionsController basicInformationsController = BasicInformaTionsController();
+  final BasicInformaTionsController basicInformationsController = GetIt.I.get<BasicInformaTionsController>(instanceName: DefaultKeys.basicInfoControllerClient);
   final UserSettings userSettings = GetIt.I.get<UserSettings>();
 
   @override
@@ -36,6 +36,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
     basicInformationsController.spreedsheetDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
     dateController.text = basicInformationsController.spreedsheetDate ?? '';
     basicInformationsController.requester = requesterController.text = userSettings.name ?? '';
+    basicInformationsController.generateOs();
   }
 
   @override
@@ -167,9 +168,10 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                 ),
                 const CustomTextLabel('Local de Atendimento'),
                   CustomRadioButtonGroup(
-                  onChanged: (value) => {
-                    basicInformationsController.localOfAttendance = value!,
-                    basicInformationsController.isAutoOS = value != LocalOfAttendance.other,
+                  onChanged: (value) {
+                    basicInformationsController.localOfAttendance = value!;
+                    basicInformationsController.isAutoOS = value != LocalOfAttendance.other;
+                    basicInformationsController.generateOs();
                   },
                   items: const [
                     LocalOfAttendance.piracicaba,
@@ -186,20 +188,22 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                         prefix: const Icon(Icons.location_on),
                       )
                     : Container(),
-                const CustomTextLabel('O.S.'),
+                !basicInformationsController.isAutoOS
+                    ? const CustomTextLabel('OS')
+                    : Container(),
                 !basicInformationsController.isAutoOS
                     ? CustomTextField(
                       hint: 'O.S.',
                       obscure: false, 
-                      onChanged: (value) => basicInformationsController.localOfAttendance = value,
+                      onChanged: (value) => basicInformationsController.os = value,
                       prefix: const Icon(Icons.info),
                     )
                     : Container(),
-                !basicInformationsController.isAutoOS
+                basicInformationsController.isAutoOS
                     ? Row(
                       mainAxisAlignment: MainAxisAlignment.center, 
                       children: [
-                        const CustomTextLabel('202201 - PIRACI'),
+                        CustomTextLabel(basicInformationsController.osWasGenerated ? basicInformationsController.osGenerated : 'Gerando...'),
                         const SizedBox(width: 16),
                         CustomIconButton(
                           iconData: Icons.edit, 

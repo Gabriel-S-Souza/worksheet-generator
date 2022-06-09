@@ -52,3 +52,17 @@ class Situation {
   static const String notReleased = 'Não liberado';
   static const String missingParts = 'Falta peças';
 }
+
+class OS {
+  static const Map<String, int> os = {'os_priracicaba': 01, 'os_iracemapolis': 01};
+}
+
+class DefaultKeys{
+  static const osPiracicaba = 'os_piracicaba';
+  static const osIracemapolis = 'os_iracemapolis';
+
+  static const piracicabaSufix = 'piracicaba_sufix';
+  static const iracemapolisSufix = 'iracemapolis_sufix';
+
+  static const basicInfoControllerClient = 'basic_info_controller_client';
+}

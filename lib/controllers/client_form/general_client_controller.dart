@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:formulario_de_atendimento/models/client_form_settings/basic_informations_model.dart';

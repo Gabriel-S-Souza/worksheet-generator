@@ -25,6 +25,22 @@ mixin _$BasicInformaTionsController on BasicInformaTionsControllerBase, Store {
     });
   }
 
+  late final _$osWasGeneratedAtom = Atom(
+      name: 'BasicInformaTionsControllerBase.osWasGenerated', context: context);
+
+  @override
+  bool get osWasGenerated {
+    _$osWasGeneratedAtom.reportRead();
+    return super.osWasGenerated;
+  }
+
+  @override
+  set osWasGenerated(bool value) {
+    _$osWasGeneratedAtom.reportWrite(value, super.osWasGenerated, () {
+      super.osWasGenerated = value;
+    });
+  }
+
   late final _$isCorrectiveAtom = Atom(
       name: 'BasicInformaTionsControllerBase.isCorrective', context: context);
 
@@ -65,10 +81,26 @@ mixin _$BasicInformaTionsController on BasicInformaTionsControllerBase, Store {
     return _$saveAsyncAction.run(() => super.save());
   }
 
+  late final _$BasicInformaTionsControllerBaseActionController =
+      ActionController(
+          name: 'BasicInformaTionsControllerBase', context: context);
+
+  @override
+  void generateOs() {
+    final _$actionInfo = _$BasicInformaTionsControllerBaseActionController
+        .startAction(name: 'BasicInformaTionsControllerBase.generateOs');
+    try {
+      return super.generateOs();
+    } finally {
+      _$BasicInformaTionsControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 isAutoOS: ${isAutoOS},
+osWasGenerated: ${osWasGenerated},
 isCorrective: ${isCorrective},
 isLoading: ${isLoading}
     ''';

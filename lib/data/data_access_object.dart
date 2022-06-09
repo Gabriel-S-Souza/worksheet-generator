@@ -24,4 +24,5 @@ class DataAccessObject {
 class DefaultBoxes {
   /// Name of the box that stores the name and email of the user
   static const userData = 'user_data';
+  static const os = 'os';
 }

@@ -1,5 +1,7 @@
 import 'package:formulario_de_atendimento/controllers/client_form/general_client_controller.dart';
+import 'package:formulario_de_atendimento/data/data_access_object.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../default_values/default_values.dart';
@@ -13,10 +15,18 @@ abstract class BasicInformaTionsControllerBase with Store {
   BasicInformaTionsControllerBase();
   
   // SpreadsheetClientGenerator spreadsheetClientGenerator = SpreadsheetClientGenerator(widget.downloadsDirectory);
-  GeneralClientController clientController = GetIt.I.get<GeneralClientController>();
+  GeneralClientController generalClientController = GetIt.I.get<GeneralClientController>();
+  final Box<dynamic> osBox = GetIt.I.get<Box<dynamic>>(instanceName: DefaultBoxes.os);
+  
+  
 
   @observable
   bool isAutoOS = true;
+
+  @observable
+  bool osWasGenerated = false;
+  
+  late String osGenerated;
 
   String? spreedsheetDate;
   String? client;
@@ -52,7 +62,7 @@ abstract class BasicInformaTionsControllerBase with Store {
     basicInformations.spreedsheetDate = spreedsheetDate;
     basicInformations.client = client;
     basicInformations.localOfAttendance = localOfAttendance;
-    basicInformations.os = os;
+    basicInformations.os = isAutoOS ? osGenerated : os;
     basicInformations.requester = requester;
     basicInformations.attendant = attendant;
     basicInformations.isCorrective = isCorrective;
@@ -71,8 +81,41 @@ abstract class BasicInformaTionsControllerBase with Store {
     await Future.delayed(const Duration(milliseconds: 500));
 
 
-    clientController.basicInformations = basicInformations;
+    generalClientController.basicInformations = basicInformations;
     
     isLoading = false;
+  }
+
+  @action
+  void generateOs() {
+    osWasGenerated = false;
+    if (localOfAttendance != null) {
+      final String osSufix;
+
+    String year = DateTime.now().year.toString();
+
+    final int osNumber;
+
+    if (localOfAttendance == LocalOfAttendance.piracicaba) {
+      osNumber = osBox.get(DefaultKeys.osPiracicaba);
+      osSufix = osBox.get(DefaultKeys.piracicabaSufix);
+    } else {
+      osNumber = osBox.get(DefaultKeys.osIracemapolis);
+      osSufix = osBox.get(DefaultKeys.iracemapolisSufix);
+    }
+
+    final String osNumberString  = osNumber < 10 ? '0$osNumber' : '$osNumber';
+    osGenerated = '$year$osNumberString - $osSufix'; 
+    osWasGenerated = true;     
+    }
+  }
+
+  Future<void> updateOs() async {
+    if (localOfAttendance == LocalOfAttendance.piracicaba) {
+      osBox.put(DefaultKeys.osPiracicaba, osBox.get(DefaultKeys.osPiracicaba) + 1);
+    } else if (localOfAttendance == LocalOfAttendance.iracenopolis) {
+       osBox.put(DefaultKeys.osIracemapolis, osBox.get(DefaultKeys.osIracemapolis) + 1);
+    }
+    return;
   }
 }
