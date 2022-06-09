@@ -47,6 +47,11 @@ class GeneralClientController {
         odometer: basicInformations!.odometer,
       
       );
+
+      basicInformations = null;
+      services = null;
+      registers = null;
+
       return response;
     }
   }
