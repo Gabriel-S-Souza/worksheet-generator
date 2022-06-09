@@ -136,14 +136,7 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                           : const Padding( padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(),
                           ),
                   secondaryChild: const Text('Anterior'),
-                  onPrimaryPressed:  !servicesController.isLoading
-                          ? () {
-                              
-                              servicesController.addToSpreedsheet();
-
-                              widget.onPrimaryPressed();
-                            }
-                          : null,
+                  onPrimaryPressed: null,
                   onSecondaryPressed: widget.onSecondaryPressed,
                 ),
                 const SizedBox(height: 20),

@@ -12,7 +12,7 @@ class ServicesController = ServicesControllerBase with _$ServicesController;
 
 abstract class ServicesControllerBase with Store {
 
-  final SpreadsheetXlsxGenerator spreadsheetXlsxGenerator = GetIt.I.get<SpreadsheetXlsxGenerator>(instanceName: 'client_form');
+  // final SpreadsheetXlsxGenerator spreadsheetXlsxGenerator = GetIt.I.get<SpreadsheetXlsxGenerator>(instanceName: 'client_form');
   
   @observable
   String oilWasUsed = YesNo.no;
@@ -37,32 +37,32 @@ abstract class ServicesControllerBase with Store {
     }
   }
 
-  @action
-  Future<void> addToSpreedsheet() async {
-    isLoading = true;
+  // @action
+  // Future<void> addToSpreedsheet() async {
+  //   isLoading = true;
 
-    final ServicesModel services = ServicesModel();
-    services.defect['value'] = defect;
-    services.cause['value'] = cause;
-    services.solution['value'] = solution;
-    services.motorOil['value'] = motorOil;
-    services.hydraulicOil['value'] = hydraulicOil;
-    services.situation['value'] = situation;
-    services.pendencies['value'] = pendencies;
+  //   final ServicesModel services = ServicesModel();
+  //   services.defect['value'] = defect;
+  //   services.cause['value'] = cause;
+  //   services.solution['value'] = solution;
+  //   services.motorOil['value'] = motorOil;
+  //   services.hydraulicOil['value'] = hydraulicOil;
+  //   services.situation['value'] = situation;
+  //   services.pendencies['value'] = pendencies;
 
-    services.treatTheProperties();
+  //   services.treatTheProperties();
 
-    List<Map<String, String?>> servicesList = services.toList();
-    for (Map<String, String?> element in servicesList) {
-      if (element['value'] != null) {
-        spreadsheetXlsxGenerator.updateCell(
-          'CLIENTE',
-          CellIndex.indexByString(element['cellAdress']!),
-          element['value'],
-        );
-      }
-    }
+  //   List<Map<String, String?>> servicesList = services.toList();
+  //   for (Map<String, String?> element in servicesList) {
+  //     if (element['value'] != null) {
+  //       spreadsheetXlsxGenerator.updateCell(
+  //         'CLIENTE',
+  //         CellIndex.indexByString(element['cellAdress']!),
+  //         element['value'],
+  //       );
+  //     }
+  //   }
 
-    isLoading = false;
-  }
+  //   isLoading = false;
+  // }
 }

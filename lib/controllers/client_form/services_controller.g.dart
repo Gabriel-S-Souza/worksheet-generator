@@ -41,14 +41,6 @@ mixin _$ServicesController on ServicesControllerBase, Store {
     });
   }
 
-  late final _$addToSpreedsheetAsyncAction =
-      AsyncAction('ServicesControllerBase.addToSpreedsheet', context: context);
-
-  @override
-  Future<void> addToSpreedsheet() {
-    return _$addToSpreedsheetAsyncAction.run(() => super.addToSpreedsheet());
-  }
-
   late final _$ServicesControllerBaseActionController =
       ActionController(name: 'ServicesControllerBase', context: context);
 

@@ -26,19 +26,19 @@ mixin _$BasicInformaTionsController on BasicInformaTionsControllerBase, Store {
     });
   }
 
-  late final _$maintenanceAtom = Atom(
-      name: 'BasicInformaTionsControllerBase.maintenance', context: context);
+  late final _$isCorrectiveAtom = Atom(
+      name: 'BasicInformaTionsControllerBase.isCorrective', context: context);
 
   @override
-  String get maintenance {
-    _$maintenanceAtom.reportRead();
-    return super.maintenance;
+  bool get isCorrective {
+    _$isCorrectiveAtom.reportRead();
+    return super.isCorrective;
   }
 
   @override
-  set maintenance(String value) {
-    _$maintenanceAtom.reportWrite(value, super.maintenance, () {
-      super.maintenance = value;
+  set isCorrective(bool value) {
+    _$isCorrectiveAtom.reportWrite(value, super.isCorrective, () {
+      super.isCorrective = value;
     });
   }
 
@@ -58,26 +58,19 @@ mixin _$BasicInformaTionsController on BasicInformaTionsControllerBase, Store {
     });
   }
 
-  late final _$BasicInformaTionsControllerBaseActionController =
-      ActionController(
-          name: 'BasicInformaTionsControllerBase', context: context);
+  late final _$saveAsyncAction =
+      AsyncAction('BasicInformaTionsControllerBase.save', context: context);
 
   @override
-  void addToSpreedsheet() {
-    final _$actionInfo = _$BasicInformaTionsControllerBaseActionController
-        .startAction(name: 'BasicInformaTionsControllerBase.addToSpreedsheet');
-    try {
-      return super.addToSpreedsheet();
-    } finally {
-      _$BasicInformaTionsControllerBaseActionController.endAction(_$actionInfo);
-    }
+  Future<void> save() {
+    return _$saveAsyncAction.run(() => super.save());
   }
 
   @override
   String toString() {
     return '''
 localOfAttendance: ${localOfAttendance},
-maintenance: ${maintenance},
+isCorrective: ${isCorrective},
 isLoading: ${isLoading}
     ''';
   }

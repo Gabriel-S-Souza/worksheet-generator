@@ -1,5 +1,4 @@
-import 'package:excel/excel.dart';
-import 'package:formulario_de_atendimento/pdf/spreadsheet_xlsx_generator.dart';
+import 'package:formulario_de_atendimento/controllers/client_form/general_client_controller.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
@@ -13,9 +12,10 @@ class BasicInformaTionsController = BasicInformaTionsControllerBase with _$Basic
 abstract class BasicInformaTionsControllerBase with Store {
   BasicInformaTionsControllerBase();
   
-  final SpreadsheetXlsxGenerator spreadsheetXlsxGenerator = GetIt.I.get<SpreadsheetXlsxGenerator>(instanceName: 'client_form');
+  // SpreadsheetClientGenerator spreadsheetClientGenerator = SpreadsheetClientGenerator(widget.downloadsDirectory);
+  GeneralClientController clientController = GetIt.I.get<GeneralClientController>();
 
-  String? date;
+  String? spreedsheetDate;
   String? client;
 
   @observable
@@ -26,7 +26,7 @@ abstract class BasicInformaTionsControllerBase with Store {
   String? attendant;
   
   @observable
-  String maintenance = Maintenance.corrective;
+  bool isCorrective = true;
 
   String correctiveMaintenanceOrigin = CorrectiveMaintenanceOrigin.wearCommon;
   String isStoppedMachine = YesNo.no;
@@ -37,47 +37,40 @@ abstract class BasicInformaTionsControllerBase with Store {
   String? fleet;
   String? model;
   String? serie;
-  String? hourMeter;
+  String? odometer;
 
   @observable
   bool isLoading = false;
 
   @action
-  void addToSpreedsheet() {
+  Future<void> save() async {
     isLoading = true;
 
     final BasicInformationsModel basicInformations = BasicInformationsModel();
-    basicInformations.date['value'] = date;
-    basicInformations.client['value'] = client;
-    basicInformations.localOfAttendance['value'] = localOfAttendance;
-    basicInformations.os['value'] = os;
-    basicInformations.requester['value'] = requester;
-    basicInformations.attendant['value'] = attendant;
-    basicInformations.maintenance['value'] = maintenance;
-    basicInformations.correctiveMaintenanceOrigin['value'] = correctiveMaintenanceOrigin;
-    basicInformations.isStoppedMachine['value'] = isStoppedMachine;
-    basicInformations.isWarranty['value'] = isWarranty;
-    basicInformations.equipment['value'] = equipment;
-    basicInformations.equipmentApplication['value'] = equipmentApplication;
-    basicInformations.plate['value'] = plate;
-    basicInformations.fleet['value'] = fleet;
-    basicInformations.model['value'] = model;
-    basicInformations.serie['value'] = serie;
-    basicInformations.hourMeter['value'] = hourMeter;
-
+    basicInformations.spreedsheetDate = spreedsheetDate;
+    basicInformations.client = client;
+    basicInformations.localOfAttendance = localOfAttendance;
+    basicInformations.os = os;
+    basicInformations.requester = requester;
+    basicInformations.attendant = attendant;
+    basicInformations.isCorrective = isCorrective;
+    basicInformations.correctiveMaintenanceOrigin = correctiveMaintenanceOrigin;
+    basicInformations.isStoppedMachine = isStoppedMachine == YesNo.yes;
+    basicInformations.isWarranty = isWarranty == YesNo.yes;
+    basicInformations.equipment = equipment;
+    basicInformations.equipmentApplication = equipmentApplication;
+    basicInformations.fleet = fleet;
+    basicInformations.model = model;
+    basicInformations.serie = serie;
+    basicInformations.odometer = odometer;
+    
     basicInformations.treatTheProperties();
 
-    List<Map<String, String?>> basicInformationsList = basicInformations.toList();
-    for (Map<String, String?> element in basicInformationsList) {
-      if (element['value'] != null) {
-        spreadsheetXlsxGenerator.updateCell(
-          'CLIENTE',
-          CellIndex.indexByString(element['cellAdress']!),
-          element['value'],
-        );
-      }
-    }
+    await Future.delayed(const Duration(seconds: 1));
 
+
+    clientController.basicInformations = basicInformations;
+    
     isLoading = false;
   }
 }

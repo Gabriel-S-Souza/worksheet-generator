@@ -6,9 +6,8 @@ import 'registers_equipment_screen.dart';
 import 'services_equipment_screen.dart';
 
 class EquipmentFormScreen extends StatefulWidget {
-  final String downloadsDirectory;
   final String equipmentName;
-  const EquipmentFormScreen({Key? key, required this.downloadsDirectory, required this.equipmentName}) : super(key: key);
+  const EquipmentFormScreen({Key? key, required this.equipmentName}) : super(key: key);
 
   @override
   State<EquipmentFormScreen> createState() => _EquipmentFormScreenState();
@@ -73,7 +72,6 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
             },
           ),
           RegistersEquipmentScreen(
-            downloadsDirectory: widget.downloadsDirectory,
             onSecondaryPressed: () {
               animatePage(1);
               print('onSecondaryPressed');

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:formulario_de_atendimento/controllers/client_form/general_client_controller.dart';
 import 'package:formulario_de_atendimento/data/data_access_object.dart';
 import 'package:formulario_de_atendimento/view/my_app.dart';
 import 'package:get_it/get_it.dart';
@@ -15,6 +16,7 @@ void main() async {
 
   GetIt.I.registerSingleton<DataAccessObject>(dao);
   GetIt.I.registerSingleton<Box>(userDataBox, instanceName: DefaultBoxes.userData);
+  GetIt.I.registerSingleton<GeneralClientController>(GeneralClientController());
 
   runApp(const MyApp());
 }

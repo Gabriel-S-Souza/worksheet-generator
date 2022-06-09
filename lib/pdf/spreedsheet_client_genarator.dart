@@ -1,42 +1,48 @@
 import 'dart:io' as io;
 
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
+import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:intl/intl.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-class SpreadsheetClientGenerator {
+class SpreedsheetClientGenerator {
   final String downloadsDirectory;
-  SpreadsheetClientGenerator(this.downloadsDirectory);
+  SpreedsheetClientGenerator(this.downloadsDirectory) {
+    _loadImages();
+  }
+  
+  late pw.Document pdf;
 
-  //TODO: GLOBAIS DE TESTE
-  final String cliente = 'ARCELORMITAL PIRACICABA';
-  final String os = '202201 - IRACE';
-  final String localOfAttendance = 'PIRACICABA';
-  final String correctiveValue = '[ X ] CORRETIVA';
-  final String preventiveValue = '[   ] PREVENTIVA';
-  final String requester = 'Alan';
-  final String attendant = 'João da Silva';
-  final String fleet = 'F-1234';
-  final String plate = 'ABC-1234';
-  final String serie = 'S-1234';
-  final String model = 'M-1234';
-  final String odometer = 'C-1234';
+  // final String cliente = 'ARCELORMITAL PIRACICABA';
+  // final String os = '202201 - IRACE';
+  // final String localOfAttendance = 'PIRACICABA';
+  // final String correctiveValue = '[ X ] CORRETIVA';
+  // final String preventiveValue = '[   ] PREVENTIVA';
+  // final String requester = 'Alan';
+  // final String attendant = 'João da Silva';
+  // final String fleet = 'F-1234';
+  // final String plate = 'ABC-1234';
+  // final String serie = 'S-1234';
+  // final String model = 'M-1234';
+  // final String odometer = 'C-1234';
 
-  final String defect = 'Defeito de teste';
-  final String cause = 'Causa de teste';
-  final String solution =
-      ' Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
-  final String motorOil = '300';
-  final String hydraulicOil = '400400df';
-  final String pendencies = ' laborum.';
+  // final String defect = 'Defeito de teste';
+  // final String cause = 'Causa de teste';
+  // final String solution =
+  //     ' Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
+  // final String motorOil = '300';
+  // final String hydraulicOil = '400400df';
+  // final String pendencies = ' laborum.';
 
-  final String attedanceDate = '01/01/2020';
-  final String attedanceStartHour = '12:00';
-  final String attedanceEndHour = '13:00';
+  // final String attedanceDate = '01/01/2020';
+  // final String attedanceStartHour = '12:00';
+  // final String attedanceEndHour = '13:00';
+
+  createDocumentBase() {
+    pdf = pw.Document();
+  }
 
 
   final double cellLargeHeight = 20;
@@ -48,8 +54,7 @@ class SpreadsheetClientGenerator {
   final double fontMediumSize = 8;
   final double fontSmallSize = 6;
 
-  late final ByteData logoBytes; 
-  late final Uint8List logoByteList;
+  late final pw.ImageProvider logo; 
 
   late final pw.ImageProvider arrowLeft;
   late final pw.ImageProvider arrowRight;
@@ -57,8 +62,7 @@ class SpreadsheetClientGenerator {
   late final pw.ImageProvider signature;
 
   Future<void> _loadImages() async {
-    logoBytes = await rootBundle.load('assets/images/logo.png');
-    logoByteList = logoBytes.buffer.asUint8List();
+    logo = await imageFromAssetBundle('assets/images/logo.png');
     arrowLeft = await imageFromAssetBundle('assets/images/arrow-red.png');
     arrowRight = await imageFromAssetBundle('assets/images/arrow-green.png');
     signature = await imageFromAssetBundle('assets/images/signature.png');
@@ -66,7 +70,35 @@ class SpreadsheetClientGenerator {
     return;
   }
   
-  Future<String> clientSheetCreate() async {
+  Future<String> clientSheetCreate({
+    String? spreedsheetDate,
+    String? cliente,
+    String? os,
+    String? localOfAttendance,
+    bool isCorrective = true,
+    String? requester,
+    String? attendant,
+    bool isStoppedMachine = false,
+    bool isWarrenty = false,
+    String? equipment,
+    String? application,
+    required String correctiveOrigin,
+    String? fleet,
+    String? model,
+    String? series,
+    String? odometer,
+    String? defect,
+    String? cause,
+    String? solution,
+    String? motorOil,
+    String? hydraulicOil,
+    String situation = Situation.released,
+    String? pendencies,
+    String? attedanceDate,
+    String? attedanceStartHour,
+    String? attedanceEndHour,
+    String? totalOfHours,
+  }) async {
     final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
     final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
     final String name = 'cliente_${date}_$time.pdf';
@@ -74,11 +106,9 @@ class SpreadsheetClientGenerator {
     double extraSpace = cellLargeHeight;
 
     final String filePath = '$downloadsDirectory/$name';
-    
-    await _loadImages();
 
     try {
-      final pdf = pw.Document();
+      
       pdf.addPage(
         pw.MultiPage(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -92,37 +122,39 @@ class SpreadsheetClientGenerator {
             ),
           ),
           build: (context) => [
-            _contentHeader(context, logoByteList, 'RELATÓRIO DE ATENDIMENTO', 'XXXXX', '00/00/0000'),
+            _contentHeader(context, logo, 'RELATÓRIO DE ATENDIMENTO', spreedsheetDate ?? ''),
             _contentBasicInfo(
               context: context, 
-              client: cliente,
-              os: os,
-              localOfAttendance: localOfAttendance,
-              correctiveValue: correctiveValue,
-              preventiveValue: preventiveValue,
-              requester: requester,
-              attendant: attendant,
-              fleet: fleet,
-              series: serie,
-              model: model,
-              odometer: odometer,
+              client: cliente ?? '',
+              os: os ?? '',
+              localOfAttendance: localOfAttendance ?? '', 
+              isCorrective: isCorrective,
+              correctiveOrigin: correctiveOrigin,
+              isStoppedMachine: isStoppedMachine,
+              isWarrenty: isWarrenty,
+              requester: requester ?? '',
+              attendant: attendant ?? '',
+              equipment: equipment ?? '',
+              application: application ?? '',
+              fleet: fleet ?? '',
+              series: series ?? '',
+              model: model ?? '',
+              odometer: odometer ?? '',
             ),
             _contentServices(
               context: context,
-              defect: defect,
-              cause: cause,
-              solution: solution,
-              motorOil: motorOil,
-              hydraulicOil: hydraulicOil,
-              pendencies: pendencies,
+              defect: defect ?? '',
+              cause: cause ?? '',
+              solution: solution ?? '',
+              motorOil: motorOil ?? '',
+              hydraulicOil: hydraulicOil ?? '',
+              pendencies: pendencies ?? '',
             ),
             _buildRegisters(
               context: context,
-              fleet: fleet,
-              plate: plate,
-              attedanceDate: attedanceDate,
-              attedanceStartHour: attedanceStartHour,
-              attedanceEndHour: attedanceEndHour,
+              attedanceDate: attedanceDate ?? '',
+              attedanceStartHour: attedanceStartHour ?? '',
+              attedanceEndHour: attedanceEndHour ?? '',
               extraSpace: extraSpace
             ),
           ], 
@@ -141,7 +173,7 @@ class SpreadsheetClientGenerator {
   }
 
 
-   pw.Widget _contentHeader(pw.Context context, Uint8List bytelist, String title, String sheetCode, String date) {
+   pw.Widget _contentHeader(pw.Context context, pw.ImageProvider bytelist, String title, String date) {
 
     return pw.SizedBox(
       height: cellLargeHeight * 3,
@@ -161,9 +193,7 @@ class SpreadsheetClientGenerator {
                 ),
               ),
               child: pw.Image(
-                pw.MemoryImage(
-                  bytelist,
-                ),
+                logo,
                 fit: pw.BoxFit.fitWidth,
               )
             ),
@@ -198,10 +228,7 @@ class SpreadsheetClientGenerator {
                 children: [
                   pw.Expanded(
                     flex: 2,
-                    child: pw.Container(
-                      alignment: pw.Alignment.center,
-                      child: pw.Text(sheetCode, style: pw.TextStyle(fontSize: fontMediumSize)),
-                    )
+                    child: pw.Container()
                   ),
                   pw.Divider(thickness: 2),
                   pw.Expanded(
@@ -219,22 +246,62 @@ class SpreadsheetClientGenerator {
 
 
   pw.Widget _contentBasicInfo({
-    required pw.Context context, required String client, required String os, 
-    String localOfAttendance = '', required String correctiveValue, required String preventiveValue,
-    String requester = '', String attendant = '', String yesStoppedMachine = '[   ] Sim',
-    String noStoppedMachine = '[   ] Não', String yesWarrenty = '[   ] Sim', String noWarrenty = '[   ] Não',
+    required pw.Context context, 
+    required String client, 
+    required String os, 
+    String localOfAttendance = '', 
+    required bool isCorrective,
+    required bool isStoppedMachine,
+    required bool isWarrenty,
+    String requester = '', 
+    String attendant = '',
     String equipment = '[   ] Carregadeira        [    ] Escavadeira        [   ] Rolo Compactador        [   ] Trator        [   ] Outros',
     String application = '[   ] Carregamento        [   ] Escavação        [   ] Terraplanagem        [   ] Rompedor        [   ] Sucata/Tesoura',
-    String operationalFailure = '[   ] FALHA OPERACIONAL',
-    String withoutPreventive = '[   ] FALTA DE PREVENTIVA',
-    String wearByLoadedMaterial = '[   ] DESG. POR MATERIAL CARREGADO/ LOCAL DE OPERAÇÃO',
-    String wearCommon = '[   ] DESGASTE COMUM',
-    String other = '[   ] OUTROS',
+    required String correctiveOrigin,
     String fleet = '',
     String model = '',
     String series = '',
     String odometer = '',
     }) {
+    final String correctiveValue;
+    final String preventiveValue;
+
+    final String yesStoppedMachine;
+    final String noStoppedMachine;
+
+    final String yesWarrenty; 
+    final String noWarrenty;
+
+    final String operationalFailure = correctiveOrigin == CorrectiveMaintenanceOrigin.operationalFailure ? '[ X ] FALHA OPERACIONAL' : '[   ] FALHA OPERACIONAL';
+    final String withoutPreventive = correctiveOrigin == CorrectiveMaintenanceOrigin.withoutPreventive ? '[ X ] FALTA DE PREVENTIVA' : '[   ] FALTA DE PREVENTIVA';
+    final String wearByLoadedMaterial = correctiveOrigin == CorrectiveMaintenanceOrigin.wearByLoadedMaterial ? '[ X ] DESG. POR MATERIAL CARREGADO/ LOCAL DE OPERAÇÃO' : '[   ] DESG. POR MATERIAL CARREGADO/ LOCAL DE OPERAÇÃO';
+    final String wearCommon = correctiveOrigin == CorrectiveMaintenanceOrigin.wearCommon ? '[ X ] DESGASTE COMUM' : '[   ] DESGASTE COMUM';
+    final String other = correctiveOrigin == CorrectiveMaintenanceOrigin.other ? '[ X ] OUTROS' : '[   ] OUTROS';
+
+    if(isStoppedMachine) {
+      yesStoppedMachine = '[ X ] SIM';
+      noStoppedMachine = '[   ] NÃO';
+    } else {
+      yesStoppedMachine = '[   ] SIM';
+      noStoppedMachine = '[ X ] NÃO';
+    }
+    
+    if(isWarrenty) {
+      yesWarrenty = '[ X ] SIM';
+      noWarrenty = '[   ] NÃO';
+    } else {
+      yesWarrenty = '[   ] SIM';
+      noWarrenty = '[ X ] NÃO';
+    }
+
+    if(isCorrective) {
+      correctiveValue = '[ X ] CORRETIVA';
+      preventiveValue = '[   ] PREVENTIVA';
+    } else {
+      correctiveValue = '[   ] CORRETIVA';
+      preventiveValue = '[ X ] PREVENTIVA';
+    }
+
     return pw.Column(
       children: [
         _generateRow(
@@ -810,8 +877,6 @@ class SpreadsheetClientGenerator {
 
     pw.Widget _buildRegisters({
     required pw.Context context,
-    String plate = '',
-    String fleet = '',
     String attedanceDate = '',
     String attedanceStartHour = '',
     String attedanceEndHour = '',

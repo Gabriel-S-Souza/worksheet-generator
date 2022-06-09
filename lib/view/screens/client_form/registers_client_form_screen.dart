@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:formulario_de_atendimento/controllers/client_form/general_client_controller.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/registers_controller.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_action_form_group.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_outlined_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_field.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../../pdf/spreedsheet_client_genarator.dart';
@@ -13,9 +15,8 @@ import '../../widgets/custom_icon_button.dart';
 
 class RegistersClientFormScreen extends StatefulWidget {
   final VoidCallback? onSecondaryPressed;
-  final String downloadsDirectory;
   const RegistersClientFormScreen({Key? key,
-  this.onSecondaryPressed, required this.downloadsDirectory}) : super(key: key);
+  this.onSecondaryPressed}) : super(key: key);
 
   @override
   State<RegistersClientFormScreen> createState() => _RegistersClientFormScreenState();
@@ -34,6 +35,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
   final TextEditingController arrivalBackHourController = TextEditingController();
   final TextEditingController attendanceStartHourController = TextEditingController();
   final TextEditingController attendanceEndHourController = TextEditingController();
+
+  final GeneralClientController generalClientController = GetIt.I.get<GeneralClientController>();
 
   final RegistersController registersController = RegistersController();
 
@@ -74,229 +77,12 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomTextLabel('Ida'),
-            const CustomTextLabel(
-              'Data e hora de saída',
-              marginTop: 8,
-              marginBottom: 8,
-              fontSize: 16,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Flexible(
-                  child: CustomTextField(
-                    controller: departureDateController,
-                    hint: 'Data de saída',
-                      suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.edit_calendar, 
-                      onTap: () async {
-                        registersController.oneWayDepartureDate = departureDateController.text = await _selectDate(context);
-                      }
-                    ),
-                    onChanged: (value) => registersController.oneWayDepartureDate = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: CustomTextField(
-                    controller: departureHourController,
-                    hint: 'Ex: 09:00',
-                    suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.watch_later_rounded, 
-                      onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, registersController.departureHour);
-                        if (hours != null) {
-                          registersController.departureHour = hours;
-                          registersController.oneWayDepartureTime = departureHourController.text = '${hours.hour}:${hours.minute}';
-                        }
-                      }
-                    ),
-                    onChanged: (value) => registersController.oneWayDepartureTime = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const CustomTextLabel(
-              'Data e hora de chegada',
-             marginTop: 8,
-              marginBottom: 8,
-              fontSize: 16,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Flexible(
-                  child: CustomTextField(
-                    controller: arrivalDateController,
-                    hint: 'Data de chegada',
-                      suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.edit_calendar, 
-                      onTap: () async {
-                        registersController.oneWayArrivalDate = arrivalDateController.text = await _selectDate(context);
-                      } 
-                    ),
-                    onChanged: (value) => registersController.oneWayArrivalDate = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: CustomTextField(
-                    controller: arrivalHourController,
-                    hint: 'Ex: 09:00',
-                    suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.watch_later_rounded, 
-                      onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, registersController.arrivalHour);
-                        if (hours != null) {
-                          registersController.arrivalHour = hours;
-                          registersController.oneWayArrivalTime = arrivalHourController.text = '${hours.hour}:${hours.minute}';
-                        }
-                      },
-                    ),
-                    onChanged: (value) => registersController.oneWayArrivalTime = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            const Divider(thickness: 1),
-            const CustomTextLabel('Volta'),
-            const CustomTextLabel(
-              'Data e hora de saída',
-              marginTop: 8,
-              marginBottom: 8,
-              fontSize: 16,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Flexible(
-                  child: CustomTextField(
-                    controller: departureBackDateController,
-                    hint: 'Data de saída',
-                      suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.edit_calendar, 
-                      onTap: () async {
-                        registersController.returnDepartureDate = departureBackDateController.text = await _selectDate(context);
-                      },
-                    ),
-                    onChanged: (value) => registersController.returnDepartureDate = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: CustomTextField(
-                    controller: departureBackHourController,
-                    hint: 'Ex: 09:00',
-                    suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.watch_later_rounded, 
-                      onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, registersController.departureBackHour);
-                        if (hours != null) {
-                          registersController.departureBackHour = hours;
-                          registersController.returnDepartureTime = departureBackHourController.text = '${hours.hour}:${hours.minute}';
-                        }
-                      },
-                    ),
-                    onChanged: (value) => registersController.returnDepartureTime = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const CustomTextLabel(
-              'Data e hora de chegada',
-              marginTop: 8,
-              marginBottom: 8,
-              fontSize: 16,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Flexible(
-                  child: CustomTextField(
-                    controller: arrivalBackDateController,
-                    hint: 'Data de chegada',
-                      suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.edit_calendar, 
-                      onTap: () async {
-                        registersController.returnArrivalDate = arrivalBackDateController.text = await _selectDate(context);
-                      },
-                    ),
-                    onChanged: (value) => registersController.returnArrivalDate = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: CustomTextField(
-                    controller: arrivalBackHourController,
-                    hint: 'Ex: 09:00',
-                    suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.watch_later_rounded, 
-                      onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, registersController.arrivalBackHour);
-                        if (hours != null) {
-                          registersController.arrivalBackHour = hours;
-                          registersController.returnArrivalTime = arrivalBackHourController.text = '${hours.hour}:${hours.minute}';
-                        }
-                      } 
-                    ),
-                    onChanged: (value) => registersController.returnArrivalTime = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            const Divider(thickness: 1,),
-            const CustomTextLabel('Km'),
-            Row(
-              children: [
-                Flexible(
-                  child: CustomTextField(
-                    hint: 'Km inicial',
-                    textInputType: TextInputType.number,
-                    prefix: const Icon(Icons.edit_road),
-                    onChanged: (value) => registersController.initialKm = value,
-                    onSubmitted: () => FocusScope.of(context).requestFocus(focusNodeFinalKm),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: CustomTextField(
-                    hint: 'Km final',
-                    focusNode: focusNodeFinalKm,
-                    textInputType: TextInputType.number,
-                    prefix: const Icon(Icons.edit_road),
-                    onChanged: (value) => registersController.finalKm = value,
-                    onSubmitted: () => FocusScope.of(context).requestFocus(focusAttendanceDate),
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(height: 24),
             const Divider(thickness: 1,),
             const CustomTextLabel('Atendimento'),
             const CustomTextLabel('Data', 
               marginTop: 8,
-              marginBottom: 8, 
+              marginBottom: 8,
               fontSize: 16,),
             CustomTextField(
               controller: attendanceDateController,
@@ -394,18 +180,25 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             const SizedBox(height: 32),
             CustomOutlinedButtom(
               onPressed: () async {
-                  SpreadsheetClientGenerator spreadsheetClientGenerator = SpreadsheetClientGenerator(widget.downloadsDirectory);
-                  spreadsheetClientGenerator.clientSheetCreate()
+                  // SpreadsheetClientGenerator spreadsheetClientGenerator = SpreadsheetClientGenerator(widget.downloadsDirectory);
+                  // spreadsheetClientGenerator.clientSheetCreate()
+                  //     .then((value) {
+                  //             _buildSnackBar(
+                  //               context, 'Salvo $value'
+                  //             );
+                  //           });
+
+                  generalClientController.createSpreedsheet()
                       .then((value) {
-                              _buildSnackBar(
-                                context, 'Salvo $value'
-                              );
-                            });
+                            _buildSnackBar(
+                              context, value
+                            );
+                          });
                 },
               child:  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Text('Salvar planilha (pdf)'),
+                    Text('Salvar planilha'),
                     SizedBox(width: 8),
                     Icon(Icons.save),
                   ],
@@ -413,16 +206,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
             ),
             const SizedBox(height: 28),
             CustomOutlinedButtom(
-              onPressed: !registersController.isLoading
-                      ? () {
-                        registersController.addToSpreedsheet()
-                            .then((value) {
-                              _buildSnackBar(
-                                context, 'Salvo $value'
-                              );
-                            });
-                      }
-                      : null,
+              onPressed: null,
               child:  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [

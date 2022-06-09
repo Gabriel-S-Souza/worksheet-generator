@@ -6,7 +6,9 @@ import 'package:printing/printing.dart';
 
 class SpreadsheetEquipmentGenerator {
   final String downloadsDirectory;
-  SpreadsheetEquipmentGenerator({required this.downloadsDirectory});
+  SpreadsheetEquipmentGenerator({required this.downloadsDirectory}) {
+    _loadImages();
+  }
 
   //TODO: GLOBAIS DE TESTE
   final String unit = 'PIRACICABA';
@@ -79,8 +81,6 @@ class SpreadsheetEquipmentGenerator {
     final String name = '${filePrefixName}_${date}_$time.pdf';
 
     final String filePath = '$downloadsDirectory/$name';
-
-    await _loadImages();
 
     try {
       final pdf = pw.Document();

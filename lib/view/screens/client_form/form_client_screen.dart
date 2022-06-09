@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:formulario_de_atendimento/pdf/spreadsheet_xlsx_generator.dart';
-import 'package:get_it/get_it.dart';
 
 import 'basic_information_cliente_form_screen.dart';
 import 'registers_client_form_screen.dart';
@@ -8,8 +6,7 @@ import 'services_client_form_screen.dart';
 
 
 class FormClientScreen extends StatefulWidget {
-  final String downloadsDirectory;
-  const FormClientScreen({Key? key, required this.downloadsDirectory}) : super(key: key);
+  const FormClientScreen({Key? key}) : super(key: key);
 
   @override
   State<FormClientScreen> createState() => _FormClientScreenState();
@@ -23,19 +20,11 @@ class _FormClientScreenState extends State<FormClientScreen> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: currentPage);
-    GetIt.I.registerSingleton<SpreadsheetXlsxGenerator>(
-      SpreadsheetXlsxGenerator(
-        downloadsDirectory: widget.downloadsDirectory,
-        spredsheetTemplatePath: "assets/worksheets/template-cliente.xlsx"
-      ),
-      instanceName: 'client_form'
-    );
   }
 
   @override
   void dispose() {
     pageController.dispose();
-    GetIt.I.unregister<SpreadsheetXlsxGenerator>(instanceName: 'client_form');
     super.dispose();
   }
 
@@ -80,7 +69,6 @@ class _FormClientScreenState extends State<FormClientScreen> {
             },
           ),
           RegistersClientFormScreen(
-            downloadsDirectory: widget.downloadsDirectory,
             onSecondaryPressed: () {
               animatePage(1);
             },
@@ -99,8 +87,8 @@ class _FormClientScreenState extends State<FormClientScreen> {
               icon: Icon(Icons.miscellaneous_services),
               label: "Serviços",),
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: "Registos",),
+              icon: Icon(Icons.assignment_turned_in),
+              label: "Atendimento",),
         ],
         onTap: animatePage,
       ),

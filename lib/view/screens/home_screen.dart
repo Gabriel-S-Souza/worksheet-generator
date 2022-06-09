@@ -1,9 +1,7 @@
 import 'dart:developer';
 
 
-import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:formulario_de_atendimento/main.dart';
 import 'package:formulario_de_atendimento/view/screens/equipment_form/equipment_form_screen.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
@@ -23,8 +21,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final UserSettings userSettings = GetIt.I.get<UserSettings>();
   PermissionStatus permissionStatus = PermissionStatus.denied;
-  // late Directory downloadsDirectory;
-  late String downloadsDirectory;
   String? value;
   final List<String> equipment = [
     'TESOURA VTN 4000',
@@ -40,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _listenForPermission();
-    _initDownloadsDirectoryState();
   }
 
   @override
@@ -91,10 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             context, MaterialPageRoute(
                               builder: (context) {
                                 if(value == 'OUTRO') {
-                                  return FormClientScreen(downloadsDirectory: downloadsDirectory);
+                                  return FormClientScreen();
                                 } else {
                                   return EquipmentFormScreen(
-                                    downloadsDirectory: downloadsDirectory, 
                                     equipmentName: value ?? 'Erro ao selecionar o equipamento',
                                   );
                                 }
@@ -200,20 +194,20 @@ class _HomeScreenState extends State<HomeScreen> {
      });
   }
 
-  Future<void> _initDownloadsDirectoryState() async {
-    String? directory;
+  // Future<void> _initDownloadsDirectoryState() async {
+  //   String? directory;
 
-    try {
-      directory = await AndroidPathProvider.downloadsPath;
-    } on PlatformException {
-      throw Exception('Could not get the downloads directory');
-    }
+  //   try {
+  //     directory = await AndroidPathProvider.downloadsPath;
+  //   } on PlatformException {
+  //     throw Exception('Could not get the downloads directory');
+  //   }
 
-    if (!mounted) return;
+  //   if (!mounted) return;
 
-    setState(() {
-      downloadsDirectory = directory!;
-    });
-  }
+  //   setState(() {
+  //     downloadsDirectory = directory!;
+  //   });
+  // }
 
 }

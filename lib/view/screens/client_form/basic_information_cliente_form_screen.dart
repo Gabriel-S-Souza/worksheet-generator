@@ -33,8 +33,8 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
   @override
   void initState() {
     super.initState();
-    basicInformationsController.date = DateFormat('dd/MM/yyyy').format(DateTime.now());
-    dateController.text = basicInformationsController.date ?? '';
+    basicInformationsController.spreedsheetDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    dateController.text = basicInformationsController.spreedsheetDate ?? '';
     basicInformationsController.requester = requesterController.text = userSettings.name ?? '';
   }
 
@@ -107,15 +107,15 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                 const CustomTextLabel('Manutenção'),
                 CustomRadioButtonGroup(
                   onChanged: (value) {
-                    basicInformationsController.maintenance = value!;
+                    basicInformationsController.isCorrective = value! == Maintenance.corrective;
                   },
                   items: const [Maintenance.corrective, Maintenance.preventive],
                   initialValue: Maintenance.corrective,
                 ),
-                basicInformationsController.maintenance == Maintenance.corrective 
+                basicInformationsController.isCorrective 
                     ? const CustomTextLabel('Manutenção originada de') 
                     : Container(),
-                basicInformationsController.maintenance == Maintenance.corrective 
+                basicInformationsController.isCorrective 
                     ? CustomRadioButtonGroup(
                       onChanged: (value) => basicInformationsController.correctiveMaintenanceOrigin = value!,
                       items: const [
@@ -269,7 +269,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                 CustomSuggestionTextField(
                   hint: 'Horímetro',
                   obscure: false,
-                  onChanged: (value) => basicInformationsController.hourMeter = value,
+                  onChanged: (value) => basicInformationsController.odometer = value,
                   onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.speed), 
                   itemBuilder: (context, suggestion) {
@@ -292,7 +292,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                       onPrimaryPressed: !basicInformationsController.isLoading
                           ? () {
                               
-                              basicInformationsController.addToSpreedsheet();
+                              basicInformationsController.save();
             
                               widget.onPrimaryPressed();
                             }
@@ -318,7 +318,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
       lastDate: DateTime(DateTime.now().year + 5),
     );
     if (picked != null) {
-      basicInformationsController.date = dateController.text = DateFormat('dd/MM/yyyy').format(picked);
+      basicInformationsController.spreedsheetDate = dateController.text = DateFormat('dd/MM/yyyy').format(picked);
     } else {
       return;
     }

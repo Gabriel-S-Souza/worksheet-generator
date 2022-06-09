@@ -12,8 +12,7 @@ import '../../widgets/custom_text_label.dart';
 
 class RegistersEquipmentScreen extends StatefulWidget {
   final VoidCallback? onSecondaryPressed;
-  final String downloadsDirectory;
-  const RegistersEquipmentScreen({Key? key, this.onSecondaryPressed, required this.downloadsDirectory}) : super(key: key);
+  const RegistersEquipmentScreen({Key? key, this.onSecondaryPressed,}) : super(key: key);
 
   @override
   State<RegistersEquipmentScreen> createState() => _RegistersEquipmentScreenState();
@@ -153,18 +152,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
             ),
             const SizedBox(height: 32),
             CustomOutlinedButtom(
-               onPressed: () async {
-                  SpreadsheetEquipmentGenerator spreadsheetClientGenerator 
-                      = SpreadsheetEquipmentGenerator(
-                        downloadsDirectory: widget.downloadsDirectory
-                      );
-                  spreadsheetClientGenerator.createSheet()
-                      .then((value) {
-                          _buildSnackBar(
-                            context, 'Salvo $value'
-                          );
-                        });
-                      },
+               onPressed: null,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [

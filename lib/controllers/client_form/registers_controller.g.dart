@@ -25,14 +25,6 @@ mixin _$RegistersController on RegistersControllerBase, Store {
     });
   }
 
-  late final _$addToSpreedsheetAsyncAction =
-      AsyncAction('RegistersControllerBase.addToSpreedsheet', context: context);
-
-  @override
-  Future<String> addToSpreedsheet() {
-    return _$addToSpreedsheetAsyncAction.run(() => super.addToSpreedsheet());
-  }
-
   @override
   String toString() {
     return '''
