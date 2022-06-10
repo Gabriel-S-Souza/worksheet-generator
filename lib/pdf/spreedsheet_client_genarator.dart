@@ -605,12 +605,12 @@ class SpreedsheetClientGenerator {
     double fontSizeMotorOil = fontLargeSize;
     double fontSizeHydraulicOil = fontLargeSize;
 
-    motorOil.length < 7 ? fontSizeMotorOil = fontLargeSize * 2 : '';
-    motorOil.length > 7 && motorOil.length < 14 ? fontSizeMotorOil = fontLargeSize : '';
+    motorOil.length < 9 ? fontSizeMotorOil = fontLargeSize * 2 : '';
+    motorOil.length >= 9 && motorOil.length < 14 ? fontSizeMotorOil = fontLargeSize * 1.5 : '';
     motorOil.length > 14 ? fontSizeMotorOil = fontLargeMediumSize : '';
 
-    hydraulicOil.length < 7 ? fontSizeHydraulicOil = fontLargeSize * 2 : '';
-    hydraulicOil.length > 7 && hydraulicOil.length < 14 ? fontSizeHydraulicOil = fontLargeSize : '';
+    hydraulicOil.length < 9 ? fontSizeHydraulicOil = fontLargeSize * 2 : '';
+    hydraulicOil.length >= 9 && hydraulicOil.length < 14 ? fontSizeHydraulicOil = fontLargeSize * 1.5 : '';
     hydraulicOil.length > 14 ? fontSizeHydraulicOil = fontLargeMediumSize : '';
 
 

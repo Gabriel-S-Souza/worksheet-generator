@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:formulario_de_atendimento/controllers/equipment_form/services_equipment_controller.dart';
 import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_outlined_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_suggestion_text_field.dart';
@@ -8,6 +10,7 @@ import 'package:formulario_de_atendimento/view/widgets/custom_suggestion_text_fi
 import '../../widgets/custom_action_form_group.dart';
 import '../../widgets/custom_radio_buttom_group.dart';
 import '../../widgets/custom_text_area.dart';
+import '../../widgets/custom_text_field.dart';
 import '../../widgets/custom_text_label.dart';
 
 class ServicesEquipmentScreen extends StatefulWidget {
@@ -26,13 +29,21 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
   final TextEditingController _controllerQuantityScrew = TextEditingController();
   final TextEditingController _controllerQuantityShim = TextEditingController();
   final TextEditingController _controllerQuantityknives = TextEditingController();
+  final TextEditingController _controllerScrewCode = TextEditingController();
+  final TextEditingController _controllerScrewSize = TextEditingController();
+  final TextEditingController _controllerShimCode = TextEditingController();
+  final TextEditingController _controllerShimSize = TextEditingController();
+  final TextEditingController _controllerKnivesCode = TextEditingController();
+  final TextEditingController _controllerKnivesSize = TextEditingController();
+  final ServicesEquipmentController servicesEquipmentcontroller = ServicesEquipmentController();
+
   int quantityScrew = 1;
   int quantityShim = 1;
   int quantityknives = 1;
   ButtomQuantity buttomQuantityPressed = ButtomQuantity.none;
-  String oilWasUsed = YesNo.no;
-  String? motorOil;
-  String? hydraulicOil;
+  // String oilWasUsed = YesNo.no;
+  // String? motorOil;
+  // String? hydraulicOil;
   late final FocusNode focusNodeReadyServices;
   
   @override
@@ -60,306 +71,329 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
       child: SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const CustomTextLabel('Defeito/Causa'),
-              CustomTextArea(
-                hint: 'Descreva o defeito / causa',
-                onChanged: (value) => {},
-                onSubmitted: () => FocusScope.of(context).requestFocus(focusNodeReadyServices),
-              ),
-              const CustomTextLabel('Serviço realizado'),
-              CustomTextArea(
-                hint: 'Descreva o serviço realizado',
-                focusNode: focusNodeReadyServices,
-                onChanged: (value) => {},
-                onSubmitted: () => FocusScope.of(context).nextFocus(),
-              ),
-              const CustomTextLabel('Foi utilizado óleo?'),
-              CustomRadioButtonGroup(
-                onChanged: (value) => setState(() => oilWasUsed = value!),
-                items: const <String> [YesNo.yes, YesNo.no], 
-                initialValue: YesNo.no,
-              ),
-              oilWasUsed == YesNo.yes ? const CustomTextLabel('Óleo de motor utilizado') : const SizedBox(),
-              oilWasUsed == YesNo.yes
-                  ? CustomSuggestionTextField(
-                      hint: 'Óleo de motor',
-                      obscure: false,
-                      prefix: const Icon(Icons.oil_barrel),
-                      onChanged: (value) => setState(()=> motorOil = value),
-                      onSubmitted: () => FocusScope.of(context).nextFocus(),
-                      itemBuilder: (context, suggestion) {
-                        return const ListTile(
-                          title: Text('Suggestion'),
-                        );
-                      }, 
-                      onSuggestionSelected: (object) {  }, 
-                      suggestionsCallback: (value) => [],
-                    )
-                  : Container(),
-                  oilWasUsed == YesNo.yes 
-                    ? const CustomTextLabel('Óleo hidráulico utilizado') : const SizedBox(),
-                  oilWasUsed == YesNo.yes 
-                  ? CustomSuggestionTextField(
-                      hint: 'Óleo hidráulico',
-                      obscure: false,
-                      prefix: const Icon(Icons.oil_barrel),
-                      onChanged: (value) => setState(()=> hydraulicOil = value),
-                      onSubmitted: () => FocusScope.of(context).nextFocus(),
-                      itemBuilder: (context, suggestion) {
-                        return const ListTile(
-                          title: Text('Suggestion'),
-                        );
-                      }, 
-                      onSuggestionSelected: (object) {  }, 
-                      suggestionsCallback: (value) => [],
-                    )
-                  : Container(),
-              const CustomTextLabel('Material usado', marginTop: 40,),
-              const CustomTextLabel(
-                'Parafusos',
-                marginTop: 16,
-                marginBottom: 16,
-                fontSize: 16,
-              ),
-              Table(
+        child: Observer(
+          builder: (context) {
+            return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildRow(['Código', 'Tamanho', 'Quantidade'], isHeader: true),
-                  _buildRow(['123', '2', '1',]),
-                  _buildRow(['123', '2', '1',]),
-                  _buildRow(['123', '2', '1',]),
-                ],
-              ),
-              const SizedBox(height: 48),
-              Row(
-                children: [
-                  Expanded(
+                  const CustomTextLabel('Defeito/Causa'),
+                  CustomTextArea(
+                    hint: 'Descreva o defeito / causa',
+                    onChanged: (value) => servicesEquipmentcontroller.defectCause = value,
+                    onSubmitted: () => FocusScope.of(context).requestFocus(focusNodeReadyServices),
+                  ),
+                  const CustomTextLabel('Serviço realizado'),
+                  CustomTextArea(
+                    hint: 'Descreva o serviço realizado',
+                    focusNode: focusNodeReadyServices,
+                    onChanged: (value) => servicesEquipmentcontroller.serviceCarried = value,
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
+                  ),
+                  const CustomTextLabel('Foi utilizado óleo?'),
+                  CustomRadioButtonGroup(
+                    onChanged: (value) => servicesEquipmentcontroller.oilWasUsed = value!,
+                    items: const <String> [YesNo.yes, YesNo.no], 
+                    initialValue: YesNo.no,
+                  ),
+                  servicesEquipmentcontroller.oilWasUsed == YesNo.yes ? const CustomTextLabel('Óleo de motor utilizado') : const SizedBox(),
+                  servicesEquipmentcontroller.oilWasUsed == YesNo.yes
+                      ? CustomTextField(
+                          hint: 'Óleo de motor',
+                          obscure: false,
+                          prefix: const Icon(Icons.oil_barrel),
+                          onChanged: (value) => servicesEquipmentcontroller.motorOil = value,
+                          onSubmitted: () => FocusScope.of(context).nextFocus(),
+                        )
+                      : Container(),
+                      servicesEquipmentcontroller.oilWasUsed == YesNo.yes 
+                        ? const CustomTextLabel('Óleo hidráulico utilizado') : const SizedBox(),
+                      servicesEquipmentcontroller.oilWasUsed == YesNo.yes 
+                      ? CustomTextField(
+                          hint: 'Óleo hidráulico',
+                          obscure: false,
+                          prefix: const Icon(Icons.oil_barrel),
+                          onChanged: (value) => servicesEquipmentcontroller.hydraulicOil = value,
+                          onSubmitted: () => FocusScope.of(context).nextFocus(),
+                        )
+                      : Container(),
+                  const CustomTextLabel('Material usado', marginTop: 40,),
+                  const CustomTextLabel(
+                    'Parafusos',
+                    marginTop: 16,
+                    marginBottom: 16,
+                    fontSize: 16,
+                  ),
+                  Table(
+                    children: [
+                      _buildRow(['Código', 'Tamanho', 'Quantidade'], isHeader: true),
+                      for(List<String> product in servicesEquipmentcontroller.screws)
+                        _buildRow([product[0], product[1], product[2]]),
+                    ],
+                  ),
+                  const SizedBox(height: 48),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 40,
+                          child: CustomSuggestionTextField(
+                            controller: _controllerScrewCode,
+                            hint: 'Código',
+                            obscure: false,
+                            contentPadding: const EdgeInsets.only(bottom: 15),
+                            style: const TextStyle(fontSize: 14),
+                            onChanged: (value) => setState((){}), 
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                            onSuggestionSelected: (object) {},
+                            suggestionsCallback: (value) => [], 
+                            itemBuilder: (context, suggestion) {
+                              return const ListTile(
+                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: SizedBox(
+                          height: 40,
+                          child: CustomSuggestionTextField(
+                            controller: _controllerScrewSize,
+                            hint: 'Tamanho',
+                            obscure: false, 
+                            contentPadding: const EdgeInsets.only(bottom: 15),
+                            style: const TextStyle(fontSize: 14),
+                            onChanged: (value) => setState((){}), 
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                            onSuggestionSelected: (object) {},
+                            suggestionsCallback: (value) => [], 
+                            itemBuilder: (context, suggestion) {
+                              return const ListTile(
+                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      _buildQuantityField(ButtomQuantity.screw, _controllerQuantityScrew),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.center,
                     child: SizedBox(
-                      height: 40,
-                      child: CustomSuggestionTextField(
-                        hint: 'Código',
-                        obscure: false,
-                        contentPadding: const EdgeInsets.only(bottom: 15),
-                        style: const TextStyle(fontSize: 14),
-                        onChanged: (value) {}, 
-                        onSubmitted: () => FocusScope.of(context).nextFocus(),
-                        onSuggestionSelected: (object) {},
-                        suggestionsCallback: (value) => [], 
-                        itemBuilder: (context, suggestion) {
-                          return const ListTile(
-                            title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                          );
-                        },
+                      width: 170,
+                      child: CustomOutlinedButtom(
+                        onPressed: _controllerScrewCode.text.isNotEmpty || _controllerScrewSize.text.isNotEmpty
+                            ? () {
+                              servicesEquipmentcontroller.screws.add([
+                                _controllerScrewCode.text,
+                                _controllerScrewSize.text,
+                                _controllerQuantityScrew.text,
+                              ]);
+                              _controllerScrewCode.clear();
+                              _controllerScrewSize.clear();
+                            }
+                            : null,
+                        child: const Text('Adicionar'),
+                      ),
+                    ),  
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(thickness: 1),
+                  const CustomTextLabel(
+                    'Calços',
+                    marginTop: 24,
+                    marginBottom: 16,
+                    fontSize: 16,
+                  ),
+                  Table(
+                    children: [
+                      _buildRow(['Código', 'Tamanho', 'Quantidade'], isHeader: true),
+                      for(List<String> product in servicesEquipmentcontroller.shims)
+                        _buildRow([product[0], product[1], product[2]]),
+                    ],
+                  ),
+                  const SizedBox(height: 48),
+                   Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 40,
+                          child: CustomSuggestionTextField(
+                            controller: _controllerShimCode,
+                            hint: 'Código',
+                            obscure: false,
+                            contentPadding: const EdgeInsets.only(bottom: 15),
+                            style: const TextStyle(fontSize: 14),
+                            onChanged: (value) => setState((){}), 
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                            onSuggestionSelected: (object) {},
+                            suggestionsCallback: (value) => [], 
+                            itemBuilder: (context, suggestion) {
+                              return const ListTile(
+                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: SizedBox(
+                          height: 40,
+                          child: CustomSuggestionTextField(
+                            controller: _controllerShimSize,
+                            hint: 'Tamanho',
+                            obscure: false, 
+                            contentPadding: const EdgeInsets.only(bottom: 15),
+                            style: const TextStyle(fontSize: 14),
+                            onChanged: (value) => setState((){}), 
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                            onSuggestionSelected: (object) {},
+                            suggestionsCallback: (value) => [], 
+                            itemBuilder: (context, suggestion) {
+                              return const ListTile(
+                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      _buildQuantityField(ButtomQuantity.shim, _controllerQuantityShim),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: 170,
+                      child: CustomOutlinedButtom(
+                        onPressed: _controllerShimCode.text.isNotEmpty || _controllerShimSize.text.isNotEmpty
+                            ? () {
+                              servicesEquipmentcontroller.shims.add([
+                                _controllerShimCode.text,
+                                _controllerShimSize.text,
+                                _controllerQuantityShim.text,
+                              ]);
+                              _controllerShimCode.clear();
+                              _controllerShimSize.clear();
+                              }
+                            : null,
+                        child: const Text('Adicionar'),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
+                  const SizedBox(height: 16),
+                  const Divider(thickness: 1),
+                  const CustomTextLabel(
+                    'Facas',
+                    marginTop: 24,
+                    marginBottom: 16,
+                    fontSize: 16,
+                  ),
+                  Table(
+                    children: [
+                      _buildRow(['Código', 'Furação', 'Quantidade'], isHeader: true),
+                      for(List<String> product in servicesEquipmentcontroller.knives)
+                        _buildRow([product[0], product[1], product[2]]),
+                    ],
+                  ),
+                  const SizedBox(height: 48),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 40,
+                          child: CustomSuggestionTextField(
+                            controller: _controllerKnivesCode,
+                            hint: 'Código',
+                            obscure: false,
+                            contentPadding: const EdgeInsets.only(bottom: 15),
+                            style: const TextStyle(fontSize: 14),
+                            onChanged: (value) => setState((){}), 
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                            onSuggestionSelected: (object) {},
+                            suggestionsCallback: (value) => [], 
+                            itemBuilder: (context, suggestion) {
+                              return const ListTile(
+                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: SizedBox(
+                          height: 40,
+                          child: CustomSuggestionTextField(
+                            controller: _controllerKnivesSize,
+                            hint: 'Furação',
+                            obscure: false, 
+                            contentPadding: const EdgeInsets.only(bottom: 15),
+                            style: const TextStyle(fontSize: 14),
+                            onChanged: (value) => setState((){}), 
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                            onSuggestionSelected: (object) {},
+                            suggestionsCallback: (value) => [], 
+                            itemBuilder: (context, suggestion) {
+                              return const ListTile(
+                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      _buildQuantityField(ButtomQuantity.knife, _controllerQuantityknives),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.center,
                     child: SizedBox(
-                      height: 40,
-                      child: CustomSuggestionTextField(
-                        hint: 'Tamanho',
-                        obscure: false, 
-                        contentPadding: const EdgeInsets.only(bottom: 15),
-                        style: const TextStyle(fontSize: 14),
-                        onChanged: (value) {}, 
-                        onSubmitted: () => FocusScope.of(context).nextFocus(),
-                        onSuggestionSelected: (object) {},
-                        suggestionsCallback: (value) => [], 
-                        itemBuilder: (context, suggestion) {
-                          return const ListTile(
-                            title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                          );
-                        },
+                      width: 170,
+                      child: CustomOutlinedButtom(
+                        onPressed: _controllerKnivesCode.text.isNotEmpty || _controllerKnivesSize.text.isNotEmpty
+                            ? () {
+                              servicesEquipmentcontroller.knives.add([
+                                _controllerKnivesCode.text,
+                                _controllerKnivesSize.text,
+                                _controllerQuantityknives.text,
+                              ]);
+                              _controllerKnivesCode.clear();
+                              _controllerKnivesSize.clear();
+                            }
+                            : null,
+                        child: const Text('Adicionar'),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  _buildQuantityField(ButtomQuantity.screw, _controllerQuantityScrew),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: 170,
-                  child: CustomOutlinedButtom(
-                    child: const Text('Adicionar'),
-                    onPressed: () {},
+                  const SizedBox(height: 16),
+                  const Divider(thickness: 1),
+                  const CustomTextLabel('Pendências'),
+                  CustomTextArea(
+                    hint: 'Descreva as pendências',
+                    onChanged: (value) => {},
+                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Divider(thickness: 1),
-              const CustomTextLabel(
-                'Calços',
-                marginTop: 24,
-                marginBottom: 16,
-                fontSize: 16,
-              ),
-              Table(
-                children: [
-                  _buildRow(['Código', 'Tamanho', 'Quantidade'], isHeader: true),
-                  _buildRow(['123', '2', '1',]),
-                  _buildRow(['123', '2', '1',]),
-                  _buildRow(['123', '2', '1',]),
-                ],
-              ),
-              const SizedBox(height: 48),
-               Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 40,
-                      child: CustomSuggestionTextField(
-                        hint: 'Código',
-                        obscure: false,
-                        contentPadding: const EdgeInsets.only(bottom: 15),
-                        style: const TextStyle(fontSize: 14),
-                        onChanged: (value) {}, 
-                        onSubmitted: () => FocusScope.of(context).nextFocus(),
-                        onSuggestionSelected: (object) {},
-                        suggestionsCallback: (value) => [], 
-                        itemBuilder: (context, suggestion) {
-                          return const ListTile(
-                            title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                          );
-                        },
-                      ),
+                  const SizedBox(height: 32),
+                  CustomActionButtonGroup(
+                    primaryChild: const Text('Salvar e avançar'),
+                    secondaryChild: const Text('Anterior'),
+                    onPrimaryPressed: widget.onPrimaryPressed,
+                    onSecondaryPressed: widget.onSecondaryPressed,
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: SizedBox(
-                      height: 40,
-                      child: CustomSuggestionTextField(
-                        hint: 'Tamanho',
-                        obscure: false, 
-                        contentPadding: const EdgeInsets.only(bottom: 15),
-                        style: const TextStyle(fontSize: 14),
-                        onChanged: (value) {}, 
-                        onSubmitted: () => FocusScope.of(context).nextFocus(),
-                        onSuggestionSelected: (object) {},
-                        suggestionsCallback: (value) => [], 
-                        itemBuilder: (context, suggestion) {
-                          return const ListTile(
-                            title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  _buildQuantityField(ButtomQuantity.shim, _controllerQuantityShim),
+                    const SizedBox(height: 20),
+                  const SizedBox(height: 48),
                 ],
-              ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: 170,
-                  child: CustomOutlinedButtom(
-                    child: const Text('Adicionar'),
-                    onPressed: () {},
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Divider(thickness: 1),
-              const CustomTextLabel(
-                'Facas',
-                marginTop: 24,
-                marginBottom: 16,
-                fontSize: 16,
-              ),
-              Table(
-                children: [
-                  _buildRow(['Código', 'Furação', 'Quantidade'], isHeader: true),
-                  _buildRow(['123', '2', '1',]),
-                  _buildRow(['123', '2', '1',]),
-                  _buildRow(['123', '2', '1',]),
-                ],
-              ),
-              const SizedBox(height: 48),
-              Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 40,
-                      child: CustomSuggestionTextField(
-                        hint: 'Código',
-                        obscure: false,
-                        contentPadding: const EdgeInsets.only(bottom: 15),
-                        style: const TextStyle(fontSize: 14),
-                        onChanged: (value) {}, 
-                        onSubmitted: () => FocusScope.of(context).nextFocus(),
-                        onSuggestionSelected: (object) {},
-                        suggestionsCallback: (value) => [], 
-                        itemBuilder: (context, suggestion) {
-                          return const ListTile(
-                            title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: SizedBox(
-                      height: 40,
-                      child: CustomSuggestionTextField(
-                        hint: 'Furação',
-                        obscure: false, 
-                        contentPadding: const EdgeInsets.only(bottom: 15),
-                        style: const TextStyle(fontSize: 14),
-                        onChanged: (value) {}, 
-                        onSubmitted: () => FocusScope.of(context).nextFocus(),
-                        onSuggestionSelected: (object) {},
-                        suggestionsCallback: (value) => [], 
-                        itemBuilder: (context, suggestion) {
-                          return const ListTile(
-                            title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  _buildQuantityField(ButtomQuantity.knife, _controllerQuantityknives),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: 170,
-                  child: CustomOutlinedButtom(
-                    child: const Text('Adicionar'),
-                    onPressed: () {},
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Divider(thickness: 1),
-              const CustomTextLabel('Pendências'),
-              CustomTextArea(
-                hint: 'Descreva as pendências',
-                onChanged: (value) => {},
-                onSubmitted: () => FocusScope.of(context).nextFocus(),
-              ),
-              const SizedBox(height: 32),
-              CustomActionButtonGroup(
-                primaryChild: const Text('Salvar e avançar'),
-                secondaryChild: const Text('Anterior'),
-                onPrimaryPressed: widget.onPrimaryPressed,
-                onSecondaryPressed: widget.onSecondaryPressed,
-                ),
-                const SizedBox(height: 20),
-              const SizedBox(height: 48),
-            ],
-          ),
+              );
+          }
+        ),
       )
     );
   }
@@ -375,7 +409,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
 
   _buildQuantityField(ButtomQuantity buttomQuantityType, TextEditingController controller) {
     return SizedBox(
-      width: 38,
+      width: 42,
       child: Column(
         children: [
           Material(
@@ -389,10 +423,9 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                   await Future.delayed(const Duration(milliseconds: 60));
                   } while (buttomQuantityPressed == buttomQuantityType);
                 },
-              onLongPressEnd: (_) => setState(() => buttomQuantityPressed = ButtomQuantity.none),
+              onLongPressEnd: (_) => buttomQuantityPressed = ButtomQuantity.none,
               child: Container(
-                height: 20,
-                width: 38,
+                height: 28,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8),
@@ -437,10 +470,9 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                   await Future.delayed(const Duration(milliseconds: 30));
                   } while (buttomQuantityPressed == buttomQuantityType);
                 },
-              onLongPressEnd: (_) => setState(() => buttomQuantityPressed = ButtomQuantity.none),
+              onLongPressEnd: (_) => buttomQuantityPressed = ButtomQuantity.none,
               child: Container(
-                height: 20,
-                width: 38,
+                height: 28,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(8),

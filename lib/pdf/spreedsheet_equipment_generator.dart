@@ -226,7 +226,6 @@ class SpreedsheetEquipmentGenerator {
                       child: pw.SizedBox(),
                     )
                   ),
-                  pw.Divider(thickness: 2),
                   pw.Expanded(
                     flex: 1,
                     child: pw.Text('DATA: $date', style: pw.TextStyle(fontSize: fontMediumSize)),
@@ -562,7 +561,7 @@ class SpreedsheetEquipmentGenerator {
                  padding: const pw.EdgeInsets.only(left: 4),
                  child: pw.Text(
                  'TESOURA: ${scissors.replaceAll('TESOURA ', '')}', 
-               style: pw.TextStyle(fontSize: scissors.length <= 18 ? fontMediumSize : fontSmallSize,
+               style: pw.TextStyle(fontSize: scissors.length <= 18 ? fontMediumSize : 7,
                   color: scissors == '' ? null : PdfColors.red, fontWeight: pw.FontWeight.bold),)
                 ),
               ),
