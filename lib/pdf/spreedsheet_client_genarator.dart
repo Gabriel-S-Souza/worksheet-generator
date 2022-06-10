@@ -20,31 +20,6 @@ class SpreedsheetClientGenerator {
   
   late pw.Document pdf;
 
-  // final String cliente = 'ARCELORMITAL PIRACICABA';
-  // final String os = '202201 - IRACE';
-  // final String localOfAttendance = 'PIRACICABA';
-  // final String correctiveValue = '[ X ] CORRETIVA';
-  // final String preventiveValue = '[   ] PREVENTIVA';
-  // final String requester = 'Alan';
-  // final String attendant = 'João da Silva';
-  // final String fleet = 'F-1234';
-  // final String plate = 'ABC-1234';
-  // final String serie = 'S-1234';
-  // final String model = 'M-1234';
-  // final String odometer = 'C-1234';
-
-  // final String defect = 'Defeito de teste';
-  // final String cause = 'Causa de teste';
-  // final String solution =
-  //     ' Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
-  // final String motorOil = '300';
-  // final String hydraulicOil = '400400df';
-  // final String pendencies = ' laborum.';
-
-  // final String attedanceDate = '01/01/2020';
-  // final String attedanceStartHour = '12:00';
-  // final String attedanceEndHour = '13:00';
-
   createDocumentBase() {
     pdf = pw.Document();
   }
@@ -273,6 +248,7 @@ class SpreedsheetClientGenerator {
     String attendant = '',
     String equipment = '[   ] Carregadeira        [    ] Escavadeira        [   ] Rolo Compactador        [   ] Trator        [   ] Outros',
     String application = '[   ] Carregamento        [   ] Escavação        [   ] Terraplanagem        [   ] Rompedor        [   ] Sucata/Tesoura',
+    //TODO: POTENCIAL BUG
     required String correctiveOrigin,
     String fleet = '',
     String model = '',

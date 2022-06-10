@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/basic_informations_controller.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/general_client_controller.dart';
+import 'package:formulario_de_atendimento/controllers/equipment_form/basic_info_equipment_controller.dart';
 import 'package:formulario_de_atendimento/data/data_access_object.dart';
 import 'package:formulario_de_atendimento/view/my_app.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'controllers/equipment_form/general_equipment_controller.dart';
 import 'default_values/default_values.dart';
 
 
@@ -36,6 +38,8 @@ void main() async {
   GetIt.I.registerSingleton<Box>(userDataBox, instanceName: DefaultBoxes.userData);
   GetIt.I.registerSingleton<Box>(osBox, instanceName: DefaultBoxes.os);
   GetIt.I.registerSingleton<GeneralClientController>(GeneralClientController());
+  GetIt.I.registerSingleton<GeneralEquipmentController>(GeneralEquipmentController());
+  GetIt.I.registerSingleton<BasicInfoEquipmentController>(BasicInfoEquipmentController());
   GetIt.I.registerSingleton<BasicInformaTionsController>(BasicInformaTionsController(), instanceName: DefaultKeys.basicInfoControllerClient);
 
   runApp(const MyApp());

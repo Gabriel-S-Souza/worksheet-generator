@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:formulario_de_atendimento/controllers/equipment_form/general_equipment_controller.dart';
+import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:formulario_de_atendimento/main.dart';
-import 'package:formulario_de_atendimento/pdf/spreedsheet_equipment_generator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/custom_action_form_group.dart';
@@ -26,6 +27,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
   final TextEditingController timeEndController = TextEditingController();
 
   final UserSettings userSettings = GetIt.I<UserSettings>();
+  final GeneralEquipmentController generalEquipmentController = GetIt.I<GeneralEquipmentController>();
 
   TimeOfDay? timeStart;
   TimeOfDay? timeEnd;
@@ -152,16 +154,27 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
             ),
             const SizedBox(height: 32),
             CustomOutlinedButtom(
-              onPressed: null,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text('Salvar planilha'),
-                  SizedBox(width: 8),
-                  Icon(Icons.save),
-                ],
-              ), 
-            ),
+              onPressed: 
+              // generalEquipmentController.readyToSave
+                  () async {
+
+                    generalEquipmentController.createSpreedsheet()
+                      .then((value) {
+                            _buildSnackBar(
+                              context, value
+                            );
+                          });
+                  },
+                  // : null,
+              child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text('Salvar planilha'),
+                    SizedBox(width: 8),
+                    Icon(Icons.save),
+                  ],
+                ), 
+                ),
             const SizedBox(height: 28),
             CustomAppButtom(
               onPressed: null,
@@ -211,7 +224,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         margin: const EdgeInsets.only(bottom: 60),
-        duration: const Duration(milliseconds: 2500),
+        duration: const Duration(milliseconds: 4000),
         behavior: SnackBarBehavior.floating,
         content: Text(message),
       ),

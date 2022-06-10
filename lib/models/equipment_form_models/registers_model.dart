@@ -5,5 +5,5 @@ class RegistersModel {
   String? attedanceStartHour;
   String? attedanceEndHour;
   String? totalOfHours;
-  List<String>? attendants;
+  List<String> attendants = [];
 }

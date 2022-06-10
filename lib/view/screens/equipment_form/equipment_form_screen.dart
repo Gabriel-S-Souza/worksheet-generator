@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:formulario_de_atendimento/controllers/equipment_form/general_equipment_controller.dart';
+import 'package:get_it/get_it.dart';
 
 import 'basic_informations_equipment_screen.dart';
 import 'registers_equipment_screen.dart';
@@ -14,6 +16,7 @@ class EquipmentFormScreen extends StatefulWidget {
 }
 
 class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
+  final GeneralEquipmentController generalEquipmentController = GetIt.I.get<GeneralEquipmentController>();
   late final PageController pageController;
   int currentPage = 0;
 
@@ -21,6 +24,7 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: currentPage);
+    generalEquipmentController.reset();
   }
 
   @override
@@ -59,6 +63,7 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
         onPageChanged: setCurrentPage,
         children: <Widget>[
           BasicInformationsEquipmentScreen(
+            equipmentName: widget.equipmentName,
             onPrimaryPressed: () {
               animatePage(1);
             },

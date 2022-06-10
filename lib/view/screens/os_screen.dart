@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/basic_informations_controller.dart';
+import 'package:formulario_de_atendimento/controllers/equipment_form/basic_info_equipment_controller.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_quantity_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_label.dart';
@@ -27,6 +28,7 @@ class _OSScreenState extends State<OSScreen> {
   final TextEditingController iracemapolisSufixController = TextEditingController();
 
   final BasicInformaTionsController basicInformationsController = GetIt.I.get<BasicInformaTionsController>(instanceName: DefaultKeys.basicInfoControllerClient);
+  final BasicInfoEquipmentController basicInfoEquipmentController = GetIt.I.get<BasicInfoEquipmentController>(instanceName: DefaultKeys.basicInfoControllerEquipment);
   final Box<dynamic> osBox = GetIt.I.get<Box<dynamic>>(instanceName: DefaultBoxes.os);
 
   late int countPiracicaba;
@@ -65,6 +67,7 @@ class _OSScreenState extends State<OSScreen> {
     isLoading = false;
     isChanged = false;
     basicInformationsController.generateOs();
+    basicInfoEquipmentController.generateOs();
     _getInputValues();
   }
 

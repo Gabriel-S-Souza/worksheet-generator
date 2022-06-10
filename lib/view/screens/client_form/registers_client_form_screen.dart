@@ -107,7 +107,6 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                           GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () async {
-                              print('clicou');
                               TimeOfDay? hours = await _selectHours(context, registersController.attendanceStartTimeOfDay);
                               if (hours != null) {
                                 registersController.attendanceStartTimeOfDay = hours;

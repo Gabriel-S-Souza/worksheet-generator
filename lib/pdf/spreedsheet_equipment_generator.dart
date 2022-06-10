@@ -1,4 +1,6 @@
 import 'dart:io' as io;
+import 'package:formulario_de_atendimento/controllers/equipment_form/basic_info_equipment_controller.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -6,56 +8,19 @@ import 'package:printing/printing.dart';
 
 import '../default_values/default_values.dart';
 
-class SpreadsheetEquipmentGenerator {
+class SpreedsheetEquipmentGenerator {
   final String downloadsDirectory;
-  SpreadsheetEquipmentGenerator({required this.downloadsDirectory}) {
+  SpreedsheetEquipmentGenerator({required this.downloadsDirectory}) {
     _loadImages();
   }
+
+  final BasicInfoEquipmentController basicInfoEquipmentController = GetIt.I.get<BasicInfoEquipmentController>();
 
   late pw.Document pdf;
 
   createDocumentBase() {
     pdf = pw.Document();
   }
-
-  // final String unit = 'PIRACICABA';
-  // final String localOfAttendance = 'PIRACICABA';
-  // final String spreedsheetDate = '01/01/2020';
-  // final String os = '202201 - IRACE';
-  // final String fleet = 'F-1234';
-  // final String model = 'M-1234';
-  // final String odometer = 'C-1234';
-  // final scissors = 'TESOURA LABOUNTY MSD-4000';
-  // final bool isCorrective = true;
-  // final String operationalFailure = '[ X ] FALHA OPERACIONAL';
-  // final bool isStoppedMachine = false; 
-  // final bool isTurnedKnife = true; 
-
-  // final String defectCause = 'Defeito de teste';
-  // String? serviceCarried;
-  // final String motorOil = '300';
-  // final String hydraulicOil = '400 - B';
-  // String? pendencies;
-
-
-  // final List<List<String>> screws = [
-  //   ['123456', '24X150', '10'],
-  //   ['123456', '24X150', '10'],
-  // ];
-  // final List<List<String>> shims = [
-  // ];
-  // final List<List<String>> knives = [
-  //   ['123456', '6 FUROS', '10'],
-  // ];
-
-  // final String attedanceStartDate = '01/01/2020';
-  // final String attedanceEndDate = '01/01/2020';
-  // final String attedanceStartHour = '12:00';
-  // final String attedanceEndHour = '13:00';
-  // final String totalOfHours = '10:00';
-  // final String attendant = 'João da Silva';
-
-  final String filePrefixName = 'labounty';
 
   final double cellLargeHeight = 20;
   final double cellHeight = 16;
@@ -93,7 +58,7 @@ class SpreadsheetEquipmentGenerator {
     bool isTurnedKnife = false,
     bool isExcavator = true,
     bool isScissors = true,
-    required String correctiveOrigin,
+    String? correctiveOrigin,
     String? fleet,
     String? model,
     String? odometer,
@@ -102,9 +67,9 @@ class SpreadsheetEquipmentGenerator {
     String? serviceCarried,
     String? motorOil,
     String? hydraulicOil,
-    required List<List<String>> screws,
-    required List<List<String>> shims,
-    required List<List<String>> knives,
+    List<List<String>>? screws,
+    List<List<String>>? shims,
+    List<List<String>>? knives,
     String? pendencies,
 
 
@@ -113,8 +78,11 @@ class SpreadsheetEquipmentGenerator {
     String? attedanceStartHour,
     String? attedanceEndHour,
     String? totalOfHours,
-    required List<String> attendants,
+    List<String>? attendants,
   }) async {
+    final String filePrefixName = scissors != null 
+        ? scissors.replaceAll('TESOURA ', '').replaceAll(' ', '-') : 'tesoura';
+
     final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
     final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
     final String name = '${filePrefixName}_${date}_$time.pdf';
@@ -136,37 +104,41 @@ class SpreadsheetEquipmentGenerator {
             ),
           ),
           build: (context) => [
-            _contentHeader(context, scissors = '', date: spreedsheetDate = ''),
+            _contentHeader(
+              context: context,
+              title: scissors ?? '',
+              date: spreedsheetDate ?? '',
+            ),
             _contentBasicInfo(
               context: context, 
-              os: os = '',
-              unit: unit = '',
-              localOfAttendance: localOfAttendance = '',
+              os: os ?? '',
+              unit: unit ?? '',
+              localOfAttendance: localOfAttendance ?? '',
               isStoppedMachine: isStoppedMachine,
               isTurnedKnife: isTurnedKnife,
               isCorrective: isCorrective,
               correctiveOrigin: correctiveOrigin,
               isExcavator: isExcavator,
               isScissors: isScissors,
-              fleet: fleet = '',
-              model: model = '',
-              odometer: odometer = '',
-              scissors: scissors = '',
+              fleet: fleet ?? '',
+              model: model ?? '',
+              odometer: odometer ?? '',
+              scissors: scissors ?? '',
             ),
             _contentServices(
               context: context,
-              defectCause: defectCause = '',
+              defectCause: defectCause ?? '',
               serviceCarried: serviceCarried ?? '',
-              motorOil: motorOil = '',
-              hydraulicOil: hydraulicOil = '',
+              motorOil: motorOil ?? '',
+              hydraulicOil: hydraulicOil ?? '',
               pendencies: pendencies ?? '',
-              screws: screws,
-              shims: shims,
-              knives: knives,
+              screws: screws ?? [],
+              shims: shims ?? [], 
+              knives: knives ?? [],
             ),
             _buildRegisters(
               context: context,
-              attendants: attendants,
+              attendants: attendants ?? [],
               attedanceStartDate: attedanceStartDate ?? '',
               attedanceEndDate: attedanceEndDate ?? '',
               attedanceStartHour: attedanceStartHour ?? '',
@@ -180,8 +152,8 @@ class SpreadsheetEquipmentGenerator {
     final io.File file = io.File(filePath);
     await file.writeAsBytes(await pdf.save());
 
-    // await basicInformationsController.updateOs();
-    // basicInformationsController.generateOs();
+    await basicInfoEquipmentController.updateOs();
+    basicInfoEquipmentController.generateOs();
 
     return file.path;
 
@@ -192,7 +164,10 @@ class SpreadsheetEquipmentGenerator {
     }
   }
 
-  pw.Widget _contentHeader(pw.Context context, String title, {String date = '' }){
+  pw.Widget _contentHeader({
+    required pw.Context context, 
+    required String title, 
+    String date = '' }){
     return pw.SizedBox(
       height: cellLargeHeight * 3,
       child: pw.Row(
@@ -275,7 +250,7 @@ class SpreadsheetEquipmentGenerator {
     required bool isCorrective,
     required bool isStoppedMachine,
     required bool isTurnedKnife,
-    String correctiveOrigin = '',
+    String? correctiveOrigin,
     bool isExcavator  = true,
     bool isScissors  = true,
     String fleet  = '',

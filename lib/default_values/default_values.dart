@@ -65,4 +65,5 @@ class DefaultKeys{
   static const iracemapolisSufix = 'iracemapolis_sufix';
 
   static const basicInfoControllerClient = 'basic_info_controller_client';
+  static const basicInfoControllerEquipment = 'basic_info_controller_equipment';
 }
