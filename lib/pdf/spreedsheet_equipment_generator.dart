@@ -4,49 +4,56 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
+import '../default_values/default_values.dart';
+
 class SpreadsheetEquipmentGenerator {
   final String downloadsDirectory;
   SpreadsheetEquipmentGenerator({required this.downloadsDirectory}) {
     _loadImages();
   }
 
-  //TODO: GLOBAIS DE TESTE
-  final String unit = 'PIRACICABA';
-  final String localOfAttendance = 'PIRACICABA';
-  final String spreedsheetDate = '01/01/2020';
-  final String os = '202201 - IRACE';
-  final String fleet = 'F-1234';
-  final String model = 'M-1234';
-  final String odometer = 'C-1234';
-  final scissors = 'TESOURA LABOUNTY MSD-4000';
-  final bool isCorrective = true;
-  final String operationalFailure = '[ X ] FALHA OPERACIONAL';
-  final bool isStoppedMachine = false; 
-  final bool isTurnedKnife = true; 
+  late pw.Document pdf;
 
-  final String defectCause = 'Defeito de teste';
-  String? serviceCarried;
-  final String motorOil = '300';
-  final String hydraulicOil = '400 - B';
-  String? pendencies;
+  createDocumentBase() {
+    pdf = pw.Document();
+  }
+
+  // final String unit = 'PIRACICABA';
+  // final String localOfAttendance = 'PIRACICABA';
+  // final String spreedsheetDate = '01/01/2020';
+  // final String os = '202201 - IRACE';
+  // final String fleet = 'F-1234';
+  // final String model = 'M-1234';
+  // final String odometer = 'C-1234';
+  // final scissors = 'TESOURA LABOUNTY MSD-4000';
+  // final bool isCorrective = true;
+  // final String operationalFailure = '[ X ] FALHA OPERACIONAL';
+  // final bool isStoppedMachine = false; 
+  // final bool isTurnedKnife = true; 
+
+  // final String defectCause = 'Defeito de teste';
+  // String? serviceCarried;
+  // final String motorOil = '300';
+  // final String hydraulicOil = '400 - B';
+  // String? pendencies;
 
 
-  final List<List<String>> screws = [
-    ['123456', '24X150', '10'],
-    ['123456', '24X150', '10'],
-  ];
-  final List<List<String>> shims = [
-  ];
-  final List<List<String>> knives = [
-    ['123456', '6 FUROS', '10'],
-  ];
+  // final List<List<String>> screws = [
+  //   ['123456', '24X150', '10'],
+  //   ['123456', '24X150', '10'],
+  // ];
+  // final List<List<String>> shims = [
+  // ];
+  // final List<List<String>> knives = [
+  //   ['123456', '6 FUROS', '10'],
+  // ];
 
-  final String attedanceStartDate = '01/01/2020';
-  final String attedanceEndDate = '01/01/2020';
-  final String attedanceStartHour = '12:00';
-  final String attedanceEndHour = '13:00';
-  final String totalOfHours = '10:00';
-  final String attendant = 'João da Silva';
+  // final String attedanceStartDate = '01/01/2020';
+  // final String attedanceEndDate = '01/01/2020';
+  // final String attedanceStartHour = '12:00';
+  // final String attedanceEndHour = '13:00';
+  // final String totalOfHours = '10:00';
+  // final String attendant = 'João da Silva';
 
   final String filePrefixName = 'labounty';
 
@@ -75,7 +82,39 @@ class SpreadsheetEquipmentGenerator {
     return;
   }
   
-  Future<String> createSheet() async {
+  Future<String> createSheet({
+    String? scissors,
+    String? spreedsheetDate,
+    String? unit,
+    String? os,
+    String? localOfAttendance,
+    bool isCorrective = true,
+    bool isStoppedMachine = false,
+    bool isTurnedKnife = false,
+    bool isExcavator = true,
+    bool isScissors = true,
+    required String correctiveOrigin,
+    String? fleet,
+    String? model,
+    String? odometer,
+
+    String? defectCause,
+    String? serviceCarried,
+    String? motorOil,
+    String? hydraulicOil,
+    required List<List<String>> screws,
+    required List<List<String>> shims,
+    required List<List<String>> knives,
+    String? pendencies,
+
+
+    String? attedanceStartDate,
+    String? attedanceEndDate,
+    String? attedanceStartHour,
+    String? attedanceEndHour,
+    String? totalOfHours,
+    required List<String> attendants,
+  }) async {
     final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
     final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
     final String name = '${filePrefixName}_${date}_$time.pdf';
@@ -83,7 +122,7 @@ class SpreadsheetEquipmentGenerator {
     final String filePath = '$downloadsDirectory/$name';
 
     try {
-      final pdf = pw.Document();
+      pdf = pw.Document();
       pdf.addPage(
         pw.MultiPage(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -97,26 +136,29 @@ class SpreadsheetEquipmentGenerator {
             ),
           ),
           build: (context) => [
-            _contentHeader(context, scissors, date: spreedsheetDate),
+            _contentHeader(context, scissors = '', date: spreedsheetDate = ''),
             _contentBasicInfo(
               context: context, 
-              os: os,
-              localOfAttendance: localOfAttendance,
+              os: os = '',
+              unit: unit = '',
+              localOfAttendance: localOfAttendance = '',
+              isStoppedMachine: isStoppedMachine,
+              isTurnedKnife: isTurnedKnife,
               isCorrective: isCorrective,
-              attendant: attendant,
-              isExcavator: true,
-              isScissors: true,
-              fleet: fleet,
-              model: model,
-              odometer: odometer,
-              scissors: scissors,
+              correctiveOrigin: correctiveOrigin,
+              isExcavator: isExcavator,
+              isScissors: isScissors,
+              fleet: fleet = '',
+              model: model = '',
+              odometer: odometer = '',
+              scissors: scissors = '',
             ),
             _contentServices(
               context: context,
-              defectCause: defectCause,
+              defectCause: defectCause = '',
               serviceCarried: serviceCarried ?? '',
-              motorOil: motorOil,
-              hydraulicOil: hydraulicOil,
+              motorOil: motorOil = '',
+              hydraulicOil: hydraulicOil = '',
               pendencies: pendencies ?? '',
               screws: screws,
               shims: shims,
@@ -124,12 +166,12 @@ class SpreadsheetEquipmentGenerator {
             ),
             _buildRegisters(
               context: context,
-              attendant: attendant,
-              attedanceStartDate: attedanceStartDate,
-              attedanceEndDate: attedanceEndDate,
-              attedanceStartHour: attedanceStartHour,
-              attedanceEndHour: attedanceEndHour,
-              totalOfHours: totalOfHours,
+              attendants: attendants,
+              attedanceStartDate: attedanceStartDate ?? '',
+              attedanceEndDate: attedanceEndDate ?? '',
+              attedanceStartHour: attedanceStartHour ?? '',
+              attedanceEndHour: attedanceEndHour ?? '',
+              totalOfHours: totalOfHours ?? '',
             ),
           ], 
         ),
@@ -137,6 +179,10 @@ class SpreadsheetEquipmentGenerator {
 
     final io.File file = io.File(filePath);
     await file.writeAsBytes(await pdf.save());
+
+    // await basicInformationsController.updateOs();
+    // basicInformationsController.generateOs();
+
     return file.path;
 
 
@@ -224,16 +270,12 @@ class SpreadsheetEquipmentGenerator {
   pw.Widget _contentBasicInfo({
     required pw.Context context,
     required String os,
+    String unit = '',
     String localOfAttendance= '',
-    bool isCorrective = true,
-    bool isStoppedMachine = false,
-    bool isTurnedKnife = false,
-    String operationalFailure = '[   ] FALHA OPERACIONAL',
-    String withoutPreventive = '[   ] FALTA DE PREVENTIVA',
-    String maintenanceFailure = '[   ] FALHA MANUTENÇÃO',
-    String wearCommon = '[   ] DESGASTE COMUM',
-    String other = '[   ] OUTROS',
-    String attendant  = '',
+    required bool isCorrective,
+    required bool isStoppedMachine,
+    required bool isTurnedKnife,
+    String correctiveOrigin = '',
     bool isExcavator  = true,
     bool isScissors  = true,
     String fleet  = '',
@@ -251,6 +293,12 @@ class SpreadsheetEquipmentGenerator {
 
     final String equipmentValue;
     final String applicationValue;
+
+    final String operationalFailure = correctiveOrigin == CorrectiveMaintenanceOriginEquipment.operationalFailure ? '[ X ] FALHA OPERACIONAL' : '[   ] FALHA OPERACIONAL';
+    final String withoutPreventive = correctiveOrigin == CorrectiveMaintenanceOriginEquipment.withoutPreventive ? '[ X ] FALTA DE PREVENTIVA' : '[   ] FALTA DE PREVENTIVA';
+    final String maintenanceFailure = correctiveOrigin == CorrectiveMaintenanceOriginEquipment.maintenanceFailure ? '[ X ] FALHA MANUTENÇÃO' : '[   ] FALHA MANUTENÇÃO';
+    final String wearCommon = correctiveOrigin == CorrectiveMaintenanceOriginEquipment.wearCommon ? '[ X ] DESGASTE COMUM' : '[   ] DESGASTE COMUM';
+    final String other = correctiveOrigin == CorrectiveMaintenanceOriginEquipment.other ? '[ X ] OUTROS' : '[   ] OUTROS';
 
     if(isStoppedMachine) {
       yesStoppedMachine = '[ X ] Sim';
@@ -576,8 +624,6 @@ class SpreadsheetEquipmentGenerator {
     hydraulicOil.length > 14 ? fontSizeHydraulicOil = fontLargeMediumSize : '';
 
     final int tableLength = [screws, shims, knives].reduce((a, b) => a.length > b.length ? a : b).length;
-
-    // final List<List<List<String>>> tableItens = [screws, shims, knives];
 
     return pw.Column(
       children: [
@@ -1016,13 +1062,17 @@ class SpreadsheetEquipmentGenerator {
 
   pw.Widget _buildRegisters({
     required pw.Context context,
-    String attendant = '',
+    required List<String> attendants,
     String attedanceStartDate = '',
     String attedanceEndDate = '',
     String attedanceStartHour = '',
     String attedanceEndHour = '',
     String totalOfHours = '',
   }) {
+
+    attendants.add('NOME');
+    final listLength = attendants.length + 2;
+    
     return pw.Column(
       children: [
         _generateRow(
@@ -1135,7 +1185,7 @@ class SpreadsheetEquipmentGenerator {
         ),
         _generateRow(
           context: context,
-          height: cellHeight * 4,
+          height: cellHeight * listLength,
           paddingLeft: 0,
           child: pw.Row(
             children: [
@@ -1157,66 +1207,32 @@ class SpreadsheetEquipmentGenerator {
               ),
                pw.Expanded(
                 child: pw.Column(
-                  children: [
-                    _generateRow(
+                  children: List.generate(listLength, (index) {
+                    return _generateRow(
                       context: context,
                       height: cellHeight,
                       paddingLeft: 4,
                       child: pw.Text(
-                        'NOME',
+                        attendants.length - 1 >= index ? attendants[index] : '',
                         style: pw.TextStyle(fontSize: fontSmallSize),
                       )
-                    ),
-                    _generateRow(
-                      context: context,
-                      height: cellHeight,
-                      paddingLeft: 4,
-                      child: pw.Text(
-                        attendant,
-                        style: pw.TextStyle(fontSize: fontSmallSize),
-                      )
-                    ),
-                    _generateRow(
-                      context: context,
-                      height: cellHeight,
-                      paddingLeft: 4,
-                    ),
-                    _generateRow(
-                      context: context,
-                      height: cellHeight,
-                      paddingLeft: 4,
-                    ),
-                  ]
+                    );
+                  })
                 )
               ),
               pw.Expanded(
                 child: pw.Column(
-                  children: [
-                    _generateRow(
+                  children: List.generate(listLength, (index) {
+                    return _generateRow(
                       context: context,
                       height: cellHeight,
                       paddingLeft: 4,
                       child: pw.Text(
-                        'ASSINATURA',
+                        index == 0 ? 'ASSINATURA' : '',
                         style: pw.TextStyle(fontSize: fontSmallSize),
                       )
-                    ),
-                    _generateRow(
-                      context: context,
-                      height: cellHeight,
-                      paddingLeft: 4,
-                    ),
-                    _generateRow(
-                      context: context,
-                      height: cellHeight,
-                      paddingLeft: 4,
-                    ),
-                    _generateRow(
-                      context: context,
-                      height: cellHeight,
-                      paddingLeft: 4,
-                    ),
-                  ]
+                    );
+                  })
                 )
               ),
             ]

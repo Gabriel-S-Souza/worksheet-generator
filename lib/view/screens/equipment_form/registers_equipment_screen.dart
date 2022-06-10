@@ -152,7 +152,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
             ),
             const SizedBox(height: 32),
             CustomOutlinedButtom(
-               onPressed: null,
+              onPressed: null,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
