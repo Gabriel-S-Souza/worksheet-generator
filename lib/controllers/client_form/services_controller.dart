@@ -58,33 +58,4 @@ abstract class ServicesControllerBase with Store {
     
     isLoading = false;
   }
-
-  // @action
-  // Future<void> addToSpreedsheet() async {
-  //   isLoading = true;
-
-  //   final ServicesModel services = ServicesModel();
-  //   services.defect['value'] = defect;
-  //   services.cause['value'] = cause;
-  //   services.solution['value'] = solution;
-  //   services.motorOil['value'] = motorOil;
-  //   services.hydraulicOil['value'] = hydraulicOil;
-  //   services.situation['value'] = situation;
-  //   services.pendencies['value'] = pendencies;
-
-  //   services.treatTheProperties();
-
-  //   List<Map<String, String?>> servicesList = services.toList();
-  //   for (Map<String, String?> element in servicesList) {
-  //     if (element['value'] != null) {
-  //       spreadsheetXlsxGenerator.updateCell(
-  //         'CLIENTE',
-  //         CellIndex.indexByString(element['cellAdress']!),
-  //         element['value'],
-  //       );
-  //     }
-  //   }
-
-  //   isLoading = false;
-  // }
 }

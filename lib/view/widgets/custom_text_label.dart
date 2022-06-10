@@ -5,12 +5,14 @@ class CustomTextLabel extends StatelessWidget {
   final double fontSize;
   final double marginTop;
   final double marginBottom;
+  final Color? color;
   const CustomTextLabel(
     this.text, 
     {Key? key, 
     this.marginTop = 22, 
     this.marginBottom = 16,
-    this.fontSize = 20,}) : super(key: key);
+    this.fontSize = 20, 
+    this.color,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class CustomTextLabel extends StatelessWidget {
         style: TextStyle(
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
+          color: color
         ),
       ),
     );

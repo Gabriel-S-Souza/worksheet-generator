@@ -165,6 +165,7 @@ class SpreedsheetClientGenerator {
               attedanceDate: attedanceDate ?? '',
               attedanceStartHour: attedanceStartHour ?? '',
               attedanceEndHour: attedanceEndHour ?? '',
+              totalOfHours: totalOfHours ?? '',
               extraSpace: extraSpace
             ),
           ], 
@@ -712,7 +713,7 @@ class SpreedsheetClientGenerator {
           context: context,
           paddingTop: 4,
           paddingRight: 4,
-          paddingBottom: solution.length < 300 ? cellHeight * 2 : cellHeight,
+          paddingBottom: solution.length < 240 ? cellHeight * 2 : cellHeight,
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,
             children: [
@@ -876,7 +877,7 @@ class SpreedsheetClientGenerator {
           context: context,
           paddingTop: 4,
           paddingRight: 4,
-          paddingBottom: pendencies.length < 300 ? cellHeight * 2 : cellHeight,
+          paddingBottom: pendencies.length < 240 ? cellHeight * 2 : cellHeight,
           borderBottom: 1.5,
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.center,

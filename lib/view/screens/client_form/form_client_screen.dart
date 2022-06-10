@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../../controllers/client_form/general_client_controller.dart';
 import 'basic_information_cliente_form_screen.dart';
 import 'registers_client_form_screen.dart';
 import 'services_client_form_screen.dart';
@@ -13,6 +15,7 @@ class FormClientScreen extends StatefulWidget {
 }
 
 class _FormClientScreenState extends State<FormClientScreen> {
+  final GeneralClientController generalClientController = GetIt.I.get<GeneralClientController>();
   late final PageController pageController;
   int currentPage = 0;
 
@@ -25,6 +28,7 @@ class _FormClientScreenState extends State<FormClientScreen> {
   @override
   void dispose() {
     pageController.dispose();
+    generalClientController.reset();
     super.dispose();
   }
 

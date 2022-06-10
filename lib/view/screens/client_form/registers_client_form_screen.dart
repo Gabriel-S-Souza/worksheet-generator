@@ -9,7 +9,6 @@ import 'package:formulario_de_atendimento/view/widgets/custom_text_field.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
-import '../../../pdf/spreedsheet_client_genarator.dart';
 import '../../widgets/custom_text_label.dart';
 import '../../widgets/custom_icon_button.dart';
 
@@ -24,17 +23,9 @@ class RegistersClientFormScreen extends StatefulWidget {
 
 class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
 
-  final TextEditingController attendanceDateController = TextEditingController();
-  final TextEditingController departureDateController = TextEditingController();
-  final TextEditingController departureBackDateController = TextEditingController();
-  final TextEditingController arrivalDateController = TextEditingController();
-  final TextEditingController arrivalBackDateController = TextEditingController();
-  final TextEditingController departureHourController = TextEditingController();
-  final TextEditingController departureBackHourController = TextEditingController();
-  final TextEditingController arrivalHourController = TextEditingController();
-  final TextEditingController arrivalBackHourController = TextEditingController();
   final TextEditingController attendanceStartHourController = TextEditingController();
   final TextEditingController attendanceEndHourController = TextEditingController();
+  final TextEditingController attendanceDateController = TextEditingController();
 
   final GeneralClientController generalClientController = GetIt.I.get<GeneralClientController>();
 
@@ -48,20 +39,13 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
     super.initState();
     focusNodeFinalKm = FocusNode();
     focusAttendanceDate = FocusNode();
+    registersController.attendanceDate = attendanceDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
   }
 
 
   @override
   void dispose() {
     attendanceDateController.dispose();
-    departureDateController.dispose();
-    departureBackDateController.dispose();
-    arrivalDateController.dispose();
-    arrivalBackDateController.dispose();
-    departureHourController.dispose();
-    departureBackHourController.dispose();
-    arrivalHourController.dispose();
-    arrivalBackHourController.dispose();
     attendanceStartHourController.dispose();
     attendanceEndHourController.dispose();
     focusNodeFinalKm.dispose();
@@ -74,162 +58,208 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
-            const Divider(thickness: 1,),
-            const CustomTextLabel('Atendimento'),
-            const CustomTextLabel('Data', 
-              marginTop: 8,
-              marginBottom: 8,
-              fontSize: 16,),
-            CustomTextField(
-              controller: attendanceDateController,
-              focusNode: focusAttendanceDate,
-              hint: 'Data do atendimento',
-                suffix: CustomIconButton(
-                radius: 32, 
-                iconData: Icons.edit_calendar, 
-                onTap: () async {
-                  registersController.attendanceDate = attendanceDateController.text = await _selectDate(context);
-                } 
-              ),
-              onChanged: (value) => registersController.attendanceDate = value,
-              onSubmitted: () => FocusScope.of(context).nextFocus(),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: <Widget> [
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CustomTextLabel(
-                        'Horário de início',
-                        marginTop: 8,
-                        marginBottom: 8,
-                        fontSize: 16,
-                      ),
-                      CustomTextField(
-                        hint: 'Ex: 09:00',
-                        controller: attendanceStartHourController,
-                        onChanged: (value) => registersController.attendanceStartTime = value,
-                        onSubmitted: () => FocusScope.of(context).nextFocus(),
+        child: Observer(
+          builder: (context) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CustomTextLabel('Atendimento'),
+                const CustomTextLabel('Data', 
+                  marginTop: 8,
+                  marginBottom: 8,
+                  fontSize: 16,),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () async {
+                    registersController.attendanceDate = attendanceDateController.text = await _selectDate(context);
+                  },
+                  child: IgnorePointer(
+                    child: CustomTextField(
+                      readOnly: true,
+                      controller: attendanceDateController,
+                      focusNode: focusAttendanceDate,
+                      hint: 'Data do atendimento',
                         suffix: CustomIconButton(
-                          radius: 32, 
-                          iconData: Icons.edit_calendar, 
-                          onTap: () async {
-                            TimeOfDay? hours = await _selectHours(context, registersController.attendanceStartHour);
-                            if (hours != null) {
-                              registersController.attendanceStartHour = hours;
-                              registersController.attendanceStartTime = attendanceStartHourController.text = '${hours.hour}:${hours.minute}';
-                            }
-                          } 
-                        ),
+                        radius: 32, 
+                        iconData: Icons.edit_calendar, 
+                        onTap: () async {
+                          registersController.attendanceDate = attendanceDateController.text = await _selectDate(context);
+                        } 
                       ),
-                    ],
+                      onChanged: (value) => registersController.attendanceDate = value,
+                      onSubmitted: () => FocusScope.of(context).nextFocus(),
+                    ),
                   ),
                 ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CustomTextLabel(
-                        'Horário de término',
-                        marginTop: 8,
-                        marginBottom: 8,
-                        fontSize: 16,
+                const SizedBox(height: 16),
+                Row(
+                  children: <Widget> [
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const CustomTextLabel(
+                            'Horário de início',
+                            marginTop: 8,
+                            marginBottom: 8,
+                            fontSize: 16,
+                          ),
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () async {
+                              print('clicou');
+                              TimeOfDay? hours = await _selectHours(context, registersController.attendanceStartTimeOfDay);
+                              if (hours != null) {
+                                registersController.attendanceStartTimeOfDay = hours;
+                                String hoursFormated = hours.hour < 10 ? '0${hours.hour}' : '${hours.hour}';
+                                String minutesFormated = hours.minute < 10 ? '0${hours.minute}' : '${hours.minute}';
+                                registersController.attendanceStartTime = attendanceStartHourController.text = '$hoursFormated:$minutesFormated';
+                              }
+                            }, 
+                            child: IgnorePointer(
+                              child: CustomTextField(
+                                readOnly: true,
+                                hint: 'Ex: 09:00',
+                                controller: attendanceStartHourController,
+                                onChanged: (value) => registersController.attendanceStartTime = value,
+                                onSubmitted: () => FocusScope.of(context).nextFocus(),
+                                suffix: CustomIconButton(
+                                  radius: 32, 
+                                  iconData: Icons.edit_calendar, 
+                                  onTap: () async {
+                                    TimeOfDay? hours = await _selectHours(context, registersController.attendanceStartTimeOfDay);
+                                    if (hours != null) {
+                                      registersController.attendanceStartTimeOfDay = hours;
+                                      String hoursFormated = hours.hour < 10 ? '0${hours.hour}' : '${hours.hour}';
+                                      String minutesFormated = hours.minute < 10 ? '0${hours.minute}' : '${hours.minute}';
+                                      registersController.attendanceStartTime = attendanceStartHourController.text = '$hoursFormated:$minutesFormated';
+                                    }
+                                  } 
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      CustomTextField(
-                        hint: 'Ex: 09:00',
-                        controller: attendanceEndHourController,
-                        onChanged: (value) => registersController.attendanceEndTime = value,
-                        onSubmitted: () => FocusScope.of(context).nextFocus(),
-                        suffix: CustomIconButton(
-                          radius: 32, 
-                          iconData: Icons.watch_later, 
-                          onTap: () async {
-                            TimeOfDay? hours = await _selectHours(context, registersController.attendanceEndHour);
-                            if (hours != null) {
-                              registersController.attendanceEndHour = hours;
-                              registersController.attendanceEndTime = attendanceEndHourController.text = '${hours.hour}:${hours.minute}';
-                            }
-                          } 
-                        ),
+                    ),
+                    const SizedBox(width: 16),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const CustomTextLabel(
+                            'Horário de término',
+                            marginTop: 8,
+                            marginBottom: 8,
+                            fontSize: 16,
+                          ),
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () async {
+                              TimeOfDay? hours = await _selectHours(context, registersController.attendanceEndTimeOfDay);
+                              if (hours != null) {
+                                registersController.attendanceEndTimeOfDay = hours;
+                                String hoursFormated = hours.hour < 10 ? '0${hours.hour}' : '${hours.hour}';
+                                String minutesFormated = hours.minute < 10 ? '0${hours.minute}' : '${hours.minute}';
+                                registersController.attendanceEndTime = attendanceEndHourController.text = '$hoursFormated:$minutesFormated';
+                              }
+                            },
+                            child: IgnorePointer(
+                              child: CustomTextField(
+                                readOnly: true,
+                                hint: 'Ex: 09:00',
+                                controller: attendanceEndHourController,
+                                onChanged: (value) => registersController.attendanceEndTime = value,
+                                onSubmitted: () => FocusScope.of(context).nextFocus(),
+                                suffix: CustomIconButton(
+                                  radius: 32, 
+                                  iconData: Icons.watch_later, 
+                                  onTap: () async {
+                                    TimeOfDay? hours = await _selectHours(context, registersController.attendanceEndTimeOfDay);
+                                    if (hours != null) {
+                                      registersController.attendanceEndTimeOfDay = hours;
+                                      String hoursFormated = hours.hour < 10 ? '0${hours.hour}' : '${hours.hour}';
+                                      String minutesFormated = hours.minute < 10 ? '0${hours.minute}' : '${hours.minute}';
+                                      registersController.attendanceEndTime = attendanceEndHourController.text = '$hoursFormated:$minutesFormated';
+                                    }
+                                  } 
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 40),
-            Observer(
-              builder: (context) {
-                return CustomActionButtonGroup(
-                  primaryChild: !registersController.isLoading
-                      ? const Text('Salvar e avançar')
-                      : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()), 
-                  secondaryChild: const Text('Anterior'),
-                  onSecondaryPressed:  widget.onSecondaryPressed,
-                  onPrimaryPressed: null,
-                );
-              }
-            ),
-            const SizedBox(height: 32),
-            CustomOutlinedButtom(
-              onPressed: () async {
-                  // SpreadsheetClientGenerator spreadsheetClientGenerator = SpreadsheetClientGenerator(widget.downloadsDirectory);
-                  // spreadsheetClientGenerator.clientSheetCreate()
-                  //     .then((value) {
-                  //             _buildSnackBar(
-                  //               context, 'Salvo $value'
-                  //             );
-                  //           });
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center, 
+                  children: [
+                    const CustomTextLabel( 'Total de horas:  ', color: Colors.black54),
+                    CustomTextLabel(registersController.totalOfHours ?? '00:00', color: Colors.black54),
+                  ]
+                ),
+                const SizedBox(height: 40),
+                Observer(
+                  builder: (context) {
+                    return CustomActionButtonGroup(
+                      primaryChild: !registersController.isLoading
+                          ? const Text('Salvar')
+                          : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()), 
+                      secondaryChild: const Text('Anterior'),
+                      onSecondaryPressed:  widget.onSecondaryPressed,
+                      onPrimaryPressed:!registersController.isLoading
+                          ? () async {
+                              await registersController.save();
+                              String? response = registersController.checkIfCanCreate();
+                              if (response != null && mounted) {
+                                _buildSnackBar(context, response);
+                              }
+                              setState(() {});
+                            }
+                          : null,
+                    );
+                  }
+                ),
+                const SizedBox(height: 32),
+                CustomOutlinedButtom(
+                  onPressed: generalClientController.readyToSave
+                      ? () async {
 
-                  generalClientController.createSpreedsheet()
-                      .then((value) {
-                            _buildSnackBar(
-                              context, value
-                            );
-                          });
-                },
-              child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text('Salvar planilha'),
-                    SizedBox(width: 8),
-                    Icon(Icons.save),
-                  ],
-                ), 
-            ),
-            const SizedBox(height: 28),
-            CustomOutlinedButtom(
-              onPressed: null,
-              child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text('Salvar planilha (xlsx)'),
-                    SizedBox(width: 8),
-                    Icon(Icons.save),
-                  ],
-                ), 
-            ),
-            const SizedBox(height: 28),
-            CustomAppButtom(
-              onPressed: null,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text('Receber no email'),
-                    SizedBox(width: 8),
-                    Icon(Icons.email),
-                  ],
-                ), 
-            ),
-            const SizedBox(height: 40),
-          ],
+                        generalClientController.createSpreedsheet()
+                          .then((value) {
+                                _buildSnackBar(
+                                  context, value
+                                );
+                              });
+                      }
+                      : null,
+                  child:  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text('Salvar planilha'),
+                        SizedBox(width: 8),
+                        Icon(Icons.save),
+                      ],
+                    ), 
+                ),
+                const SizedBox(height: 28),
+                CustomAppButtom(
+                  onPressed: null,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text('Receber no email'),
+                        SizedBox(width: 8),
+                        Icon(Icons.email),
+                      ],
+                    ), 
+                ),
+                const SizedBox(height: 40),
+              ],
+            );
+          }
         ),
       ),
     );

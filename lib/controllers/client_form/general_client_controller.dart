@@ -19,15 +19,19 @@ class GeneralClientController {
   ServicesModel? services;
   RegistersModel? registers;
 
+  get readyToSave =>
+      basicInformations != null &&
+      services != null &&
+      registers != null;
+
   Future<String> createSpreedsheet() async {
     if (basicInformations == null) {
       return 'A página de informações básicas não foi salva';
     } else if (services == null) {
       return 'A página de serviços não foi salva';
+    } else if (registers == null) {
+      return 'Esta página não foi salva';
     } 
-    //else if (registers == null) {
-    //   return 'A página de atendimento não foi salva';
-    // } 
     else {
       spreedsheetClientGenerator.createDocumentBase();
       String response = await spreedsheetClientGenerator.clientSheetCreate(
@@ -56,8 +60,10 @@ class GeneralClientController {
         situation: services!.situation,
         pendencies: services!.pendencies,
 
-        
-      
+        attedanceDate: registers!.attendanceDate,
+        attedanceStartHour: registers!.attendanceStartTime,
+        attedanceEndHour: registers!.attendanceEndTime,
+        totalOfHours: registers!.totalOfHours,      
       );
 
       basicInformations = null;
@@ -66,6 +72,12 @@ class GeneralClientController {
 
       return response;
     }
+  }
+
+  void reset() {
+    basicInformations = null;
+    services = null;
+    registers = null;
   }
 
   Future<void> _init() async {
@@ -82,5 +94,17 @@ class GeneralClientController {
       throw Exception('Could not get the downloads directory');
     }
 
+  }
+
+  String? checkIfCanCreate() {
+    if (basicInformations == null) {
+      return 'A página de informações básicas não foi salva';
+    } else if (services == null) {
+      return 'A página de serviços não foi salva';
+    } else if (registers == null) {
+      return 'Esta página não foi salva';
+    } else {
+      return null;
+    }
   }
 }
