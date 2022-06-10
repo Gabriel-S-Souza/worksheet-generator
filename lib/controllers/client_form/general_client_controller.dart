@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/services.dart';
-import 'package:formulario_de_atendimento/models/client_form_settings/basic_informations_model.dart';
-import 'package:formulario_de_atendimento/models/client_form_settings/registers_model.dart';
-import 'package:formulario_de_atendimento/models/client_form_settings/services_model.dart';
+import 'package:formulario_de_atendimento/models/client_form_models/basic_informations_model.dart';
+import 'package:formulario_de_atendimento/models/client_form_models/registers_model.dart';
+import 'package:formulario_de_atendimento/models/client_form_models/services_model.dart';
 import 'package:formulario_de_atendimento/pdf/spreedsheet_client_genarator.dart';
 
 class GeneralClientController {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/general_client_controller.dart';
-import 'package:formulario_de_atendimento/models/client_form_settings/registers_model.dart';
+import 'package:formulario_de_atendimento/models/client_form_models/registers_model.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 

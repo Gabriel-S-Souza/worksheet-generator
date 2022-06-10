@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../default_values/default_values.dart';
-import '../../models/client_form_settings/basic_informations_model.dart';
+import '../../models/client_form_models/basic_informations_model.dart';
 
 part 'basic_informations_controller.g.dart';
 
