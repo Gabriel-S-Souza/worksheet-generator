@@ -86,6 +86,62 @@ mixin _$RegistersEquipmentController
     return _$saveAsyncAction.run(() => super.save());
   }
 
+  late final _$RegistersEquipmentControllerBaseActionController =
+      ActionController(
+          name: 'RegistersEquipmentControllerBase', context: context);
+
+  @override
+  void setAttendanceStartTimeOfDay(TimeOfDay value) {
+    final _$actionInfo =
+        _$RegistersEquipmentControllerBaseActionController.startAction(
+            name:
+                'RegistersEquipmentControllerBase.setAttendanceStartTimeOfDay');
+    try {
+      return super.setAttendanceStartTimeOfDay(value);
+    } finally {
+      _$RegistersEquipmentControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setAttendanceEndTimeOfDay(TimeOfDay value) {
+    final _$actionInfo =
+        _$RegistersEquipmentControllerBaseActionController.startAction(
+            name: 'RegistersEquipmentControllerBase.setAttendanceEndTimeOfDay');
+    try {
+      return super.setAttendanceEndTimeOfDay(value);
+    } finally {
+      _$RegistersEquipmentControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _setTotalOfHours(TimeOfDay? hours) {
+    final _$actionInfo = _$RegistersEquipmentControllerBaseActionController
+        .startAction(name: 'RegistersEquipmentControllerBase._setTotalOfHours');
+    try {
+      return super._setTotalOfHours(hours);
+    } finally {
+      _$RegistersEquipmentControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void calculateHoursDifference() {
+    final _$actionInfo =
+        _$RegistersEquipmentControllerBaseActionController.startAction(
+            name: 'RegistersEquipmentControllerBase.calculateHoursDifference');
+    try {
+      return super.calculateHoursDifference();
+    } finally {
+      _$RegistersEquipmentControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

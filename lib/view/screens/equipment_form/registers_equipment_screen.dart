@@ -31,16 +31,22 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
   final GeneralEquipmentController generalEquipmentController = GetIt.I<GeneralEquipmentController>();
   final RegistersEquipmentController registersEquipmentController = RegistersEquipmentController();
 
-  TimeOfDay? timeStart;
-  TimeOfDay? timeEnd;
-
-
   @override
   void initState() {
     super.initState();
     registersEquipmentController.attedanceStartDate = registersEquipmentController.attedanceEndDate =
         dateEndController.text = dateStartController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
     attendantController.text = userSettings.name ?? '';
+  }
+
+  @override
+  void dispose() {
+    attendantController.dispose();
+    dateStartController.dispose();
+    dateEndController.dispose();
+    timeStartController.dispose();
+    timeEndController.dispose();
+    super.dispose();
   }
 
   @override
@@ -107,6 +113,8 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                      child: GestureDetector(
                        onTap: () async {
                           dateStartController.text = await _selectDate(context);
+                          registersEquipmentController.attedanceStartDate = dateStartController.text;
+                          registersEquipmentController.calculateHoursDifference();
                         },
                        behavior: HitTestBehavior.translucent,
                        child: IgnorePointer(
@@ -117,12 +125,10 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                               suffix: CustomIconButton(
                               radius: 32, 
                               iconData: Icons.edit_calendar, 
-                              onTap: () async {
-                                dateStartController.text = await _selectDate(context);
-                              }
+                              onTap: () {},
                             ),
                             onChanged: (value) => {},
-                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+      
                           ),
                        ),
                      ),
@@ -131,12 +137,13 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                     Flexible(
                       child: GestureDetector(
                         onTap: () async {
-                          TimeOfDay? hours = await _selectHours(context, timeStart);
+                          TimeOfDay? hours = await _selectHours(context, registersEquipmentController.attendanceStartTimeOfDay);
                           if (hours != null) {
-                            timeStart = hours;
+                            registersEquipmentController.attendanceStartTimeOfDay = hours;
                             String hoursFormated = hours.hour < 10 ? '0${hours.hour}' : '${hours.hour}';
                             String minutesFormated = hours.minute < 10 ? '0${hours.minute}' : '${hours.minute}';
-                            timeStartController.text = '$hoursFormated:$minutesFormated';
+                            registersEquipmentController.attedanceStartHour = timeStartController.text = '$hoursFormated:$minutesFormated';
+                            registersEquipmentController.calculateHoursDifference();
                           }
                         },
                         behavior: HitTestBehavior.translucent,
@@ -151,7 +158,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                               onTap: () {}
                             ),
                             onChanged: (value) => {},
-                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+      
                           ),
                         ),
                       ),
@@ -168,6 +175,8 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                      child: GestureDetector(
                        onTap: () async {
                           dateEndController.text = await _selectDate(context);
+                          registersEquipmentController.attedanceEndDate = dateEndController.text;
+                          registersEquipmentController.calculateHoursDifference();
                         },
                        behavior: HitTestBehavior.translucent,
                        child: IgnorePointer(
@@ -178,12 +187,9 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                               suffix: CustomIconButton(
                               radius: 32, 
                               iconData: Icons.edit_calendar, 
-                              onTap: () async {
-                                dateEndController.text = await _selectDate(context);
-                              }
+                              onTap: () {},
                             ),
                             onChanged: (value) => {},
-                            onSubmitted: () => FocusScope.of(context).nextFocus(),
                           ),
                        ),
                      ),
@@ -192,12 +198,13 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                     Flexible(
                       child: GestureDetector(
                         onTap: () async {
-                          TimeOfDay? hours = await _selectHours(context, timeEnd);
+                          TimeOfDay? hours = await _selectHours(context, registersEquipmentController.attendanceEndTimeOfDay);
                           if (hours != null) {
-                            timeEnd = hours;
+                            registersEquipmentController.attendanceEndTimeOfDay = hours;
                             String hoursFormated = hours.hour < 10 ? '0${hours.hour}' : '${hours.hour}';
                             String minutesFormated = hours.minute < 10 ? '0${hours.minute}' : '${hours.minute}';
-                            timeEndController.text = '$hoursFormated:$minutesFormated';
+                            registersEquipmentController.attedanceEndHour = timeEndController.text = '$hoursFormated:$minutesFormated';
+                            registersEquipmentController.calculateHoursDifference();
                           }
                         },
                         behavior: HitTestBehavior.translucent,
@@ -212,12 +219,20 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                               onTap: () {}
                             ),
                             onChanged: (value) => {},
-                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+      
                           ),
                         ),
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center, 
+                  children: [
+                    const CustomTextLabel( 'Total de horas:  ', color: Colors.black54),
+                    CustomTextLabel(registersEquipmentController.totalOfHours ?? '00:00', color: Colors.black54),
+                  ]
                 ),
                 const SizedBox(height: 40),
                 CustomActionButtonGroup(
