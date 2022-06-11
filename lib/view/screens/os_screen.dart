@@ -28,7 +28,7 @@ class _OSScreenState extends State<OSScreen> {
   final TextEditingController iracemapolisSufixController = TextEditingController();
 
   final BasicInformaTionsController basicInformationsController = GetIt.I.get<BasicInformaTionsController>(instanceName: DefaultKeys.basicInfoControllerClient);
-  final BasicInfoEquipmentController basicInfoEquipmentController = GetIt.I.get<BasicInfoEquipmentController>(instanceName: DefaultKeys.basicInfoControllerEquipment);
+  final BasicInfoEquipmentController basicInfoEquipmentController = GetIt.I.get<BasicInfoEquipmentController>();
   final Box<dynamic> osBox = GetIt.I.get<Box<dynamic>>(instanceName: DefaultBoxes.os);
 
   late int countPiracicaba;

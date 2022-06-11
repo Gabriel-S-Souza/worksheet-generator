@@ -154,6 +154,7 @@ class SpreedsheetEquipmentGenerator {
 
     await basicInfoEquipmentController.updateOs();
     basicInfoEquipmentController.generateOs();
+    basicInfoEquipmentController.reset();
 
     return file.path;
 

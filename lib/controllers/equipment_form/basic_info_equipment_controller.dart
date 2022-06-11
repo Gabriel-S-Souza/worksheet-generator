@@ -85,6 +85,44 @@ abstract class BasicInfoEquipmentControllerBase with Store {
   }
 
   @action
+  void reset(){
+    isAutoOS = true;
+    osWasGenerated = false;
+    scissors = null;
+    spreedsheetDate = null;
+    unit = null;
+    localOfAttendance = LocalOfAttendance.piracicaba;
+    os = null;
+    attendant = [];
+    isCorrective = true;
+    isStoppedMachine = YesNo.no;
+    isTurnedKnife = YesNo.no;
+    isExcavator = true;
+    isScissors = true;
+    correctiveMaintenanceOrigin = CorrectiveMaintenanceOrigin.wearCommon;
+    fleet = null;
+    model = null;
+    odometer = null;
+  }
+
+  void printValues() {
+    print('scissors: $scissors');
+    print('spreedsheetDate: $spreedsheetDate');
+    print('unit: $unit');
+    print('localOfAttendance: $localOfAttendance');
+    print('os: $os');
+    print('isCorrective: $isCorrective');
+    print('isStoppedMachine: $isStoppedMachine');
+    print('isTurnedKnife: $isTurnedKnife');
+    print('isExcavator: $isExcavator');
+    print('isScissors: $isScissors');
+    print('correctiveMaintenanceOrigin: $correctiveMaintenanceOrigin');
+    print('fleet: $fleet');
+    print('model: $model');
+    print('odometer: $odometer');
+  }
+
+  @action
   void generateOs() {
     osWasGenerated = false;
     if (localOfAttendance != null) {

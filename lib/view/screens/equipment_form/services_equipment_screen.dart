@@ -126,9 +126,22 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                   Table(
                     children: [
                       _buildRow(['Código', 'Tamanho', 'Quantidade'], isHeader: true),
-                      for(List<String> product in servicesEquipmentcontroller.screws)
-                        _buildRow([product[0], product[1], product[2]]),
+                      for(int i = 0; i < servicesEquipmentcontroller.screws.length ; i++)
+                        _buildRow([
+                          servicesEquipmentcontroller.screws[i][0], 
+                          servicesEquipmentcontroller.screws[i][1], 
+                          servicesEquipmentcontroller.screws[i][2],
+                        ], 
+                        index: i,
+                        tableItens: TableItens.screws,
+                      ),
                     ],
+                    columnWidths: const {
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(1),
+                      2: FlexColumnWidth(1),
+                      3: FlexColumnWidth(0.3),
+                    },
                   ),
                   const SizedBox(height: 48),
                   Row(
@@ -212,9 +225,22 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                   Table(
                     children: [
                       _buildRow(['Código', 'Tamanho', 'Quantidade'], isHeader: true),
-                      for(List<String> product in servicesEquipmentcontroller.shims)
-                        _buildRow([product[0], product[1], product[2]]),
+                      for(int i = 0; i < servicesEquipmentcontroller.shims.length ; i++)
+                        _buildRow([
+                          servicesEquipmentcontroller.shims[i][0], 
+                          servicesEquipmentcontroller.shims[i][1], 
+                          servicesEquipmentcontroller.shims[i][2],
+                       ], 
+                        index: i,
+                        tableItens: TableItens.shims,
+                      ),
                     ],
+                     columnWidths: const {
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(1),
+                      2: FlexColumnWidth(1),
+                      3: FlexColumnWidth(0.3),
+                    },
                   ),
                   const SizedBox(height: 48),
                    Row(
@@ -297,10 +323,23 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                   ),
                   Table(
                     children: [
-                      _buildRow(['Código', 'Furação', 'Quantidade'], isHeader: true),
-                      for(List<String> product in servicesEquipmentcontroller.knives)
-                        _buildRow([product[0], product[1], product[2]]),
+                      _buildRow(['Código', 'Furação', 'Quantidade'], isHeader: true,),
+                      for(int i = 0; i < servicesEquipmentcontroller.knives.length ; i++)
+                        _buildRow([
+                          servicesEquipmentcontroller.knives[i][0], 
+                          servicesEquipmentcontroller.knives[i][1], 
+                          servicesEquipmentcontroller.knives[i][2],
+                        ], 
+                        index: i,
+                        tableItens: TableItens.knives,
+                      ),
                     ],
+                    columnWidths: const {
+                      0: FlexColumnWidth(1),
+                      1: FlexColumnWidth(1),
+                      2: FlexColumnWidth(1),
+                      3: FlexColumnWidth(0.3),
+                    },
                   ),
                   const SizedBox(height: 48),
                   Row(
@@ -378,15 +417,20 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                   const CustomTextLabel('Pendências'),
                   CustomTextArea(
                     hint: 'Descreva as pendências',
-                    onChanged: (value) => {},
+                    onChanged: (value) => servicesEquipmentcontroller.pendencies = value,
                     onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                   const SizedBox(height: 32),
                   CustomActionButtonGroup(
-                    primaryChild: const Text('Salvar e avançar'),
+                    primaryChild: !servicesEquipmentcontroller.isLoading
+                        ? const Text('Salvar e avançar')
+                        : const Padding(padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
                     secondaryChild: const Text('Anterior'),
-                    onPrimaryPressed: widget.onPrimaryPressed,
                     onSecondaryPressed: widget.onSecondaryPressed,
+                    onPrimaryPressed: () async {
+                      await servicesEquipmentcontroller.save();
+                      widget.onPrimaryPressed?.call();
+                    },
                     ),
                     const SizedBox(height: 20),
                   const SizedBox(height: 48),
@@ -398,12 +442,45 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
     );
   }
 
-  TableRow _buildRow(List<String> cells, {bool isHeader = false}) {
+  TableRow _buildRow(List<String> cells, {bool isHeader = false, int? index, TableItens? tableItens}) {
     return TableRow(
       decoration: isHeader ? BoxDecoration(color: Colors.grey[200]) : null,
-      children: cells.map((cell) {
-        return AutoSizeText(cell, textAlign: TextAlign.center, maxFontSize: 16, maxLines: 1,);
-      }).toList(),
+      children: [
+        for(String cell in cells)
+          TableCell(
+            verticalAlignment: TableCellVerticalAlignment.middle,
+            child: Container(
+              margin: isHeader ? const EdgeInsets.symmetric(vertical: 8) : null,
+              child: AutoSizeText(
+                cell, 
+                textAlign: TextAlign.center, 
+                maxFontSize: 16, 
+                maxLines: 1,
+                style: isHeader 
+                    ? const TextStyle(fontSize: 16, fontWeight: FontWeight.bold) : null,
+              )
+            )
+          ),
+          !isHeader
+              ?  TableCell(
+                verticalAlignment: TableCellVerticalAlignment.middle,
+                child: IconButton(
+                  visualDensity: VisualDensity.compact,
+                  iconSize: 20,
+                  icon: const Icon(Icons.remove),
+                  onPressed: () {
+                    if (tableItens == TableItens.screws) {
+                      servicesEquipmentcontroller.screws.removeAt(index!);
+                    } else if(tableItens == TableItens.shims) {
+                      servicesEquipmentcontroller.shims.removeAt(index!);
+                    } else if(tableItens == TableItens.knives) {
+                      servicesEquipmentcontroller.knives.removeAt(index!);
+                    }
+                  }, 
+                ),
+                )
+              : TableCell(child: Container()),
+      ],
     );
   }
 
@@ -544,4 +621,10 @@ enum ButtomQuantity {
   shim,
   knife,
   none
+}
+
+enum TableItens {
+  screws,
+  shims,
+  knives,
 }

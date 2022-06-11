@@ -120,6 +120,18 @@ mixin _$BasicInfoEquipmentController
           name: 'BasicInfoEquipmentControllerBase', context: context);
 
   @override
+  void reset() {
+    final _$actionInfo = _$BasicInfoEquipmentControllerBaseActionController
+        .startAction(name: 'BasicInfoEquipmentControllerBase.reset');
+    try {
+      return super.reset();
+    } finally {
+      _$BasicInfoEquipmentControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void generateOs() {
     final _$actionInfo = _$BasicInfoEquipmentControllerBaseActionController
         .startAction(name: 'BasicInfoEquipmentControllerBase.generateOs');

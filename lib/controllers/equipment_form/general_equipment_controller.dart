@@ -29,9 +29,10 @@ class GeneralEquipmentController {
     if (basicInformations == null) {
       return 'A página de informações básicas não foi salva';
     } 
-    // else if (services == null) {
-    //   return 'A página de serviços não foi salva';
-    // } else if (registers == null) {
+    else if (services == null) {
+      return 'A página de serviços não foi salva';
+    } 
+    //else if (registers == null) {
     //   return 'Esta página não foi salva';
     // } 
     else {
