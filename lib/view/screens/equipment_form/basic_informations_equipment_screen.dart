@@ -216,9 +216,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                     const SizedBox(height: 40),
                     CustomActionButtonGroup(
                       onPrimaryPressed: !basicInfoEquipmentController.isLoading
-                          ? () async {
-                              basicInfoEquipmentController.printValues();
-                              
+                          ? () async {                              
                               await basicInfoEquipmentController.save();
             
                               widget.onPrimaryPressed();

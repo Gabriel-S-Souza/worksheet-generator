@@ -152,9 +152,9 @@ class SpreedsheetEquipmentGenerator {
     final io.File file = io.File(filePath);
     await file.writeAsBytes(await pdf.save());
 
+    basicInfoEquipmentController.reset();
     await basicInfoEquipmentController.updateOs();
     basicInfoEquipmentController.generateOs();
-    basicInfoEquipmentController.reset();
 
     return file.path;
 

@@ -151,6 +151,7 @@ class SpreedsheetClientGenerator {
     final io.File file = io.File(filePath);
     await file.writeAsBytes(await pdf.save());
 
+    basicInformationsController.reset();
     await basicInformationsController.updateOs();
     basicInformationsController.generateOs();
 

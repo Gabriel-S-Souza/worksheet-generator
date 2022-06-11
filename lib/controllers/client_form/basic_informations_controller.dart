@@ -87,6 +87,29 @@ abstract class BasicInformaTionsControllerBase with Store {
   }
 
   @action
+  void reset() {
+    isAutoOS = true;
+    osWasGenerated = false;
+    spreedsheetDate = null;
+    client = null;
+    localOfAttendance = LocalOfAttendance.piracicaba;
+    os = null;
+    requester = null;
+    attendant = null;
+    isCorrective = true;
+    correctiveMaintenanceOrigin = CorrectiveMaintenanceOrigin.wearCommon;
+    isStoppedMachine = YesNo.no;
+    isWarranty = YesNo.no;
+    equipment = Equipment.excavator;
+    equipmentApplication = EquipmentApplication.scrap;
+    plate = null;
+    fleet = null;
+    model = null;
+    serie = null;
+    odometer = null;
+  }
+
+  @action
   void generateOs() {
     osWasGenerated = false;
     if (localOfAttendance != null) {

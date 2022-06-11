@@ -86,6 +86,17 @@ mixin _$BasicInformaTionsController on BasicInformaTionsControllerBase, Store {
           name: 'BasicInformaTionsControllerBase', context: context);
 
   @override
+  void reset() {
+    final _$actionInfo = _$BasicInformaTionsControllerBaseActionController
+        .startAction(name: 'BasicInformaTionsControllerBase.reset');
+    try {
+      return super.reset();
+    } finally {
+      _$BasicInformaTionsControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void generateOs() {
     final _$actionInfo = _$BasicInformaTionsControllerBaseActionController
         .startAction(name: 'BasicInformaTionsControllerBase.generateOs');

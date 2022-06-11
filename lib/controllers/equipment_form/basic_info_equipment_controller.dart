@@ -93,7 +93,6 @@ abstract class BasicInfoEquipmentControllerBase with Store {
     unit = null;
     localOfAttendance = LocalOfAttendance.piracicaba;
     os = null;
-    attendant = [];
     isCorrective = true;
     isStoppedMachine = YesNo.no;
     isTurnedKnife = YesNo.no;
@@ -103,23 +102,6 @@ abstract class BasicInfoEquipmentControllerBase with Store {
     fleet = null;
     model = null;
     odometer = null;
-  }
-
-  void printValues() {
-    print('scissors: $scissors');
-    print('spreedsheetDate: $spreedsheetDate');
-    print('unit: $unit');
-    print('localOfAttendance: $localOfAttendance');
-    print('os: $os');
-    print('isCorrective: $isCorrective');
-    print('isStoppedMachine: $isStoppedMachine');
-    print('isTurnedKnife: $isTurnedKnife');
-    print('isExcavator: $isExcavator');
-    print('isScissors: $isScissors');
-    print('correctiveMaintenanceOrigin: $correctiveMaintenanceOrigin');
-    print('fleet: $fleet');
-    print('model: $model');
-    print('odometer: $odometer');
   }
 
   @action
