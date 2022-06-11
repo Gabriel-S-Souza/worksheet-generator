@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/controllers/equipment_form/general_equipment_controller.dart';
-import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:formulario_de_atendimento/main.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import '../../../controllers/equipment_form/registers_equipment_controller.dart';
 import '../../widgets/custom_action_form_group.dart';
 import '../../widgets/custom_app_buttom.dart';
 import '../../widgets/custom_icon_button.dart';
@@ -28,6 +29,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
 
   final UserSettings userSettings = GetIt.I<UserSettings>();
   final GeneralEquipmentController generalEquipmentController = GetIt.I<GeneralEquipmentController>();
+  final RegistersEquipmentController registersEquipmentController = RegistersEquipmentController();
 
   TimeOfDay? timeStart;
   TimeOfDay? timeEnd;
@@ -36,7 +38,8 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
   @override
   void initState() {
     super.initState();
-    dateStartController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    registersEquipmentController.attedanceStartDate = registersEquipmentController.attedanceEndDate =
+        dateEndController.text = dateStartController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
     attendantController.text = userSettings.name ?? '';
   }
 
@@ -47,149 +50,222 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
       child: SingleChildScrollView(
-         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const CustomTextLabel('Atendimento',),
-            CustomTextField(
-              controller: attendantController,
-              hint: 'Nome do atendente',
-              obscure: false, 
-              onChanged: (value) => {},
-              onSubmitted: () => FocusScope.of(context).nextFocus(),
-              prefix: const Icon(Icons.person)
-            ),
-            const CustomTextLabel(
-              'Início',
-              fontSize: 16,
-            ),
-             Row(
-              children: [
-                Flexible(
-                 child: CustomTextField(
-                    controller: dateStartController,
-                    hint: 'Data',
-                      suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.edit_calendar, 
-                      onTap: () async {
-                        dateStartController.text = await _selectDate(context);
-                      }
-                    ),
-                    onChanged: (value) => {},
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
+         child: Observer(
+           builder: (context) {
+             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const CustomTextLabel('Atendimento',),
+                const CustomTextLabel(
+                  'Atendente(s):',
+                  fontSize: 16,
+                  marginTop: 8,
+                  marginBottom: 0,
+                ),
+                Container(
+                  constraints: const BoxConstraints(
+                    minHeight: 100,
+                  ),
+                  alignment: Alignment.topCenter,
+                  child: CustomTextLabel(
+                    registersEquipmentController.attendants.join(', '),
+                    fontSize: 16,
+                    color: Colors.black54,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: CustomTextField(
-                    controller: timeStartController,
-                    hint: 'Ex: 09:00',
-                    suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.watch_later_rounded, 
-                      onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, timeStart);
-                        if (hours != null) {
-                          timeStart = hours;
-                          timeStartController.text = '${hours.hour}:${hours.minute}';
-                        }
-                      },
-                    ),
-                    onChanged: (value) => {},
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
+                CustomTextField(
+                  controller: attendantController,
+                  hint: 'Nome do atendente',
+                  obscure: false, 
+                  onChanged: (value) => {},
+                  onSubmitted:attendantController.text.isNotEmpty
+                        ? () {
+                          registersEquipmentController.attendants.add(attendantController.text);
+                        } 
+                        : null,
+                  prefix: const Icon(Icons.person)
+                ),
+                const SizedBox(height: 32),
+                Align(
+                  alignment: Alignment.center,
+                  child: CustomOutlinedButtom(
+                    onPressed: attendantController.text.isNotEmpty
+                        ? () {
+                          registersEquipmentController.attendants.add(attendantController.text);
+                        } 
+                        : null,
+                    child: const Text('Adicionar atendente'),
                   ),
                 ),
-              ],
-            ),
-            const CustomTextLabel(
-              'Final',
-              fontSize: 16,
-            ),
-             Row(
-              children: [
-                Flexible(
-                 child: CustomTextField(
-                    controller: dateEndController,
-                    hint: 'Data',
-                      suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.edit_calendar, 
-                      onTap: () async {
-                        dateEndController.text = await _selectDate(context);
-                      }
-                    ),
-                    onChanged: (value) => {},
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
+                const CustomTextLabel(
+                  'Início',
+                  fontSize: 16,
                 ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: CustomTextField(
-                    controller: timeEndController,
-                    hint: 'Ex: 09:00',
-                    suffix: CustomIconButton(
-                      radius: 32, 
-                      iconData: Icons.watch_later_rounded, 
-                      onTap: () async {
-                        TimeOfDay? hours = await _selectHours(context, timeEnd);
-                        if (hours != null) {
-                          timeEnd = hours;
-                          timeEndController.text = '${hours.hour}:${hours.minute}';
-                        }
-                      },
+                 Row(
+                  children: [
+                    Flexible(
+                     child: GestureDetector(
+                       onTap: () async {
+                          dateStartController.text = await _selectDate(context);
+                        },
+                       behavior: HitTestBehavior.translucent,
+                       child: IgnorePointer(
+                         child: CustomTextField(
+                           readOnly: true,
+                            controller: dateStartController,
+                            hint: 'Data',
+                              suffix: CustomIconButton(
+                              radius: 32, 
+                              iconData: Icons.edit_calendar, 
+                              onTap: () async {
+                                dateStartController.text = await _selectDate(context);
+                              }
+                            ),
+                            onChanged: (value) => {},
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                          ),
+                       ),
+                     ),
                     ),
-                    onChanged: (value) => {},
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 40),
-            CustomActionButtonGroup(
-              primaryChild: const Text('Gerar planilha'),
-              secondaryChild: const Text('Anterior'),
-              onPrimaryPressed: null,
-              onSecondaryPressed: widget.onSecondaryPressed,
-            ),
-            const SizedBox(height: 32),
-            CustomOutlinedButtom(
-              onPressed: 
-              // generalEquipmentController.readyToSave
-                  () async {
-
-                    generalEquipmentController.createSpreedsheet()
-                      .then((value) {
-                            _buildSnackBar(
-                              context, value
-                            );
-                          });
-                  },
-                  // : null,
-              child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text('Salvar planilha'),
-                    SizedBox(width: 8),
-                    Icon(Icons.save),
+                    const SizedBox(width: 16),
+                    Flexible(
+                      child: GestureDetector(
+                        onTap: () async {
+                          TimeOfDay? hours = await _selectHours(context, timeStart);
+                          if (hours != null) {
+                            timeStart = hours;
+                            String hoursFormated = hours.hour < 10 ? '0${hours.hour}' : '${hours.hour}';
+                            String minutesFormated = hours.minute < 10 ? '0${hours.minute}' : '${hours.minute}';
+                            timeStartController.text = '$hoursFormated:$minutesFormated';
+                          }
+                        },
+                        behavior: HitTestBehavior.translucent,
+                        child: IgnorePointer(
+                          child: CustomTextField(
+                            readOnly: true,
+                            controller: timeStartController,
+                            hint: 'Ex: 09:00',
+                            suffix: CustomIconButton(
+                              radius: 32, 
+                              iconData: Icons.watch_later_rounded, 
+                              onTap: () {}
+                            ),
+                            onChanged: (value) => {},
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
-                ), 
                 ),
-            const SizedBox(height: 28),
-            CustomAppButtom(
-              onPressed: null,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text('Receber no email'),
-                  SizedBox(width: 8),
-                  Icon(Icons.email),
-                ],
-              ), 
-            ),
-            const SizedBox(height: 40),
-          ]
-        )
+                const CustomTextLabel(
+                  'Final',
+                  fontSize: 16,
+                ),
+                 Row(
+                  children: [
+                    Flexible(
+                     child: GestureDetector(
+                       onTap: () async {
+                          dateEndController.text = await _selectDate(context);
+                        },
+                       behavior: HitTestBehavior.translucent,
+                       child: IgnorePointer(
+                         child: CustomTextField(
+                            readOnly: true,
+                            controller: dateEndController,
+                            hint: 'Data',
+                              suffix: CustomIconButton(
+                              radius: 32, 
+                              iconData: Icons.edit_calendar, 
+                              onTap: () async {
+                                dateEndController.text = await _selectDate(context);
+                              }
+                            ),
+                            onChanged: (value) => {},
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                          ),
+                       ),
+                     ),
+                    ),
+                    const SizedBox(width: 16),
+                    Flexible(
+                      child: GestureDetector(
+                        onTap: () async {
+                          TimeOfDay? hours = await _selectHours(context, timeEnd);
+                          if (hours != null) {
+                            timeEnd = hours;
+                            String hoursFormated = hours.hour < 10 ? '0${hours.hour}' : '${hours.hour}';
+                            String minutesFormated = hours.minute < 10 ? '0${hours.minute}' : '${hours.minute}';
+                            timeEndController.text = '$hoursFormated:$minutesFormated';
+                          }
+                        },
+                        behavior: HitTestBehavior.translucent,
+                        child: IgnorePointer(
+                          child: CustomTextField(
+                            readOnly: true,
+                            controller: timeEndController,
+                            hint: 'Ex: 09:00',
+                            suffix: CustomIconButton(
+                              radius: 32, 
+                              iconData: Icons.watch_later_rounded, 
+                              onTap: () {}
+                            ),
+                            onChanged: (value) => {},
+                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                CustomActionButtonGroup(
+                  primaryChild: const Text('Gerar planilha'),
+                  secondaryChild: const Text('Anterior'),
+                  onPrimaryPressed: null,
+                  onSecondaryPressed: widget.onSecondaryPressed,
+                ),
+                const SizedBox(height: 32),
+                CustomOutlinedButtom(
+                  onPressed: 
+                  // generalEquipmentController.readyToSave
+                      () async {
+
+                        generalEquipmentController.createSpreedsheet()
+                          .then((value) {
+                                _buildSnackBar(
+                                  context, value
+                                );
+                              });
+                      },
+                      // : null,
+                  child:  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text('Salvar planilha'),
+                        SizedBox(width: 8),
+                        Icon(Icons.save),
+                      ],
+                    ), 
+                    ),
+                const SizedBox(height: 28),
+                CustomAppButtom(
+                  onPressed: null,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text('Receber no email'),
+                      SizedBox(width: 8),
+                      Icon(Icons.email),
+                    ],
+                  ), 
+                ),
+                const SizedBox(height: 40),
+              ]
+        );
+           }
+         )
       )
     );
   }
