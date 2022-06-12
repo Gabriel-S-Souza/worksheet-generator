@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../data/data_access_object.dart';
-import '../main.dart';
 
 class LoginController {
   

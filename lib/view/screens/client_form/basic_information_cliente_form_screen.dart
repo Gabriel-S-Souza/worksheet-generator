@@ -26,6 +26,7 @@ class BasicInformationsClienteFormScreen extends StatefulWidget {
 
 class _BasicInformationsClienteFormScreenState extends State<BasicInformationsClienteFormScreen> {
   final TextEditingController dateController = TextEditingController();
+  final TextEditingController attendantController = TextEditingController();
   final TextEditingController requesterController = TextEditingController();
   final BasicInformaTionsController basicInformationsController = GetIt.I.get<BasicInformaTionsController>(instanceName: DefaultKeys.basicInfoControllerClient);
   final UserSettings userSettings = GetIt.I.get<UserSettings>();
@@ -35,7 +36,8 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
     super.initState();
     basicInformationsController.spreedsheetDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
     dateController.text = basicInformationsController.spreedsheetDate ?? '';
-    basicInformationsController.requester = requesterController.text = userSettings.name ?? '';
+    basicInformationsController.attendant = basicInformationsController.requester 
+        = attendantController.text = requesterController.text = userSettings.name ?? '';
     basicInformationsController.generateOs();
   }
 
@@ -70,6 +72,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                 ),
                 const CustomTextLabel('Cliente'),
                 CustomSuggestionTextField(
+                  hint: 'Nome do cliente',
                   obscure: false, 
                   onChanged: (value) => basicInformationsController.client = value,
                   onSubmitted: () => FocusScope.of(context).nextFocus(),
@@ -85,6 +88,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                 const CustomTextLabel('Solicitado por'),
                 CustomSuggestionTextField(
                   controller: requesterController,
+                  hint: 'Nome do solicitante',
                   obscure: false, 
                   onChanged: (value) {},
                   onSubmitted: () => FocusScope.of(context).nextFocus(),
@@ -99,6 +103,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                 ),
                 const CustomTextLabel('Atendido por'),
                 CustomTextField(
+                  controller: attendantController,
                   hint: 'Nome do atendente',
                   obscure: false, 
                   onChanged: (value) => basicInformationsController.attendant = value,

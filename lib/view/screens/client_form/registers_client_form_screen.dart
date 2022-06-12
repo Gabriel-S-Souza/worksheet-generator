@@ -34,6 +34,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
   late final FocusNode focusNodeFinalKm;
   late final FocusNode focusAttendanceDate;
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -61,7 +63,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
         child: Observer(
           builder: (context) {
             return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const CustomTextLabel('Atendimento'),
                 const CustomTextLabel('Data', 
@@ -222,26 +224,33 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                   }
                 ),
                 const SizedBox(height: 32),
-                CustomOutlinedButtom(
+                CustomAppButtom(
                   onPressed: generalClientController.readyToSave
                       ? () async {
-
+                        setState(() {
+                          isLoading = true;
+                        });
                         generalClientController.createSpreedsheet()
                           .then((value) {
                                 _buildSnackBar(
                                   context, value
                                 );
+                                setState(() {
+                                  isLoading = false;
+                                }); 
                               });
                       }
                       : null,
-                  child:  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text('Salvar planilha'),
-                        SizedBox(width: 8),
-                        Icon(Icons.save),
-                      ],
-                    ), 
+                  child: !isLoading
+                      ?  Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text('Salvar planilha'),
+                            SizedBox(width: 8),
+                            Icon(Icons.save),
+                          ],
+                        )
+                      : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
                 ),
                 const SizedBox(height: 28),
                 CustomAppButtom(

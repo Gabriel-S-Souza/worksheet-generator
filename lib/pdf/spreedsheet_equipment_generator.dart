@@ -230,8 +230,8 @@ class SpreedsheetEquipmentGenerator {
                       child: pw.SizedBox(),
                     )
                   ),
-                  pw.Expanded(
-                    flex: 1,
+                  pw.Padding(
+                    padding: const pw.EdgeInsets.only(bottom: 4),
                     child: pw.Text('DATA: $date', style: pw.TextStyle(fontSize: fontMediumSize)),
                   ),
                 ]

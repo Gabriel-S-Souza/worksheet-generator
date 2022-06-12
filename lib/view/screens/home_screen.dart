@@ -6,9 +6,12 @@ import 'package:formulario_de_atendimento/main.dart';
 import 'package:formulario_de_atendimento/view/screens/equipment_form/equipment_form_screen.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../data/data_access_object.dart';
 import '../widgets/custom_dropdown_buttom.dart';
+import '../widgets/custom_login_check.dart';
 import 'client_form/form_client_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -109,55 +112,60 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            // Positioned(
-            //   bottom: 24,
-            //   child: Column(
-            //     children: [
-            //       Container(
-            //         constraints: BoxConstraints(
-            //           maxWidth: deviceWidth - (deviceWidth * 0.05) * 2,
-            //         ),
-            //         alignment: Alignment.center,
-            //         child: Row(
-            //           mainAxisAlignment: MainAxisAlignment.center,
-            //           children: [
-            //             Text(
-            //               userSettings.name != null ? 'User:  ' : '',
-            //               style: TextStyle(
-            //                 fontSize: 12,
-            //                 color: Colors.black87,
-            //               )),
-            //             Text(
-            //               userSettings.name ?? '',
-            //               style: TextStyle(
-            //                 fontSize: 12,
-            //                 color: Colors.black87,
-            //                 fontWeight: FontWeight.bold
-            //               )),
-            //           ],
-            //         ),
-            //       ),
-            //       ConstrainedBox(
-            //         constraints: BoxConstraints(
-            //           maxHeight: 34,
-            //         ),
-            //         child: TextButton(
-            //           onPressed: () {}, 
-            //           child: Text(
-            //             'Sair',
-            //             style: TextStyle(
-            //               fontSize: 12,
-            //             ),
-            //           ),
-            //         ),
-            //       )
-            //     ],
-            //   ),
-            // )
+            Positioned(
+              bottom: 24,
+              child: Column(
+                children: [
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: deviceWidth - (deviceWidth * 0.05) * 2,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      userSettings.name ?? '',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold
+                      )),
+                  ),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxHeight: 34,
+                    ),
+                    child: TextButton(
+                      onPressed: _unregisterUser, 
+                      child: const Text(
+                        'Sair',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _unregisterUser() async {
+    Box<dynamic> userDataBox = GetIt.I.get<Box<dynamic>>(instanceName: DefaultBoxes.userData);
+    
+    await userDataBox.put('email', '');
+    await userDataBox.put('name', '');
+
+    GetIt.I.unregister<UserSettings>();
+    
+    if (mounted) {
+      Navigator.pushReplacement(context, MaterialPageRoute(
+        builder: (context) => const CustomLoginCheck(),
+      ));
+    }
+    
   }
 
   void _listenForPermission() async {

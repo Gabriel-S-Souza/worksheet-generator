@@ -152,10 +152,11 @@ class SpreedsheetClientGenerator {
     await file.writeAsBytes(await pdf.save());
 
     basicInformationsController.reset();
-    await basicInformationsController.updateOs();
-    basicInformationsController.generateOs();
-
-    return file.path;
+    if (localOfAttendance == LocalOfAttendance.piracicaba || localOfAttendance == LocalOfAttendance.iracenopolis) {
+      await basicInformationsController.updateOs();
+      basicInformationsController.generateOs();
+    }
+    return 'Salvo ${file.path}';
 
 
     } catch (e) {
@@ -222,9 +223,8 @@ class SpreedsheetClientGenerator {
                     flex: 2,
                     child: pw.Container()
                   ),
-                  pw.Divider(thickness: 2),
-                  pw.Expanded(
-                    flex: 1,
+                  pw.Padding(
+                    padding: const pw.EdgeInsets.only(bottom: 4),
                     child: pw.Text('DATA: $date', style: pw.TextStyle(fontSize: fontMediumSize)),
                   ),
                 ]
@@ -249,7 +249,6 @@ class SpreedsheetClientGenerator {
     String attendant = '',
     String equipment = '[   ] Carregadeira        [    ] Escavadeira        [   ] Rolo Compactador        [   ] Trator        [   ] Outros',
     String application = '[   ] Carregamento        [   ] Escavação        [   ] Terraplanagem        [   ] Rompedor        [   ] Sucata/Tesoura',
-    //TODO: POTENCIAL BUG
     required String correctiveOrigin,
     String fleet = '',
     String model = '',
