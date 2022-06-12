@@ -85,7 +85,7 @@ class SpreedsheetEquipmentGenerator {
 
     final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
     final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
-    final String name = '${filePrefixName}_${date}_$time.pdf';
+    final String name = '${filePrefixName.replaceAll('/', '-')}_${date}_$time.pdf';
 
     final String filePath = '$downloadsDirectory/$name';
 
@@ -153,10 +153,13 @@ class SpreedsheetEquipmentGenerator {
     await file.writeAsBytes(await pdf.save());
 
     basicInfoEquipmentController.reset();
-    await basicInfoEquipmentController.updateOs();
-    basicInfoEquipmentController.generateOs();
+    if (localOfAttendance == LocalOfAttendance.piracicaba || localOfAttendance == LocalOfAttendance.iracenopolis) {
+      await basicInfoEquipmentController.updateOs();
+      basicInfoEquipmentController.generateOs();
+      
+    }
 
-    return file.path;
+    return 'Salvo ${file.path}';
 
 
 
@@ -246,7 +249,7 @@ class SpreedsheetEquipmentGenerator {
     required pw.Context context,
     required String os,
     String unit = '',
-    String localOfAttendance= '',
+    String localOfAttendance = '',
     required bool isCorrective,
     required bool isStoppedMachine,
     required bool isTurnedKnife,
@@ -372,7 +375,7 @@ class SpreedsheetEquipmentGenerator {
                       width: 100,
                       child: pw.Text('Local de Atendimento:', style: pw.TextStyle(fontSize: fontMediumSize)),
                     ),
-                    pw.Text(localOfAttendance, style: pw.TextStyle(fontSize: fontMediumSize)),
+                    pw.Text(localOfAttendance.toUpperCase(), style: pw.TextStyle(fontSize: fontMediumSize)),
                   ]
                 )
               ),
@@ -1045,8 +1048,8 @@ class SpreedsheetEquipmentGenerator {
     String totalOfHours = '',
   }) {
 
-    attendants.add('NOME');
-    final listLength = attendants.length + 2;
+    attendants.insert(0, 'NOME');
+    final listLength = attendants.length + 1;
     
     return pw.Column(
       children: [
@@ -1225,7 +1228,7 @@ class SpreedsheetEquipmentGenerator {
                   crossAxisAlignment: pw.CrossAxisAlignment.center,
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [
-                    pw.Image(signature, alignment: pw.Alignment.bottomCenter, width: 75),
+                    pw.Image(signature, alignment: pw.Alignment.bottomCenter, width: 70),
                     pw.Divider(thickness: 0.5, height: 8, indent: 40, endIndent: 40,),
                     pw.SizedBox(height: 4),
                     pw.Text('CHB - Responsável pelo atendimento', style: pw.TextStyle(fontSize: fontSmallSize)),
@@ -1237,7 +1240,7 @@ class SpreedsheetEquipmentGenerator {
                   crossAxisAlignment: pw.CrossAxisAlignment.center,
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [
-                    pw.Image(signature, alignment: pw.Alignment.bottomCenter, width: 75),
+                    pw.Image(signature, alignment: pw.Alignment.bottomCenter, width: 70),
                     pw.Divider(thickness: 0.5, height: 8, indent: 40, endIndent: 40,),
                     pw.SizedBox(height: 4),
                     pw.Text('Responsável - Cliente/Unidade', style: pw.TextStyle(fontSize: fontSmallSize)),

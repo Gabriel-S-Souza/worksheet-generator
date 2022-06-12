@@ -62,6 +62,24 @@ mixin _$RegistersEquipmentController
     });
   }
 
+  late final _$isTotalOfHoursEditableAtom = Atom(
+      name: 'RegistersEquipmentControllerBase.isTotalOfHoursEditable',
+      context: context);
+
+  @override
+  bool get isTotalOfHoursEditable {
+    _$isTotalOfHoursEditableAtom.reportRead();
+    return super.isTotalOfHoursEditable;
+  }
+
+  @override
+  set isTotalOfHoursEditable(bool value) {
+    _$isTotalOfHoursEditableAtom
+        .reportWrite(value, super.isTotalOfHoursEditable, () {
+      super.isTotalOfHoursEditable = value;
+    });
+  }
+
   late final _$isLoadingAtom = Atom(
       name: 'RegistersEquipmentControllerBase.isLoading', context: context);
 
@@ -148,6 +166,7 @@ mixin _$RegistersEquipmentController
 attendanceStartTimeOfDay: ${attendanceStartTimeOfDay},
 attendanceEndTimeOfDay: ${attendanceEndTimeOfDay},
 totalOfHours: ${totalOfHours},
+isTotalOfHoursEditable: ${isTotalOfHoursEditable},
 isLoading: ${isLoading}
     ''';
   }

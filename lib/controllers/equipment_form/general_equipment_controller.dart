@@ -32,9 +32,9 @@ class GeneralEquipmentController {
     else if (services == null) {
       return 'A página de serviços não foi salva';
     } 
-    //else if (registers == null) {
-    //   return 'Esta página não foi salva';
-    // } 
+    else if (registers == null) {
+      return 'Esta página não foi salva';
+    } 
     else {
       spreedsheetEquipmentGenerator.createDocumentBase();
       String response = await spreedsheetEquipmentGenerator.createSheet(
@@ -62,12 +62,12 @@ class GeneralEquipmentController {
         knives: services!.knives,
         pendencies: services!.pendencies,
 
-        // attendants: registers!.attendants,
-        // attedanceStartDate: registers!.attedanceStartDate,
-        // attedanceEndDate: registers!.attedanceEndDate,
-        // attedanceStartHour: registers!.attedanceStartHour,
-        // attedanceEndHour: registers!.attedanceEndHour,
-        // totalOfHours: registers!.totalOfHours,
+        attendants: registers!.attendants,
+        attedanceStartDate: registers!.attedanceStartDate,
+        attedanceEndDate: registers!.attedanceEndDate,
+        attedanceStartHour: registers!.attedanceStartHour,
+        attedanceEndHour: registers!.attedanceEndHour,
+        totalOfHours: registers!.totalOfHours,
       );
 
       basicInformations = null;

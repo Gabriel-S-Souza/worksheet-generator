@@ -38,6 +38,9 @@ abstract class RegistersEquipmentControllerBase with Store {
   @observable
   String? totalOfHours;
 
+  @observable
+  bool isTotalOfHoursEditable = false;
+
   @action
   void _setTotalOfHours(TimeOfDay? hours) {
     if (hours != null) {
@@ -106,6 +109,7 @@ abstract class RegistersEquipmentControllerBase with Store {
     isLoading = false;
   }
 
-  // String? checkIfCanCreate() {
-  // }
+  String? checkIfCanCreate() {
+    return generalEquipmentController.checkIfCanCreate();
+  }
 }

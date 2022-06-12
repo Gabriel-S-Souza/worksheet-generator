@@ -83,10 +83,11 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                   controller: attendantController,
                   hint: 'Nome do atendente',
                   obscure: false, 
-                  onChanged: (value) => {},
+                  onChanged: (value) => setState(() {}),
                   onSubmitted:attendantController.text.isNotEmpty
                         ? () {
                           registersEquipmentController.attendants.add(attendantController.text);
+                          attendantController.clear();
                         } 
                         : null,
                   prefix: const Icon(Icons.person)
@@ -98,6 +99,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                     onPressed: attendantController.text.isNotEmpty
                         ? () {
                           registersEquipmentController.attendants.add(attendantController.text);
+                          attendantController.clear();
                         } 
                         : null,
                     child: const Text('Adicionar atendente'),
@@ -227,24 +229,67 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center, 
-                  children: [
-                    const CustomTextLabel( 'Total de horas:  ', color: Colors.black54),
-                    CustomTextLabel(registersEquipmentController.totalOfHours ?? '00:00', color: Colors.black54),
-                  ]
-                ),
+                !registersEquipmentController.isTotalOfHoursEditable
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.end, 
+                        children: [
+                          const CustomTextLabel( 'Total de horas:  ', color: Colors.black54, marginBottom: 22,),
+                          CustomTextLabel(registersEquipmentController.totalOfHours ?? '00:00', color: Colors.black54, marginBottom: 22,),
+                          const SizedBox(width: 16),
+                          TextButton(
+                            onPressed: () => registersEquipmentController.isTotalOfHoursEditable = true,
+                            child: const Text('Editável', style: TextStyle(fontSize: 12)),
+                          )
+                        ]
+                      )
+                    : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CustomTextLabel( 'Total de horas', fontSize: 16,),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.end, 
+                            children: [
+                              Expanded(
+                                child: CustomTextField( 
+                                  hint: 'Total de horas',
+                                  prefix: const Icon(Icons.timer),
+                                  textInputType: TextInputType.datetime,
+                                  onChanged: (value) => registersEquipmentController.totalOfHours = value,    
+                                  obscure: false,                     
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              TextButton(
+                                onPressed: () => registersEquipmentController.isTotalOfHoursEditable = false,
+                                child: const Text('Automático', style: TextStyle(fontSize: 12)),
+                              )
+                            ]
+                          ),
+                      ],
+                    ),
                 const SizedBox(height: 40),
                 CustomActionButtonGroup(
-                  primaryChild: const Text('Gerar planilha'),
+                  onPrimaryPressed:!registersEquipmentController.isLoading
+                      ? () async {
+                          await registersEquipmentController.save();
+                          String? response = registersEquipmentController.checkIfCanCreate();
+                          if (response != null && mounted) {
+                            _buildSnackBar(context, response);
+                          }
+                          setState(() {});
+                        }
+                      : null,
+                  primaryChild: !registersEquipmentController.isLoading
+                      ? const Text('Salvar')
+                      : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()), 
                   secondaryChild: const Text('Anterior'),
-                  onPrimaryPressed: null,
                   onSecondaryPressed: widget.onSecondaryPressed,
                 ),
                 const SizedBox(height: 32),
-                CustomOutlinedButtom(
+                CustomAppButtom(
                   onPressed: 
-                  // generalEquipmentController.readyToSave
+                  generalEquipmentController.checkIfCanCreate() == null
+                      ?
                       () async {
 
                         generalEquipmentController.createSpreedsheet()
@@ -253,12 +298,12 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                                   context, value
                                 );
                               });
-                      },
-                      // : null,
+                      }
+                      : null,
                   child:  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
-                        Text('Salvar planilha'),
+                        Text('Exportar planilha'),
                         SizedBox(width: 8),
                         Icon(Icons.save),
                       ],
