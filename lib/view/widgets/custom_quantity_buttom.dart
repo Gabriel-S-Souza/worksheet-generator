@@ -24,7 +24,7 @@ class CustomQuantityButtom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
      return SizedBox(
-      width: 38,
+      width: 42,
       child: Column(
         children: [
           Material(
@@ -34,7 +34,7 @@ class CustomQuantityButtom extends StatelessWidget {
               onLongPressStart: onIncrementLongPressStart,
               onLongPressEnd: onIncrementLongPressEnd,
               child: Container(
-                height: 20,
+                height: 28,
                 width: 38,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
@@ -50,7 +50,7 @@ class CustomQuantityButtom extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 34,
+            height: 28,
             width: 38,
             child: TextField(
               controller: controller,
@@ -75,7 +75,7 @@ class CustomQuantityButtom extends StatelessWidget {
               onLongPressStart: onDecrementLongPressStart,
               onLongPressEnd: onDecrementLongPressEnd,
               child: Container(
-                height: 20,
+                height: 28,
                 width: 38,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(

@@ -135,7 +135,7 @@ class _OSScreenState extends State<OSScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         child: CustomQuantityButtom(
                           controller: piracicabaCountController,
                           onChanged: (value) {
@@ -263,11 +263,14 @@ class _OSScreenState extends State<OSScreen> {
                 onPressed: isChanged
                     ? () async {
                         _updateOs()
-                            .then((value) => _buildSnackBar(context, 'OS atualizado!'));
+                            .then((value) {
+                              _buildSnackBar(context, 'O.S. atualizado!');
+                              Navigator.pop(context);
+                            } );
                       }
                     : null,
                 child: !isLoading 
-                    ? const Text('Salvar')
+                    ? const Text('Atualizar')
                     : const CircularProgressIndicator(),
               ),
               const SizedBox(height: 40),

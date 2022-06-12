@@ -96,8 +96,8 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
               icon: Icon(Icons.miscellaneous_services),
               label: "Serviços",),
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: "Registos",),
+              icon: Icon(Icons.assignment_turned_in),
+              label: "Atendimento",),
         ],
         onTap: animatePage,
       ),
