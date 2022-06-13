@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/basic_informations_controller.dart';
 import 'package:formulario_de_atendimento/controllers/client_form/general_client_controller.dart';
@@ -11,10 +12,15 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'controllers/equipment_form/general_equipment_controller.dart';
 import 'default_values/default_values.dart';
+import 'firebase_options.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   DataAccessObject dao = DataAccessObject();
   await dao.openDataBase();
   Box<String> userDataBox = await dao.getBox<String>(DefaultBoxes.userData);

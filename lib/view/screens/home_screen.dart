@@ -2,6 +2,7 @@ import 'dart:developer';
 
 
 import 'package:flutter/material.dart';
+import 'package:formulario_de_atendimento/controllers/login_controller.dart';
 import 'package:formulario_de_atendimento/main.dart';
 import 'package:formulario_de_atendimento/view/screens/equipment_form/equipment_form_screen.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
@@ -154,6 +155,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _unregisterUser() async {
     Box<dynamic> userDataBox = GetIt.I.get<Box<dynamic>>(instanceName: DefaultBoxes.userData);
+
+    LoginController loginController = LoginController();
+
+    await loginController.logout();
+
     
     await userDataBox.put('email', '');
     await userDataBox.put('name', '');

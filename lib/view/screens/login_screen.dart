@@ -85,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Text('Entrar'),
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          await loginController.login();
+                          await loginController.googleLogin();
                           
                           if (!mounted) return;
 
