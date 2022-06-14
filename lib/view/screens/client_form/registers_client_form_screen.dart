@@ -33,9 +33,6 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
   late final FocusNode focusNodeFinalKm;
   late final FocusNode focusAttendanceDate;
 
-  bool loadOnExport = false;
-  bool loadOnSend = false;
-
   @override
   void initState() {
     super.initState();
@@ -212,8 +209,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       onSecondaryPressed:  widget.onSecondaryPressed,
                       onPrimaryPressed:!registersController.isLoading
                           ? () async {
-                              await registersController.save();
-                              String? response = await generalClientController.createSpreedsheet();
+                              String? response = await registersController.save();
                               if (mounted) {
                                 _buildSnackBar(context, response);
                               }
@@ -225,25 +221,25 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 ),
                 const SizedBox(height: 32),
                 CustomAppButtom(
-                  onPressed: !loadOnExport && generalClientController.readyToSave
+                  onPressed: !registersController.loadOnExport && registersController.readyToSave
                       ? () async {
-                        setState(() => loadOnExport = true); 
+                        registersController.loadOnExport = true; 
                         generalClientController.export()
                           .then((value) {
                                 _buildSnackBar(context, value);
-                                setState(() => loadOnExport = false); 
+                                registersController.loadOnExport = false; 
                               })
                           .catchError((value) {
                                 _buildSnackBar(context, value);
-                                setState(() => loadOnExport = false); 
+                                registersController.loadOnExport = false; 
                               });
                       }
                       : null,
-                  child: !loadOnExport
+                  child: !registersController.loadOnExport
                       ?  Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Text('Salvar planilha'),
+                            Text('Exportar planilha'),
                             SizedBox(width: 8),
                             Icon(Icons.save),
                           ],
@@ -252,21 +248,21 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 ),
                 const SizedBox(height: 28),
                 CustomAppButtom(
-                  onPressed: !loadOnSend && generalClientController.readyToSendEmail
+                  onPressed: !registersController.loadOnSend && registersController.readyToSendEmail
                       ? () async {
-                        setState(() => loadOnSend = true);
+                        registersController.loadOnSend = true;
                         generalClientController.sendByEmail()
                             .then((value) {
                                 _buildSnackBar(context, value);
-                                 setState(() => loadOnSend = false);
+                                 registersController.loadOnSend = false;
                               })
                             .catchError((value) {
                                 _buildSnackBar(context, value);
-                                setState(() => loadOnSend = false); 
+                                registersController.loadOnSend = false; 
                               });
                         }
                       : null,
-                  child: !loadOnSend
+                  child: !registersController.loadOnSend
                       ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [

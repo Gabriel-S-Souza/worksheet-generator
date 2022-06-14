@@ -64,8 +64,20 @@ abstract class RegistersControllerBase with Store {
   @observable
   bool isLoading = false;
 
+  @observable
+  bool loadOnExport = false;
+
+  @observable
+  bool loadOnSend = false;
+
+  @computed
+  bool get readyToSave => generalClientController.readyToSave;
+
+  @computed
+  bool get readyToSendEmail => generalClientController.readyToSendEmail;
+
   @action
-  Future<void> save() async {
+  Future<String> save() async {
     isLoading = true;
 
     final RegistersModel registers = RegistersModel();
@@ -79,8 +91,12 @@ abstract class RegistersControllerBase with Store {
 
 
     generalClientController.registers = registers;
+
+    String? response = await generalClientController.createSpreedsheet();
     
     isLoading = false;
+
+    return response;
   }
 
   String? checkIfCanCreate() {

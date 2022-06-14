@@ -25,12 +25,14 @@ class SpreedsheetClientGenerator {
 
   io.File? file;
 
+  late String fileName;
+
   void createDocumentBase() {
     pdf = pw.Document();
   }
 
   Future<String> exportFile() async {
-    final String name = _getName();
+    final String name = fileName;
     try {
       final String filePath = '$downloadsDirectory/$name';
       final io.File file = io.File(filePath);
@@ -45,7 +47,7 @@ class SpreedsheetClientGenerator {
 
   Future<String> sendByEmail() async {
 
-    if (file == null) return 'Arquivo não encontrado'; 
+    if (file == null) return 'Arquivo não gerado'; 
 
     final message = await EmailService.sendEmail(
       subject: 'Formulário de Atendimento', 
@@ -60,7 +62,7 @@ class SpreedsheetClientGenerator {
     file = null;
   }
 
-  bool get readToSendEmail => file != null;
+  bool get readyToSendEmail => file != null;
 
   String _getName() {
     final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
@@ -125,9 +127,11 @@ class SpreedsheetClientGenerator {
     String? attedanceEndHour,
     String? totalOfHours,
   }) async {
-    final String name = _getName();    
+    fileName = _getName();
 
-    double extraSpace = cellLargeHeight;
+    final String name = fileName; 
+
+    final double extraSpace = cellLargeHeight;
 
     Directory tempDir = await getTemporaryDirectory();
 

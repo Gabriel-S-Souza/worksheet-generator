@@ -1,12 +1,15 @@
 import 'dart:io' as io;
+import 'dart:io';
 import 'package:formulario_de_atendimento/controllers/equipment_form/basic_info_equipment_controller.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 import '../default_values/default_values.dart';
+import '../services/email_service.dart';
 
 class SpreedsheetEquipmentGenerator {
   final String downloadsDirectory;
@@ -18,8 +21,54 @@ class SpreedsheetEquipmentGenerator {
 
   late pw.Document pdf;
 
+  io.File? file;
+
+  late String fileName;
+
   createDocumentBase() {
     pdf = pw.Document();
+  }
+
+  Future<String> exportFile() async {
+    final String name = fileName;
+    try {
+      final String filePath = '$downloadsDirectory/$name';
+      final io.File file = io.File(filePath);
+      await file.writeAsBytes(await pdf.save());
+
+      return 'Salvo ${file.path}';
+    } catch (e) {
+      return 'Erro ao exportar: $e';
+    }
+    
+  }
+
+  Future<String> sendByEmail() async {
+
+    if (file == null) return 'Arquivo não gerado'; 
+
+    final message = await EmailService.sendEmail(
+      subject: 'Formulário de Atendimento', 
+      body: '', 
+      file: file!,
+    );
+
+    return message;
+  }
+
+  void clear() {
+    file = null;
+  }
+
+  bool get readToSendEmail => file != null;
+
+  String _getName(scissors) {
+    final String filePrefixName = scissors != null 
+        ? scissors.replaceAll('TESOURA ', '').replaceAll(' ', '-') : 'tesoura';
+
+    final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
+    final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
+    return '${filePrefixName.replaceAll('/', '-')}_${date}_$time.pdf';
   }
 
   final double cellLargeHeight = 20;
@@ -80,14 +129,14 @@ class SpreedsheetEquipmentGenerator {
     String? totalOfHours,
     List<String>? attendants,
   }) async {
-    final String filePrefixName = scissors != null 
-        ? scissors.replaceAll('TESOURA ', '').replaceAll(' ', '-') : 'tesoura';
 
-    final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
-    final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
-    final String name = '${filePrefixName.replaceAll('/', '-')}_${date}_$time.pdf';
+    fileName = _getName(scissors);
 
-    final String filePath = '$downloadsDirectory/$name';
+    final String name = fileName;
+
+    Directory tempDir = await getTemporaryDirectory();
+
+    final String filePath = '${tempDir.path}/$name';
 
     try {
       pdf = pw.Document();
@@ -95,13 +144,9 @@ class SpreedsheetEquipmentGenerator {
         pw.MultiPage(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           mainAxisAlignment: pw.MainAxisAlignment.start,
-          pageTheme: pw.PageTheme(
+          pageTheme: const pw.PageTheme(
             pageFormat: PdfPageFormat.a4,
-            margin: const pw.EdgeInsets.fromLTRB(24, 24, 24, 12),
-            theme: pw.ThemeData.withFont(
-              base: await PdfGoogleFonts.robotoMedium(),
-              bold: await PdfGoogleFonts.robotoBold(),
-            ),
+            margin: pw.EdgeInsets.fromLTRB(24, 24, 24, 12),
           ),
           build: (context) => [
             _contentHeader(
@@ -149,8 +194,8 @@ class SpreedsheetEquipmentGenerator {
         ),
       );
 
-    final io.File file = io.File(filePath);
-    await file.writeAsBytes(await pdf.save());
+    file = io.File(filePath);
+    await file!.writeAsBytes(await pdf.save());
 
     basicInfoEquipmentController.reset();
     if (localOfAttendance == LocalOfAttendance.piracicaba || localOfAttendance == LocalOfAttendance.iracenopolis) {
@@ -159,7 +204,7 @@ class SpreedsheetEquipmentGenerator {
       
     }
 
-    return 'Salvo ${file.path}';
+    return 'Salvo';
 
 
 

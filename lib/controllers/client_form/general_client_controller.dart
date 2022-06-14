@@ -24,7 +24,7 @@ class GeneralClientController {
       services != null &&
       registers != null;
 
-  get readyToSendEmail => spreedsheetClientGenerator.readToSendEmail;
+  get readyToSendEmail => spreedsheetClientGenerator.readyToSendEmail;
 
   Future<String> createSpreedsheet() async {
     if (basicInformations == null) {

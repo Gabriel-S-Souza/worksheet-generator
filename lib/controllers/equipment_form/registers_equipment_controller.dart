@@ -85,12 +85,24 @@ abstract class RegistersEquipmentControllerBase with Store {
         totalOfHours = '00:00';
       }
   }
+
+  @computed
+  bool get readyToSave => generalEquipmentController.readyToSave;
+
+  @computed
+  bool get readyToSendEmail => generalEquipmentController.readyToSendEmail;
   
   @observable
   bool isLoading = false;
 
+  @observable
+  bool loadOnExport = false;
+
+  @observable
+  bool loadOnSend = false;
+
   @action
-  Future<void> save() async {
+  Future<String> save() async {
     isLoading = true;
 
     final RegistersModel registers = RegistersModel();
@@ -106,7 +118,11 @@ abstract class RegistersEquipmentControllerBase with Store {
 
     generalEquipmentController.registers = registers;
 
+    String message = await generalEquipmentController.createSpreedsheet();
+
     isLoading = false;
+
+    return message;
   }
 
   String? checkIfCanCreate() {

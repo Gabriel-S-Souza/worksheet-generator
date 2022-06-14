@@ -9,6 +9,21 @@ part of 'registers_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$RegistersController on RegistersControllerBase, Store {
+  Computed<bool>? _$readyToSaveComputed;
+
+  @override
+  bool get readyToSave =>
+      (_$readyToSaveComputed ??= Computed<bool>(() => super.readyToSave,
+              name: 'RegistersControllerBase.readyToSave'))
+          .value;
+  Computed<bool>? _$readyToSendEmailComputed;
+
+  @override
+  bool get readyToSendEmail => (_$readyToSendEmailComputed ??= Computed<bool>(
+          () => super.readyToSendEmail,
+          name: 'RegistersControllerBase.readyToSendEmail'))
+      .value;
+
   late final _$attendanceStartTimeOfDayAtom = Atom(
       name: 'RegistersControllerBase.attendanceStartTimeOfDay',
       context: context);
@@ -76,11 +91,43 @@ mixin _$RegistersController on RegistersControllerBase, Store {
     });
   }
 
+  late final _$loadOnExportAtom =
+      Atom(name: 'RegistersControllerBase.loadOnExport', context: context);
+
+  @override
+  bool get loadOnExport {
+    _$loadOnExportAtom.reportRead();
+    return super.loadOnExport;
+  }
+
+  @override
+  set loadOnExport(bool value) {
+    _$loadOnExportAtom.reportWrite(value, super.loadOnExport, () {
+      super.loadOnExport = value;
+    });
+  }
+
+  late final _$loadOnSendAtom =
+      Atom(name: 'RegistersControllerBase.loadOnSend', context: context);
+
+  @override
+  bool get loadOnSend {
+    _$loadOnSendAtom.reportRead();
+    return super.loadOnSend;
+  }
+
+  @override
+  set loadOnSend(bool value) {
+    _$loadOnSendAtom.reportWrite(value, super.loadOnSend, () {
+      super.loadOnSend = value;
+    });
+  }
+
   late final _$saveAsyncAction =
       AsyncAction('RegistersControllerBase.save', context: context);
 
   @override
-  Future<void> save() {
+  Future<String> save() {
     return _$saveAsyncAction.run(() => super.save());
   }
 
@@ -104,7 +151,11 @@ mixin _$RegistersController on RegistersControllerBase, Store {
 attendanceStartTimeOfDay: ${attendanceStartTimeOfDay},
 attendanceEndTimeOfDay: ${attendanceEndTimeOfDay},
 totalOfHours: ${totalOfHours},
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+loadOnExport: ${loadOnExport},
+loadOnSend: ${loadOnSend},
+readyToSave: ${readyToSave},
+readyToSendEmail: ${readyToSendEmail}
     ''';
   }
 }

@@ -24,6 +24,7 @@ class GeneralEquipmentController {
       basicInformations != null &&
       services != null &&
       registers != null;
+  get readyToSendEmail => spreedsheetEquipmentGenerator.readToSendEmail;
 
   Future<String> createSpreedsheet() async {
     if (basicInformations == null) {
@@ -110,5 +111,17 @@ class GeneralEquipmentController {
     } else {
       return null;
     }
+  }
+
+  Future<String> export() async {
+    return await spreedsheetEquipmentGenerator.exportFile();
+  }
+
+  Future<String> sendByEmail() async {
+    return await spreedsheetEquipmentGenerator.sendByEmail();
+  }
+
+  void clear() {
+    spreedsheetEquipmentGenerator.clear();
   }
 }

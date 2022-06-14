@@ -10,6 +10,21 @@ part of 'registers_equipment_controller.dart';
 
 mixin _$RegistersEquipmentController
     on RegistersEquipmentControllerBase, Store {
+  Computed<bool>? _$readyToSaveComputed;
+
+  @override
+  bool get readyToSave =>
+      (_$readyToSaveComputed ??= Computed<bool>(() => super.readyToSave,
+              name: 'RegistersEquipmentControllerBase.readyToSave'))
+          .value;
+  Computed<bool>? _$readyToSendEmailComputed;
+
+  @override
+  bool get readyToSendEmail => (_$readyToSendEmailComputed ??= Computed<bool>(
+          () => super.readyToSendEmail,
+          name: 'RegistersEquipmentControllerBase.readyToSendEmail'))
+      .value;
+
   late final _$attendanceStartTimeOfDayAtom = Atom(
       name: 'RegistersEquipmentControllerBase.attendanceStartTimeOfDay',
       context: context);
@@ -96,11 +111,43 @@ mixin _$RegistersEquipmentController
     });
   }
 
+  late final _$loadOnExportAtom = Atom(
+      name: 'RegistersEquipmentControllerBase.loadOnExport', context: context);
+
+  @override
+  bool get loadOnExport {
+    _$loadOnExportAtom.reportRead();
+    return super.loadOnExport;
+  }
+
+  @override
+  set loadOnExport(bool value) {
+    _$loadOnExportAtom.reportWrite(value, super.loadOnExport, () {
+      super.loadOnExport = value;
+    });
+  }
+
+  late final _$loadOnSendAtom = Atom(
+      name: 'RegistersEquipmentControllerBase.loadOnSend', context: context);
+
+  @override
+  bool get loadOnSend {
+    _$loadOnSendAtom.reportRead();
+    return super.loadOnSend;
+  }
+
+  @override
+  set loadOnSend(bool value) {
+    _$loadOnSendAtom.reportWrite(value, super.loadOnSend, () {
+      super.loadOnSend = value;
+    });
+  }
+
   late final _$saveAsyncAction =
       AsyncAction('RegistersEquipmentControllerBase.save', context: context);
 
   @override
-  Future<void> save() {
+  Future<String> save() {
     return _$saveAsyncAction.run(() => super.save());
   }
 
@@ -167,7 +214,11 @@ attendanceStartTimeOfDay: ${attendanceStartTimeOfDay},
 attendanceEndTimeOfDay: ${attendanceEndTimeOfDay},
 totalOfHours: ${totalOfHours},
 isTotalOfHoursEditable: ${isTotalOfHoursEditable},
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+loadOnExport: ${loadOnExport},
+loadOnSend: ${loadOnSend},
+readyToSave: ${readyToSave},
+readyToSendEmail: ${readyToSendEmail}
     ''';
   }
 }

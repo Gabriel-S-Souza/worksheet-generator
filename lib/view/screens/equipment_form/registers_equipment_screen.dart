@@ -271,8 +271,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                 CustomActionButtonGroup(
                   onPrimaryPressed:!registersEquipmentController.isLoading
                       ? () async {
-                          await registersEquipmentController.save();
-                          String? response = registersEquipmentController.checkIfCanCreate();
+                          final String response = await registersEquipmentController.save();
                           if (response != null && mounted) {
                             _buildSnackBar(context, response);
                           }
@@ -288,38 +287,57 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                 const SizedBox(height: 32),
                 CustomAppButtom(
                   onPressed: 
-                  generalEquipmentController.checkIfCanCreate() == null
-                      ?
-                      () async {
-
-                        generalEquipmentController.createSpreedsheet()
+                  !registersEquipmentController.loadOnExport && registersEquipmentController.readyToSave
+                      ? () async {
+                        registersEquipmentController.loadOnExport = true; 
+                        generalEquipmentController.export()
                           .then((value) {
-                                _buildSnackBar(
-                                  context, value
-                                );
+                                _buildSnackBar(context, value);
+                                registersEquipmentController.loadOnExport = false; 
+                              })
+                          .catchError((value) {
+                                _buildSnackBar(context, value);
+                                registersEquipmentController.loadOnExport = false; 
                               });
                       }
                       : null,
-                  child:  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text('Exportar planilha'),
-                        SizedBox(width: 8),
-                        Icon(Icons.save),
-                      ],
-                    ), 
+                  child: !registersEquipmentController.loadOnExport
+                      ?  Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text('Exportar planilha'),
+                            SizedBox(width: 8),
+                            Icon(Icons.save),
+                          ],
+                        )
+                      : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
                     ),
                 const SizedBox(height: 28),
                 CustomAppButtom(
-                  onPressed: null,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text('Receber no email'),
-                      SizedBox(width: 8),
-                      Icon(Icons.email),
-                    ],
-                  ), 
+                  onPressed: !registersEquipmentController.loadOnSend && registersEquipmentController.readyToSendEmail
+                      ? () async {
+                        registersEquipmentController.loadOnSend = true;
+                        generalEquipmentController.sendByEmail()
+                            .then((value) {
+                                _buildSnackBar(context, value);
+                                 registersEquipmentController.loadOnSend = false;
+                              })
+                            .catchError((value) {
+                                _buildSnackBar(context, value);
+                                registersEquipmentController.loadOnSend = false; 
+                              });
+                        }
+                      : null,
+                  child: !registersEquipmentController.loadOnSend
+                      ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text('Receber no email'),
+                          SizedBox(width: 8),
+                          Icon(Icons.email),
+                        ],
+                      )
+                      : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
                 ),
                 const SizedBox(height: 40),
               ]
