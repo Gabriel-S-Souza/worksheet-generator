@@ -24,6 +24,8 @@ class GeneralClientController {
       services != null &&
       registers != null;
 
+  get readyToSendEmail => spreedsheetClientGenerator.readToSendEmail;
+
   Future<String> createSpreedsheet() async {
     if (basicInformations == null) {
       return 'A página de informações básicas não foi salva';
@@ -106,5 +108,17 @@ class GeneralClientController {
     } else {
       return null;
     }
+  }
+
+  Future<String> sendByEmail() async {
+    return await spreedsheetClientGenerator.sendByEmail();
+  }
+  
+  Future<String> export() async {
+    return await spreedsheetClientGenerator.exportFile();
+  }
+
+  void clear() {
+    spreedsheetClientGenerator.clear();
   }
 }

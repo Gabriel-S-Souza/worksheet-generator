@@ -4,7 +4,6 @@ import 'package:formulario_de_atendimento/controllers/client_form/general_client
 import 'package:formulario_de_atendimento/controllers/client_form/registers_controller.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_action_form_group.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
-import 'package:formulario_de_atendimento/view/widgets/custom_outlined_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_text_field.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -34,7 +33,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
   late final FocusNode focusNodeFinalKm;
   late final FocusNode focusAttendanceDate;
 
-  bool isLoading = false;
+  bool loadOnExport = false;
+  bool loadOnSend = false;
 
   @override
   void initState() {
@@ -213,8 +213,8 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       onPrimaryPressed:!registersController.isLoading
                           ? () async {
                               await registersController.save();
-                              String? response = registersController.checkIfCanCreate();
-                              if (response != null && mounted) {
+                              String? response = await generalClientController.createSpreedsheet();
+                              if (mounted) {
                                 _buildSnackBar(context, response);
                               }
                               setState(() {});
@@ -225,23 +225,21 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 ),
                 const SizedBox(height: 32),
                 CustomAppButtom(
-                  onPressed: generalClientController.readyToSave
+                  onPressed: !loadOnExport && generalClientController.readyToSave
                       ? () async {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        generalClientController.createSpreedsheet()
+                        setState(() => loadOnExport = true); 
+                        generalClientController.export()
                           .then((value) {
-                                _buildSnackBar(
-                                  context, value
-                                );
-                                setState(() {
-                                  isLoading = false;
-                                }); 
+                                _buildSnackBar(context, value);
+                                setState(() => loadOnExport = false); 
+                              })
+                          .catchError((value) {
+                                _buildSnackBar(context, value);
+                                setState(() => loadOnExport = false); 
                               });
                       }
                       : null,
-                  child: !isLoading
+                  child: !loadOnExport
                       ?  Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
@@ -254,15 +252,30 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 ),
                 const SizedBox(height: 28),
                 CustomAppButtom(
-                  onPressed: null,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text('Receber no email'),
-                        SizedBox(width: 8),
-                        Icon(Icons.email),
-                      ],
-                    ), 
+                  onPressed: !loadOnSend && generalClientController.readyToSendEmail
+                      ? () async {
+                        setState(() => loadOnSend = true);
+                        generalClientController.sendByEmail()
+                            .then((value) {
+                                _buildSnackBar(context, value);
+                                 setState(() => loadOnSend = false);
+                              })
+                            .catchError((value) {
+                                _buildSnackBar(context, value);
+                                setState(() => loadOnSend = false); 
+                              });
+                        }
+                      : null,
+                  child: !loadOnSend
+                      ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text('Receber no email'),
+                          SizedBox(width: 8),
+                          Icon(Icons.email),
+                        ],
+                      )
+                      : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
                 ),
                 const SizedBox(height: 40),
               ],

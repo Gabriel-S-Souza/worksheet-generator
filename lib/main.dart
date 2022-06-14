@@ -6,6 +6,7 @@ import 'package:formulario_de_atendimento/controllers/client_form/basic_informat
 import 'package:formulario_de_atendimento/controllers/client_form/general_client_controller.dart';
 import 'package:formulario_de_atendimento/controllers/equipment_form/basic_info_equipment_controller.dart';
 import 'package:formulario_de_atendimento/data/data_access_object.dart';
+import 'package:formulario_de_atendimento/services/google_auth_api.dart';
 import 'package:formulario_de_atendimento/view/my_app.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -39,7 +40,11 @@ void main() async {
     log(osBox.get(DefaultKeys.piracicabaSufix));
     log(osBox.get(DefaultKeys.iracemapolisSufix));
   }
+  GoogleAuthApi googleAuthApi = GoogleAuthApi();
 
+  googleAuthApi.signInSilently();
+
+  GetIt.I.registerSingleton<GoogleAuthApi>(googleAuthApi);
   GetIt.I.registerSingleton<DataAccessObject>(dao);
   GetIt.I.registerSingleton<Box>(userDataBox, instanceName: DefaultBoxes.userData);
   GetIt.I.registerSingleton<Box>(osBox, instanceName: DefaultBoxes.os);

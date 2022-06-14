@@ -1,14 +1,17 @@
 import 'dart:io' as io;
+import 'dart:io';
 
 import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 import '../controllers/client_form/basic_informations_controller.dart';
+import '../services/email_service.dart';
 
 class SpreedsheetClientGenerator {
   final String downloadsDirectory;
@@ -20,8 +23,49 @@ class SpreedsheetClientGenerator {
   
   late pw.Document pdf;
 
-  createDocumentBase() {
+  io.File? file;
+
+  void createDocumentBase() {
     pdf = pw.Document();
+  }
+
+  Future<String> exportFile() async {
+    final String name = _getName();
+    try {
+      final String filePath = '$downloadsDirectory/$name';
+      final io.File file = io.File(filePath);
+      await file.writeAsBytes(await pdf.save());
+
+      return 'Salvo ${file.path}';
+    } catch (e) {
+      return 'Erro ao exportar: $e';
+    }
+    
+  }
+
+  Future<String> sendByEmail() async {
+
+    if (file == null) return 'Arquivo não encontrado'; 
+
+    final message = await EmailService.sendEmail(
+      subject: 'Formulário de Atendimento', 
+      body: '', 
+      file: file!,
+    );
+
+    return message;
+  }
+
+  void clear() {
+    file = null;
+  }
+
+  bool get readToSendEmail => file != null;
+
+  String _getName() {
+    final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
+    final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
+    return 'cliente_${date}_$time.pdf';
   }
 
 
@@ -68,7 +112,6 @@ class SpreedsheetClientGenerator {
     String? series,
     String? odometer,
 
-
     String? defect,
     String? cause,
     String? solution,
@@ -77,19 +120,18 @@ class SpreedsheetClientGenerator {
     String? situation,
     String? pendencies,
 
-
     String? attedanceDate,
     String? attedanceStartHour,
     String? attedanceEndHour,
     String? totalOfHours,
   }) async {
-    final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');
-    final String time = DateFormat('HH:mm:ss').format(DateTime.now()).replaceAll(':', '-');
-    final String name = 'cliente_${date}_$time.pdf';
+    final String name = _getName();    
 
     double extraSpace = cellLargeHeight;
 
-    final String filePath = '$downloadsDirectory/$name';
+    Directory tempDir = await getTemporaryDirectory();
+
+    final String filePath = '${tempDir.path}/$name';
 
     try {
       
@@ -148,15 +190,15 @@ class SpreedsheetClientGenerator {
       );
       
 
-    final io.File file = io.File(filePath);
-    await file.writeAsBytes(await pdf.save());
+      file = io.File(filePath);
+      await file!.writeAsBytes(await pdf.save());
 
-    basicInformationsController.reset();
-    if (localOfAttendance == LocalOfAttendance.piracicaba || localOfAttendance == LocalOfAttendance.iracenopolis) {
-      await basicInformationsController.updateOs();
-      basicInformationsController.generateOs();
-    }
-    return 'Salvo ${file.path}';
+      basicInformationsController.reset();
+      if (localOfAttendance == LocalOfAttendance.piracicaba || localOfAttendance == LocalOfAttendance.iracenopolis) {
+        await basicInformationsController.updateOs();
+        basicInformationsController.generateOs();
+      }
+      return 'Salvo';
 
 
     } catch (e) {
