@@ -6,8 +6,8 @@ import 'package:formulario_de_atendimento/view/widgets/custom_text_label.dart';
 
 import '../../widgets/custom_action_form_group.dart';
 import '../../widgets/custom_radio_buttom_group.dart';
-import '../../widgets/custom_suggestion_text_field.dart';
 import '../../widgets/custom_text_area.dart';
+import '../../widgets/custom_text_field.dart';
 
 class ServicesClientFormScreen extends StatefulWidget {
   final VoidCallback onPrimaryPressed;
@@ -80,37 +80,23 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                 ),
                 servicesController.oilWasUsed == YesNo.yes ? const CustomTextLabel('Óleo de motor utilizado') : const SizedBox(),
                 servicesController.oilWasUsed == YesNo.yes
-                    ? CustomSuggestionTextField(
+                    ? CustomTextField(
                         hint: 'Óleo de motor',
                         obscure: false,
                         prefix: const Icon(Icons.oil_barrel),
                         onChanged: (value) => servicesController.motorOil = value,
                         onSubmitted: () => FocusScope.of(context).nextFocus(),
-                        itemBuilder: (context, suggestion) {
-                          return const ListTile(
-                            title: Text('Suggestion'),
-                          );
-                        }, 
-                        onSuggestionSelected: (object) {  }, 
-                        suggestionsCallback: (value) => [],
                       )
                     : Container(),
                     servicesController.oilWasUsed == YesNo.yes 
                       ? const CustomTextLabel('Óleo hidráulico utilizado') : const SizedBox(),
                     servicesController.oilWasUsed == YesNo.yes 
-                    ? CustomSuggestionTextField(
+                    ? CustomTextField(
                         hint: 'Óleo hidráulico',
                         obscure: false,
                         prefix: const Icon(Icons.oil_barrel),
                         onChanged: (value) => servicesController.hydraulicOil = value,
                         onSubmitted: () => FocusScope.of(context).nextFocus(),
-                        itemBuilder: (context, suggestion) {
-                          return const ListTile(
-                            title: Text('Suggestion'),
-                          );
-                        }, 
-                        onSuggestionSelected: (object) {  }, 
-                        suggestionsCallback: (value) => [],
                       )
                     : Container(),
                 const CustomTextLabel('Situação'),

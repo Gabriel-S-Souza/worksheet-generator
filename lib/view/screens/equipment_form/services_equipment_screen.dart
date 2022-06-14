@@ -5,7 +5,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/controllers/equipment_form/services_equipment_controller.dart';
 import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_outlined_buttom.dart';
-import 'package:formulario_de_atendimento/view/widgets/custom_suggestion_text_field.dart';
 
 import '../../widgets/custom_action_form_group.dart';
 import '../../widgets/custom_radio_buttom_group.dart';
@@ -41,10 +40,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
   int quantityShim = 1;
   int quantityknives = 1;
   ButtomQuantity buttomQuantityPressed = ButtomQuantity.none;
-  // String oilWasUsed = YesNo.no;
-  // String? motorOil;
-  // String? hydraulicOil;
-  late final FocusNode focusNodeReadyServices;
   
   @override
   void initState() {
@@ -52,7 +47,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
     _controllerQuantityScrew.text = quantityScrew.toString();
     _controllerQuantityShim.text = quantityShim.toString();
     _controllerQuantityknives.text = quantityknives.toString();
-    focusNodeReadyServices = FocusNode();
   }
 
   @override
@@ -60,7 +54,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
     _controllerQuantityScrew.dispose();
     _controllerQuantityShim.dispose();
     _controllerQuantityknives.dispose();
-    focusNodeReadyServices.dispose();
     super.dispose();
   }
 
@@ -80,14 +73,11 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                   CustomTextArea(
                     hint: 'Descreva o defeito / causa',
                     onChanged: (value) => servicesEquipmentcontroller.defectCause = value,
-                    onSubmitted: () => FocusScope.of(context).requestFocus(focusNodeReadyServices),
                   ),
                   const CustomTextLabel('Serviço realizado'),
                   CustomTextArea(
                     hint: 'Descreva o serviço realizado',
-                    focusNode: focusNodeReadyServices,
                     onChanged: (value) => servicesEquipmentcontroller.serviceCarried = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
                   ),
                   const CustomTextLabel('Foi utilizado óleo?'),
                   CustomRadioButtonGroup(
@@ -149,7 +139,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomSuggestionTextField(
+                          child: CustomTextField(
                             controller: _controllerScrewCode,
                             hint: 'Código',
                             obscure: false,
@@ -157,13 +147,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
                             onSubmitted: () => FocusScope.of(context).nextFocus(),
-                            onSuggestionSelected: (object) {},
-                            suggestionsCallback: (value) => [], 
-                            itemBuilder: (context, suggestion) {
-                              return const ListTile(
-                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                              );
-                            },
                           ),
                         ),
                       ),
@@ -171,7 +154,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomSuggestionTextField(
+                          child: CustomTextField(
                             controller: _controllerScrewSize,
                             hint: 'Tamanho',
                             obscure: false, 
@@ -179,13 +162,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
                             onSubmitted: () => FocusScope.of(context).nextFocus(),
-                            onSuggestionSelected: (object) {},
-                            suggestionsCallback: (value) => [], 
-                            itemBuilder: (context, suggestion) {
-                              return const ListTile(
-                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                              );
-                            },
                           ),
                         ),
                       ),
@@ -248,7 +224,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomSuggestionTextField(
+                          child: CustomTextField(
                             controller: _controllerShimCode,
                             hint: 'Código',
                             obscure: false,
@@ -256,13 +232,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
                             onSubmitted: () => FocusScope.of(context).nextFocus(),
-                            onSuggestionSelected: (object) {},
-                            suggestionsCallback: (value) => [], 
-                            itemBuilder: (context, suggestion) {
-                              return const ListTile(
-                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                              );
-                            },
                           ),
                         ),
                       ),
@@ -270,7 +239,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomSuggestionTextField(
+                          child: CustomTextField(
                             controller: _controllerShimSize,
                             hint: 'Tamanho',
                             obscure: false, 
@@ -278,13 +247,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
                             onSubmitted: () => FocusScope.of(context).nextFocus(),
-                            onSuggestionSelected: (object) {},
-                            suggestionsCallback: (value) => [], 
-                            itemBuilder: (context, suggestion) {
-                              return const ListTile(
-                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                              );
-                            },
                           ),
                         ),
                       ),
@@ -347,7 +309,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomSuggestionTextField(
+                          child: CustomTextField(
                             controller: _controllerKnivesCode,
                             hint: 'Código',
                             obscure: false,
@@ -355,13 +317,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
                             onSubmitted: () => FocusScope.of(context).nextFocus(),
-                            onSuggestionSelected: (object) {},
-                            suggestionsCallback: (value) => [], 
-                            itemBuilder: (context, suggestion) {
-                              return const ListTile(
-                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                              );
-                            },
                           ),
                         ),
                       ),
@@ -369,7 +324,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomSuggestionTextField(
+                          child: CustomTextField(
                             controller: _controllerKnivesSize,
                             hint: 'Furação',
                             obscure: false, 
@@ -377,13 +332,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
                             onSubmitted: () => FocusScope.of(context).nextFocus(),
-                            onSuggestionSelected: (object) {},
-                            suggestionsCallback: (value) => [], 
-                            itemBuilder: (context, suggestion) {
-                              return const ListTile(
-                                title: Text('Suggestion', style: TextStyle(fontSize: 14),),
-                              );
-                            },
                           ),
                         ),
                       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
@@ -15,7 +14,9 @@ class CustomTextField extends StatelessWidget {
     this.onSubmitted, 
     this.textInputAction = TextInputAction.next, 
     this.focusNode, 
-    this.readOnly = false,
+    this.readOnly = false, 
+    this.contentPadding, 
+    this.style,
   }) : super(key: key);
   final TextEditingController? controller;
   final String? hint;
@@ -29,6 +30,8 @@ class CustomTextField extends StatelessWidget {
   final Function()? onSubmitted;
   final bool? enabled;
   final bool readOnly;
+  final EdgeInsetsGeometry? contentPadding;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +55,13 @@ class CustomTextField extends StatelessWidget {
         onFieldSubmitted: (value) {
           onSubmitted?.call();
         },
+        style: style,
         decoration: InputDecoration(
           hintText: hint,
           border: InputBorder.none,
           prefixIcon: prefix,
           suffixIcon: suffix,
+          contentPadding: contentPadding,
         ),
         textAlignVertical: TextAlignVertical.center,
       ),

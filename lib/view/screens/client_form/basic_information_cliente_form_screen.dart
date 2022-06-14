@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/view/screens/os_screen.dart';
-import 'package:formulario_de_atendimento/view/widgets/custom_suggestion_text_field.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_icon_button.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -71,35 +70,21 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   ),
                 ),
                 const CustomTextLabel('Cliente'),
-                CustomSuggestionTextField(
+                CustomTextField(
                   hint: 'Nome do cliente',
                   obscure: false, 
                   onChanged: (value) => basicInformationsController.client = value,
                   onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.person), 
-                  itemBuilder: (context, suggestion) {
-                    return const ListTile(
-                      title: Text('Suggestion'),
-                    );
-                  }, 
-                  onSuggestionSelected: (object) {  }, 
-                  suggestionsCallback: (value) => [],
                 ),
                 const CustomTextLabel('Solicitado por'),
-                CustomSuggestionTextField(
+                CustomTextField(
                   controller: requesterController,
                   hint: 'Nome do solicitante',
                   obscure: false, 
                   onChanged: (value) {},
                   onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  prefix: const Icon(Icons.person), 
-                  itemBuilder: (context, suggestion) {
-                    return const ListTile(
-                      title: Text('Suggestion'),
-                    );
-                  }, 
-                  onSuggestionSelected: (object) {  }, 
-                  suggestionsCallback: (value) => [],
+                  prefix: const Icon(Icons.person),
                 ),
                 const CustomTextLabel('Atendido por'),
                 CustomTextField(
@@ -227,64 +212,36 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                     )
                     : Container(),
                 const CustomTextLabel('Frota'),
-                CustomSuggestionTextField(
+                CustomTextField(
                   hint: 'Frota',
                   obscure: false,
                   onChanged: (value) => basicInformationsController.fleet = value,
                   onSubmitted: () => FocusScope.of(context).nextFocus(),
                   prefix: const Icon(Icons.onetwothree), 
-                  itemBuilder: (context, suggestion) {
-                    return const ListTile(
-                      title: Text('Suggestion'),
-                    );
-                  }, 
-                  onSuggestionSelected: (object) {  }, 
-                  suggestionsCallback: (value) => [],
                 ),
                 const CustomTextLabel('Modelo'),
-                CustomSuggestionTextField(
+                CustomTextField(
                   hint: 'Modelo',
                   obscure: false,
                   onChanged: (value) => basicInformationsController.model = value,
                   onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  prefix: const Icon(Icons.onetwothree), 
-                  itemBuilder: (context, suggestion) {
-                    return const ListTile(
-                      title: Text('Suggestion'),
-                    );
-                  }, 
-                  onSuggestionSelected: (object) {  }, 
-                  suggestionsCallback: (value) => [],
+                  prefix: const Icon(Icons.onetwothree),
                 ),
                 const CustomTextLabel('Série'),
-                CustomSuggestionTextField(
+                CustomTextField(
                   hint: 'Série',
                   obscure: false,
                   onChanged: (value) => basicInformationsController.serie = value,
                   onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  prefix: const Icon(Icons.onetwothree), 
-                  itemBuilder: (context, suggestion) {
-                    return const ListTile(
-                      title: Text('Suggestion'),
-                    );
-                  }, 
-                  onSuggestionSelected: (object) {  }, 
-                  suggestionsCallback: (value) => [],
+                  prefix: const Icon(Icons.onetwothree),
                 ),
                 const CustomTextLabel('Horímetro'),
-                CustomSuggestionTextField(
+                CustomTextField(
                   hint: 'Horímetro',
                   obscure: false,
                   onChanged: (value) => basicInformationsController.odometer = value,
                   onSubmitted: () => FocusScope.of(context).nextFocus(),
-                  prefix: const Icon(Icons.speed), 
-                  itemBuilder: (context, suggestion) {
-                    return const ListTile(
-                      title: Text('Suggestion'),
-                    );
-                  }, 
-                  onSuggestionSelected: (object) {  }, 
-                  suggestionsCallback: (value) => [],
+                  prefix: const Icon(Icons.speed),
                 ),
                 const SizedBox(height: 40),
                 Observer(
