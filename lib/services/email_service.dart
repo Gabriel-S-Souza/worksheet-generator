@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:formulario_de_atendimento/main.dart';
 import 'package:formulario_de_atendimento/services/google_auth_api.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mailer/mailer.dart';
@@ -15,6 +16,7 @@ class EmailService {
     required String body,
     required File file,
     }) async {
+    final UserSettings userSettings = GetIt.I.get<UserSettings>();
     final GoogleAuthApi googleAuthApi = GetIt.I.get<GoogleAuthApi>();
 
     final user = googleAuthApi.currentUser;
@@ -33,7 +35,7 @@ class EmailService {
 
     final message = Message()
       ..from = Address(userEmail, 'Formulário de Atendimento')
-      ..recipients = ['gabriel12saraiva@gmail.com']
+      ..recipients = [userSettings.email]
       ..subject = subject
       ..text = body
       ..attachments = [

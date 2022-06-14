@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/controllers/login_controller.dart';
+import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_login_check.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_simple_textfield.dart';
 
@@ -14,6 +15,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   final loginController = LoginController();
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   CustomSimpleTextField(
-                    label: 'Email',
+                    label: 'Email destinatário',
                     prefixIcon: const Icon(Icons.email_outlined),
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.done,
@@ -72,32 +75,33 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   const SizedBox(height: 36),
-                  SizedBox(
-                    height: 44,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
-                          )
+                  CustomAppButtom(
+                    onPressed: !isLoading
+                        ? () async {
+                          setState(() => isLoading = true);
+                          if (formKey.currentState!.validate()) {
+                            await loginController.googleLogin();
+                            setState(() => isLoading = false);
+                            
+                            if (!mounted) return;
+
+                            _buildSnackBar(context);
+
+                            Navigator.pushReplacement(context, MaterialPageRoute(
+                              builder: (context) => const CustomLoginCheck(),
+                            ));
+                            }
+                          }
+                        : null,
+                    child: !isLoading
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text('Entrar'),
+                          ],
                         )
-                      ),
-                      child: const Text('Entrar'),
-                      onPressed: () async {
-                        if (formKey.currentState!.validate()) {
-                          await loginController.googleLogin();
-                          
-                          if (!mounted) return;
-
-                          _buildSnackBar(context);
-
-                          Navigator.pushReplacement(context, MaterialPageRoute(
-                            builder: (context) => const CustomLoginCheck(),
-                          ));
-                        }
-                      },
-                    ),
-                  ),
+                        : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
+                  )
                 ],
               ),
             ),
