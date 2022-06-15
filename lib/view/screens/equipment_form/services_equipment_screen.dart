@@ -370,7 +370,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                   CustomActionButtonGroup(
                     primaryChild: !servicesEquipmentcontroller.isLoading
                         ? const Text('Salvar e avançar')
-                        : const Padding(padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                        : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
                     secondaryChild: const Text('Anterior'),
                     onSecondaryPressed: widget.onSecondaryPressed,
                     onPrimaryPressed: () async {

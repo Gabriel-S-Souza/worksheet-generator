@@ -232,8 +232,7 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                       onSecondaryPressed: null,
                       primaryChild: !basicInfoEquipmentController.isLoading
                           ? const Text('Salvar e avançar')
-                          : const Padding( padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(),
-                          ),
+                          : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
                       secondaryChild: const Text('Anterior'),
                     ),
                     const SizedBox(height: 40),
