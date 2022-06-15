@@ -27,15 +27,14 @@ void main() async {
   Box<String> userDataBox = await dao.getBox<String>(DefaultBoxes.userData);
   Box<dynamic> osBox = await dao.getBox<dynamic>(DefaultBoxes.os);
 
-  // await osBox.deleteAll(userDataBox.keys);
-
   if (osBox.isEmpty) {
     await osBox.put(DefaultKeys.osPiracicaba, 1);
     await osBox.put(DefaultKeys.osIracemapolis, 1);
     await osBox.put(DefaultKeys.piracicabaSufix, 'PIRA');
     await osBox.put(DefaultKeys.iracemapolisSufix, 'IRACE');
+    log('OS BOX WAS EMPTY');
   }
-  
+
   GoogleAuthApi googleAuthApi = GoogleAuthApi();
 
   googleAuthApi.signInSilently();

@@ -1,11 +1,10 @@
-
-
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:formulario_de_atendimento/main.dart';
 import 'package:formulario_de_atendimento/services/google_auth_api.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 
@@ -29,12 +28,13 @@ class EmailService {
     final auth = await user.authentication;
     final accessToken = auth.accessToken;
 
-    if (accessToken == null) return 'Access token not found';
+    if (accessToken == null) return 'Token de acesso não encontrado, tente logar novamente';
 
     log('UserEmail: $userEmail');
-    log('Destinatário: $userSettings.email');
+    log('Destinatário: ${userSettings.email}');
 
     final smtpServer = gmailSaslXoauth2(userEmail, accessToken);
+    
 
     final message = Message()
       ..from = Address(userEmail, 'Formulário de Atendimento')
