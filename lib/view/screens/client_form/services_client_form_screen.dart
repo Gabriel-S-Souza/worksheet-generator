@@ -46,6 +46,7 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Observer(
           builder: (context) {
             return Column(
@@ -119,7 +120,6 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                 CustomActionButtonGroup(
                   onPrimaryPressed:!servicesController.isLoading
                       ? () async {
-                        
                           await servicesController.save();
         
                           widget.onPrimaryPressed();
@@ -129,8 +129,7 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                   secondaryChild: const Text('Anterior'),
                   primaryChild:!servicesController.isLoading
                           ? const Text('Salvar e avançar')
-                          : const Padding(padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(),
-                          ),
+                          : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
                 ),
                 const SizedBox(height: 20),
               ],

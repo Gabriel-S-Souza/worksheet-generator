@@ -9,21 +9,6 @@ part of 'registers_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$RegistersController on RegistersControllerBase, Store {
-  Computed<bool>? _$readyToSaveComputed;
-
-  @override
-  bool get readyToSave =>
-      (_$readyToSaveComputed ??= Computed<bool>(() => super.readyToSave,
-              name: 'RegistersControllerBase.readyToSave'))
-          .value;
-  Computed<bool>? _$readyToSendEmailComputed;
-
-  @override
-  bool get readyToSendEmail => (_$readyToSendEmailComputed ??= Computed<bool>(
-          () => super.readyToSendEmail,
-          name: 'RegistersControllerBase.readyToSendEmail'))
-      .value;
-
   late final _$attendanceStartTimeOfDayAtom = Atom(
       name: 'RegistersControllerBase.attendanceStartTimeOfDay',
       context: context);
@@ -123,6 +108,38 @@ mixin _$RegistersController on RegistersControllerBase, Store {
     });
   }
 
+  late final _$readyToExportAtom =
+      Atom(name: 'RegistersControllerBase.readyToExport', context: context);
+
+  @override
+  bool get readyToExport {
+    _$readyToExportAtom.reportRead();
+    return super.readyToExport;
+  }
+
+  @override
+  set readyToExport(bool value) {
+    _$readyToExportAtom.reportWrite(value, super.readyToExport, () {
+      super.readyToExport = value;
+    });
+  }
+
+  late final _$readyToSendEmailAtom =
+      Atom(name: 'RegistersControllerBase.readyToSendEmail', context: context);
+
+  @override
+  bool get readyToSendEmail {
+    _$readyToSendEmailAtom.reportRead();
+    return super.readyToSendEmail;
+  }
+
+  @override
+  set readyToSendEmail(bool value) {
+    _$readyToSendEmailAtom.reportWrite(value, super.readyToSendEmail, () {
+      super.readyToSendEmail = value;
+    });
+  }
+
   late final _$saveAsyncAction =
       AsyncAction('RegistersControllerBase.save', context: context);
 
@@ -146,6 +163,28 @@ mixin _$RegistersController on RegistersControllerBase, Store {
   }
 
   @override
+  void setReadyToExport() {
+    final _$actionInfo = _$RegistersControllerBaseActionController.startAction(
+        name: 'RegistersControllerBase.setReadyToExport');
+    try {
+      return super.setReadyToExport();
+    } finally {
+      _$RegistersControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setReadyToSendEmail() {
+    final _$actionInfo = _$RegistersControllerBaseActionController.startAction(
+        name: 'RegistersControllerBase.setReadyToSendEmail');
+    try {
+      return super.setReadyToSendEmail();
+    } finally {
+      _$RegistersControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 attendanceStartTimeOfDay: ${attendanceStartTimeOfDay},
@@ -154,7 +193,7 @@ totalOfHours: ${totalOfHours},
 isLoading: ${isLoading},
 loadOnExport: ${loadOnExport},
 loadOnSend: ${loadOnSend},
-readyToSave: ${readyToSave},
+readyToExport: ${readyToExport},
 readyToSendEmail: ${readyToSendEmail}
     ''';
   }

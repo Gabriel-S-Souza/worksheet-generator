@@ -43,7 +43,7 @@ class CustomTextField extends StatelessWidget {
       ),
       padding: prefix != null ? null : const EdgeInsets.only(left: 16),
       child: TextFormField(
-        focusNode: focusNode ?? FocusNode(),
+        focusNode: focusNode,
         controller: controller,
         obscureText: obscure,
         keyboardType: textInputType,

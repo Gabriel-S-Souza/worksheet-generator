@@ -79,7 +79,6 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
           RegistersEquipmentScreen(
             onSecondaryPressed: () {
               animatePage(1);
-              print('onSecondaryPressed');
             },
           ),
         ],

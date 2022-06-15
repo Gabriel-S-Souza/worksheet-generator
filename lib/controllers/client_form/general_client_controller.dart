@@ -24,7 +24,10 @@ class GeneralClientController {
       services != null &&
       registers != null;
 
-  get readyToSendEmail => spreedsheetClientGenerator.readyToSendEmail;
+  bool get readyToExport => spreedsheetClientGenerator.readyToExport;
+
+  bool get readyToSendEmail => spreedsheetClientGenerator.readyToSendEmail;
+
 
   Future<String> createSpreedsheet() async {
     if (basicInformations == null) {
@@ -80,6 +83,8 @@ class GeneralClientController {
     basicInformations = null;
     services = null;
     registers = null;
+
+    spreedsheetClientGenerator.clear();
   }
 
   Future<void> _init() async {

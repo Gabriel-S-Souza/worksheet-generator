@@ -64,6 +64,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Observer(
           builder: (context) {
             return Column(
@@ -92,7 +93,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                           obscure: false,
                           prefix: const Icon(Icons.oil_barrel),
                           onChanged: (value) => servicesEquipmentcontroller.motorOil = value,
-                          onSubmitted: () => FocusScope.of(context).nextFocus(),
                         )
                       : Container(),
                       servicesEquipmentcontroller.oilWasUsed == YesNo.yes 
@@ -103,7 +103,6 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                           obscure: false,
                           prefix: const Icon(Icons.oil_barrel),
                           onChanged: (value) => servicesEquipmentcontroller.hydraulicOil = value,
-                          onSubmitted: () => FocusScope.of(context).nextFocus(),
                         )
                       : Container(),
                   const CustomTextLabel('Material usado', marginTop: 40,),
@@ -146,7 +145,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
-                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+
                           ),
                         ),
                       ),
@@ -161,7 +160,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
-                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+
                           ),
                         ),
                       ),
@@ -231,7 +230,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
-                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+
                           ),
                         ),
                       ),
@@ -246,7 +245,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}), 
-                            onSubmitted: () => FocusScope.of(context).nextFocus(),
+
                           ),
                         ),
                       ),
@@ -366,13 +365,13 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                   CustomTextArea(
                     hint: 'Descreva as pendências',
                     onChanged: (value) => servicesEquipmentcontroller.pendencies = value,
-                    onSubmitted: () => FocusScope.of(context).nextFocus(),
+                    onSubmitted: () => FocusScope.of(context).unfocus(),
                   ),
                   const SizedBox(height: 32),
                   CustomActionButtonGroup(
                     primaryChild: !servicesEquipmentcontroller.isLoading
                         ? const Text('Salvar e avançar')
-                        : const Padding(padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+                        : const SizedBox(width: 24, height: 24, child: CircularProgressIndicator()),
                     secondaryChild: const Text('Anterior'),
                     onSecondaryPressed: widget.onSecondaryPressed,
                     onPrimaryPressed: () async {

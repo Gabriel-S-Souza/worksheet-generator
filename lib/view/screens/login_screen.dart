@@ -78,8 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   CustomAppButtom(
                     onPressed: !isLoading
                         ? () async {
-                          setState(() => isLoading = true);
                           if (formKey.currentState!.validate()) {
+                            setState(() => isLoading = true);
                             await loginController.googleLogin();
                             setState(() => isLoading = false);
                             

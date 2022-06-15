@@ -86,11 +86,17 @@ abstract class RegistersEquipmentControllerBase with Store {
       }
   }
 
-  @computed
-  bool get readyToSave => generalEquipmentController.readyToSave;
+  @observable
+  bool readyToSave = false;
 
-  @computed
-  bool get readyToSendEmail => generalEquipmentController.readyToSendEmail;
+  @observable
+  bool readyToSendEmail = false;
+
+  @action
+  void setReadyToSave() => readyToSave = generalEquipmentController.readyToSave;
+
+  @action
+  void setReadyToSendEmail() => readyToSendEmail = generalEquipmentController.readyToSendEmail;
   
   @observable
   bool isLoading = false;
@@ -121,6 +127,9 @@ abstract class RegistersEquipmentControllerBase with Store {
     String message = await generalEquipmentController.createSpreedsheet();
 
     isLoading = false;
+
+    setReadyToSave();
+    setReadyToSendEmail();
 
     return message;
   }

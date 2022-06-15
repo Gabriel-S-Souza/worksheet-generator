@@ -19,9 +19,11 @@ class EmailService {
     final UserSettings userSettings = GetIt.I.get<UserSettings>();
     final GoogleAuthApi googleAuthApi = GetIt.I.get<GoogleAuthApi>();
 
-    final user = googleAuthApi.currentUser;
+    var user = googleAuthApi.currentUser;
 
-    if (user == null) return 'User not found';
+    user ??= await googleAuthApi.signInSilently();
+
+    if (user == null) return 'Sem internet ou login mal sucedido';
 
     final String userEmail = user.email;
     final auth = await user.authentication;
@@ -30,6 +32,7 @@ class EmailService {
     if (accessToken == null) return 'Access token not found';
 
     log('UserEmail: $userEmail');
+    log('Destinatário: $userSettings.email');
 
     final smtpServer = gmailSaslXoauth2(userEmail, accessToken);
 
@@ -46,7 +49,7 @@ class EmailService {
 
     try {
       await send(message, smtpServer);
-      return 'Email enviado com sucesso!'; 
+      return 'Email enviado com sucesso para ${userSettings.email}'; 
     } on MailerException catch (e) {
       log('MailerException: $e');
       return 'Erro ao enviar o email: $e';

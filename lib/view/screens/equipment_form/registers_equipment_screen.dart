@@ -56,10 +56,11 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
          child: Observer(
            builder: (context) {
              return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 const CustomTextLabel('Atendimento',),
                 const CustomTextLabel(
@@ -271,11 +272,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                 CustomActionButtonGroup(
                   onPrimaryPressed:!registersEquipmentController.isLoading
                       ? () async {
-                          final String response = await registersEquipmentController.save();
-                          if (response != null && mounted) {
-                            _buildSnackBar(context, response);
-                          }
-                          setState(() {});
+                          await registersEquipmentController.save();
                         }
                       : null,
                   primaryChild: !registersEquipmentController.isLoading
@@ -378,7 +375,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         margin: const EdgeInsets.only(bottom: 60),
-        duration: const Duration(milliseconds: 4000),
+        duration: const Duration(milliseconds: 2000),
         behavior: SnackBarBehavior.floating,
         content: Text(message),
       ),

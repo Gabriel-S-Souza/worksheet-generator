@@ -34,12 +34,8 @@ void main() async {
     await osBox.put(DefaultKeys.osIracemapolis, 1);
     await osBox.put(DefaultKeys.piracicabaSufix, 'PIRA');
     await osBox.put(DefaultKeys.iracemapolisSufix, 'IRACE');
-    log('OS BOX WAS EMPTY');
-    log(osBox.get(DefaultKeys.osPiracicaba));
-    log(osBox.get(DefaultKeys.osIracemapolis));
-    log(osBox.get(DefaultKeys.piracicabaSufix));
-    log(osBox.get(DefaultKeys.iracemapolisSufix));
   }
+  
   GoogleAuthApi googleAuthApi = GoogleAuthApi();
 
   googleAuthApi.signInSilently();

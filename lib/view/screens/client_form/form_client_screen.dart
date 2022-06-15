@@ -23,12 +23,12 @@ class _FormClientScreenState extends State<FormClientScreen> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: currentPage);
+    generalClientController.reset();
   }
 
   @override
   void dispose() {
     pageController.dispose();
-    generalClientController.reset();
     super.dispose();
   }
 
