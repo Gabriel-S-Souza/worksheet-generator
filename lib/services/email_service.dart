@@ -33,7 +33,7 @@ class EmailService {
     final auth = await user.authentication;
     final accessToken = auth.accessToken;
 
-    if (accessToken == null) return 'Access token not found';
+    if (accessToken == null) return 'Token de acesso não encontrado, tente logar novamente';
 
     log('UserEmail: $userEmail');
     log('Destinatário: ${userSettings.email}');
@@ -54,7 +54,7 @@ class EmailService {
 
     try {
       await send(message, smtpServer);
-      return 'Email enviado com sucesso!'; 
+      return 'Email enviado com sucesso para ${userSettings.email}'; 
     } on MailerException catch (e) {
       log('MailerException: $e');
       return 'Erro ao enviar o email: $e';
