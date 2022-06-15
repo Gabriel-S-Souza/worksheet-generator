@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:formulario_de_atendimento/main.dart';
 import 'package:formulario_de_atendimento/services/google_auth_api.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 
@@ -19,9 +20,15 @@ class EmailService {
     final UserSettings userSettings = GetIt.I.get<UserSettings>();
     final GoogleAuthApi googleAuthApi = GetIt.I.get<GoogleAuthApi>();
 
-    final user = googleAuthApi.currentUser;
+    GoogleSignInAccount? user;
 
-    if (user == null) return 'User not found';
+    if (googleAuthApi.currentUser == null) {
+      user = await googleAuthApi.googleLogin();
+    } else {
+      user = googleAuthApi.currentUser;
+    }
+
+    if (user == null) return 'Você deve ter acesso à internet e estar logado no Google para enviar um email';
 
     final String userEmail = user.email;
     final auth = await user.authentication;
@@ -33,6 +40,7 @@ class EmailService {
     log('Destinatário: ${userSettings.email}');
 
     final smtpServer = gmailSaslXoauth2(userEmail, accessToken);
+    
 
     final message = Message()
       ..from = Address(userEmail, 'Formulário de Atendimento')
