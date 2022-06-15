@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:formulario_de_atendimento/main.dart';
 import 'package:formulario_de_atendimento/services/google_auth_api.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 
@@ -20,7 +19,10 @@ class EmailService {
 
     var user = googleAuthApi.currentUser;
 
-    user ??= await googleAuthApi.signInSilently();
+    if (user == null) {
+      await googleAuthApi.signInSilently();
+      user = googleAuthApi.currentUser;
+    } 
 
     if (user == null) return 'Sem internet ou login mal sucedido';
 

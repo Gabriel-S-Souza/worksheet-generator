@@ -254,7 +254,6 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                                 child: CustomTextField( 
                                   hint: 'Total de horas',
                                   prefix: const Icon(Icons.timer),
-                                  textInputType: TextInputType.datetime,
                                   onChanged: (value) => registersEquipmentController.totalOfHours = value,    
                                   obscure: false,                     
                                 ),
