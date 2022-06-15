@@ -20,11 +20,9 @@ class GeneralEquipmentController {
   ServicesModel? services;
   RegistersModel? registers;
 
-  get readyToSave =>
-      basicInformations != null &&
-      services != null &&
-      registers != null;
-  get readyToSendEmail => spreedsheetEquipmentGenerator.readToSendEmail;
+  bool get readyToSave => spreedsheetEquipmentGenerator.readyToExport;
+
+  bool get readyToSendEmail => spreedsheetEquipmentGenerator.readyToSendEmail;
 
   Future<String> createSpreedsheet() async {
     if (basicInformations == null) {
@@ -83,6 +81,8 @@ class GeneralEquipmentController {
     basicInformations = null;
     services = null;
     registers = null;
+
+    spreedsheetEquipmentGenerator.clear();
   }
 
   Future<void> _init() async {

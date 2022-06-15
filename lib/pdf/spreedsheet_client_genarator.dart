@@ -60,9 +60,12 @@ class SpreedsheetClientGenerator {
 
   void clear() {
     file = null;
+    createDocumentBase();
   }
 
   bool get readyToSendEmail => file != null;
+
+  bool get readyToExport => pdf.document.pdfPageList.pages.isNotEmpty;
 
   String _getName() {
     final String date = DateFormat('dd/MM/yyyy').format(DateTime.now()).replaceAll('/', '-');

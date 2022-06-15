@@ -30,6 +30,7 @@ class EmailService {
     if (accessToken == null) return 'Access token not found';
 
     log('UserEmail: $userEmail');
+    log('Destinatário: ${userSettings.email}');
 
     final smtpServer = gmailSaslXoauth2(userEmail, accessToken);
 

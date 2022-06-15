@@ -38,7 +38,7 @@ class GoogleAuthApi {
         idToken: googleAuth.idToken,
       );
 
-      final authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+      await FirebaseAuth.instance.signInWithCredential(credential);
       
       return googleUser;
 

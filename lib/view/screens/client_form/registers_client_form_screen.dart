@@ -209,11 +209,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                       onSecondaryPressed:  widget.onSecondaryPressed,
                       onPrimaryPressed:!registersController.isLoading
                           ? () async {
-                              String? response = await registersController.save();
-                              if (mounted) {
-                                _buildSnackBar(context, response);
-                              }
-                              setState(() {});
+                              await registersController.save();
                             }
                           : null,
                     );
@@ -221,7 +217,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                 ),
                 const SizedBox(height: 32),
                 CustomAppButtom(
-                  onPressed: !registersController.loadOnExport && registersController.readyToSave
+                  onPressed: !registersController.loadOnExport && registersController.readyToExport
                       ? () async {
                         registersController.loadOnExport = true; 
                         generalClientController.export()

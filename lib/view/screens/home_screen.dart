@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context, MaterialPageRoute(
                               builder: (context) {
                                 if(value == 'OUTRO') {
-                                  return FormClientScreen();
+                                  return const FormClientScreen();
                                 } else {
                                   return EquipmentFormScreen(
                                     equipmentName: value ?? 'Erro ao selecionar o equipamento',

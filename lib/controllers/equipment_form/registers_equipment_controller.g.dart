@@ -10,21 +10,6 @@ part of 'registers_equipment_controller.dart';
 
 mixin _$RegistersEquipmentController
     on RegistersEquipmentControllerBase, Store {
-  Computed<bool>? _$readyToSaveComputed;
-
-  @override
-  bool get readyToSave =>
-      (_$readyToSaveComputed ??= Computed<bool>(() => super.readyToSave,
-              name: 'RegistersEquipmentControllerBase.readyToSave'))
-          .value;
-  Computed<bool>? _$readyToSendEmailComputed;
-
-  @override
-  bool get readyToSendEmail => (_$readyToSendEmailComputed ??= Computed<bool>(
-          () => super.readyToSendEmail,
-          name: 'RegistersEquipmentControllerBase.readyToSendEmail'))
-      .value;
-
   late final _$attendanceStartTimeOfDayAtom = Atom(
       name: 'RegistersEquipmentControllerBase.attendanceStartTimeOfDay',
       context: context);
@@ -92,6 +77,39 @@ mixin _$RegistersEquipmentController
     _$isTotalOfHoursEditableAtom
         .reportWrite(value, super.isTotalOfHoursEditable, () {
       super.isTotalOfHoursEditable = value;
+    });
+  }
+
+  late final _$readyToSaveAtom = Atom(
+      name: 'RegistersEquipmentControllerBase.readyToSave', context: context);
+
+  @override
+  bool get readyToSave {
+    _$readyToSaveAtom.reportRead();
+    return super.readyToSave;
+  }
+
+  @override
+  set readyToSave(bool value) {
+    _$readyToSaveAtom.reportWrite(value, super.readyToSave, () {
+      super.readyToSave = value;
+    });
+  }
+
+  late final _$readyToSendEmailAtom = Atom(
+      name: 'RegistersEquipmentControllerBase.readyToSendEmail',
+      context: context);
+
+  @override
+  bool get readyToSendEmail {
+    _$readyToSendEmailAtom.reportRead();
+    return super.readyToSendEmail;
+  }
+
+  @override
+  set readyToSendEmail(bool value) {
+    _$readyToSendEmailAtom.reportWrite(value, super.readyToSendEmail, () {
+      super.readyToSendEmail = value;
     });
   }
 
@@ -208,17 +226,42 @@ mixin _$RegistersEquipmentController
   }
 
   @override
+  void setReadyToSave() {
+    final _$actionInfo = _$RegistersEquipmentControllerBaseActionController
+        .startAction(name: 'RegistersEquipmentControllerBase.setReadyToSave');
+    try {
+      return super.setReadyToSave();
+    } finally {
+      _$RegistersEquipmentControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setReadyToSendEmail() {
+    final _$actionInfo =
+        _$RegistersEquipmentControllerBaseActionController.startAction(
+            name: 'RegistersEquipmentControllerBase.setReadyToSendEmail');
+    try {
+      return super.setReadyToSendEmail();
+    } finally {
+      _$RegistersEquipmentControllerBaseActionController
+          .endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 attendanceStartTimeOfDay: ${attendanceStartTimeOfDay},
 attendanceEndTimeOfDay: ${attendanceEndTimeOfDay},
 totalOfHours: ${totalOfHours},
 isTotalOfHoursEditable: ${isTotalOfHoursEditable},
+readyToSave: ${readyToSave},
+readyToSendEmail: ${readyToSendEmail},
 isLoading: ${isLoading},
 loadOnExport: ${loadOnExport},
-loadOnSend: ${loadOnSend},
-readyToSave: ${readyToSave},
-readyToSendEmail: ${readyToSendEmail}
+loadOnSend: ${loadOnSend}
     ''';
   }
 }

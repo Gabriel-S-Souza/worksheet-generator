@@ -58,9 +58,12 @@ class SpreedsheetEquipmentGenerator {
 
   void clear() {
     file = null;
+    createDocumentBase();
   }
 
-  bool get readToSendEmail => file != null;
+  bool get readyToSendEmail => file != null;
+
+  bool get readyToExport => pdf.document.pdfPageList.pages.isNotEmpty;
 
   String _getName(scissors) {
     final String filePrefixName = scissors != null 
@@ -129,7 +132,7 @@ class SpreedsheetEquipmentGenerator {
     String? totalOfHours,
     List<String>? attendants,
   }) async {
-
+    
     fileName = _getName(scissors);
 
     final String name = fileName;

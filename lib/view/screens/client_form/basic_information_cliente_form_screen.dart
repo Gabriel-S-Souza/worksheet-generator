@@ -29,6 +29,11 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
   final TextEditingController requesterController = TextEditingController();
   final BasicInformaTionsController basicInformationsController = GetIt.I.get<BasicInformaTionsController>(instanceName: DefaultKeys.basicInfoControllerClient);
   final UserSettings userSettings = GetIt.I.get<UserSettings>();
+  late final FocusNode focusRequester;
+  late final FocusNode focusAttendant;
+  late final FocusNode focusModel; 
+  late final FocusNode seriesFocus; 
+  late final FocusNode odometerFocus; 
 
   @override
   void initState() {
@@ -38,12 +43,21 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
     basicInformationsController.attendant = basicInformationsController.requester 
         = attendantController.text = requesterController.text = userSettings.name ?? '';
     basicInformationsController.generateOs();
+    focusRequester = FocusNode();
+    focusAttendant = FocusNode();
+    focusModel = FocusNode();
+    seriesFocus = FocusNode();
+    odometerFocus = FocusNode();
   }
 
   @override
   void dispose() {
     dateController.dispose();
     requesterController.dispose();
+    focusRequester.dispose();
+    focusAttendant.dispose();
+    seriesFocus.dispose();
+    odometerFocus.dispose();
     super.dispose();
   }
 
@@ -74,25 +88,27 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   hint: 'Nome do cliente',
                   obscure: false, 
                   onChanged: (value) => basicInformationsController.client = value,
-                  onSubmitted: () => FocusScope.of(context).nextFocus(),
+                  onSubmitted: () => FocusScope.of(context).requestFocus(focusRequester),
                   prefix: const Icon(Icons.person), 
                 ),
                 const CustomTextLabel('Solicitado por'),
                 CustomTextField(
                   controller: requesterController,
+                  focusNode: focusRequester,
                   hint: 'Nome do solicitante',
                   obscure: false, 
                   onChanged: (value) {},
-                  onSubmitted: () => FocusScope.of(context).nextFocus(),
+                  onSubmitted: () => FocusScope.of(context).requestFocus(focusAttendant),
                   prefix: const Icon(Icons.person),
                 ),
                 const CustomTextLabel('Atendido por'),
                 CustomTextField(
                   controller: attendantController,
+                  focusNode: focusAttendant,
                   hint: 'Nome do atendente',
                   obscure: false, 
                   onChanged: (value) => basicInformationsController.attendant = value,
-                  onSubmitted: () => FocusScope.of(context).nextFocus(),
+                  onSubmitted: () => FocusScope.of(context).unfocus(),
                   prefix: const Icon(Icons.person)
                 ),
                 const CustomTextLabel('Manutenção'),
@@ -216,31 +232,34 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                   hint: 'Frota',
                   obscure: false,
                   onChanged: (value) => basicInformationsController.fleet = value,
-                  onSubmitted: () => FocusScope.of(context).nextFocus(),
+                  onSubmitted: () => FocusScope.of(context).requestFocus(focusModel),
                   prefix: const Icon(Icons.onetwothree), 
                 ),
                 const CustomTextLabel('Modelo'),
                 CustomTextField(
                   hint: 'Modelo',
+                  focusNode: focusModel,
                   obscure: false,
                   onChanged: (value) => basicInformationsController.model = value,
-                  onSubmitted: () => FocusScope.of(context).nextFocus(),
+                  onSubmitted: () => FocusScope.of(context).requestFocus(seriesFocus),
                   prefix: const Icon(Icons.onetwothree),
                 ),
                 const CustomTextLabel('Série'),
                 CustomTextField(
                   hint: 'Série',
+                  focusNode: seriesFocus,
                   obscure: false,
                   onChanged: (value) => basicInformationsController.serie = value,
-                  onSubmitted: () => FocusScope.of(context).nextFocus(),
+                  onSubmitted: () => FocusScope.of(context).requestFocus(odometerFocus),
                   prefix: const Icon(Icons.onetwothree),
                 ),
                 const CustomTextLabel('Horímetro'),
                 CustomTextField(
                   hint: 'Horímetro',
+                  focusNode: odometerFocus,
                   obscure: false,
                   onChanged: (value) => basicInformationsController.odometer = value,
-                  onSubmitted: () => FocusScope.of(context).nextFocus(),
+                  onSubmitted: () => FocusScope.of(context).unfocus(),
                   prefix: const Icon(Icons.speed),
                 ),
                 const SizedBox(height: 40),
@@ -249,8 +268,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                     return CustomActionButtonGroup(
                       primaryChild: !basicInformationsController.isLoading
                           ? const Text('Salvar e avançar')
-                          : const Padding( padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(),
-                          ),
+                          : const Padding( padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
                       secondaryChild: const Text('Anterior'),
                       onPrimaryPressed: !basicInformationsController.isLoading
                           ? () async {

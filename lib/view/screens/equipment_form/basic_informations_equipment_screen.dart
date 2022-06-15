@@ -29,7 +29,8 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
   final TextEditingController dateController = TextEditingController();
 
   final BasicInfoEquipmentController basicInfoEquipmentController = GetIt.I.get<BasicInfoEquipmentController>();
-  
+  late final FocusNode focusModel; 
+  late final FocusNode focusOdometer; 
 
   @override
   void initState() {
@@ -38,11 +39,15 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
     dateController.text = basicInfoEquipmentController.spreedsheetDate ?? '';
     basicInfoEquipmentController.scissors = widget.equipmentName;
     basicInfoEquipmentController.generateOs();
+    focusModel = FocusNode();
+    focusOdometer = FocusNode();
   }
 
   @override
   void dispose() {
     dateController.dispose();
+    focusOdometer.dispose();
+    focusModel.dispose();
     super.dispose();
   }
 
@@ -194,23 +199,25 @@ class _BasicInformationsEquipmentScreenState extends State<BasicInformationsEqui
                       hint: 'Frota',
                       obscure: false,
                       onChanged: (value) => basicInfoEquipmentController.fleet = value,
-                      onSubmitted: () => FocusScope.of(context).nextFocus(),
+                      onSubmitted: () => FocusScope.of(context).requestFocus(focusModel),
                       prefix: const Icon(Icons.onetwothree), 
                     ),
                     const CustomTextLabel('Modelo'),
                     CustomTextField(
                       hint: 'Modelo',
+                      focusNode: focusModel,
                       obscure: false,
                       onChanged: (value) => basicInfoEquipmentController.model = value,
-                      onSubmitted: () => FocusScope.of(context).nextFocus(),
+                      onSubmitted: () => FocusScope.of(context).requestFocus(focusOdometer),
                       prefix: const Icon(Icons.onetwothree),
                     ),
                     const CustomTextLabel('Horímetro'),
                     CustomTextField(
                       hint: 'Horímetro',
+                      focusNode: focusOdometer,
                       obscure: false,
                       onChanged: (value) => basicInfoEquipmentController.odometer = value,
-                      onSubmitted: () => FocusScope.of(context).nextFocus(),
+                      onSubmitted: () => FocusScope.of(context).unfocus(),
                       prefix: const Icon(Icons.speed),
                     ),
                     const SizedBox(height: 40),
