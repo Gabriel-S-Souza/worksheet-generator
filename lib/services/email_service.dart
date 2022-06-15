@@ -1,5 +1,3 @@
-
-
 import 'dart:developer';
 import 'dart:io';
 
@@ -20,15 +18,16 @@ class EmailService {
     final UserSettings userSettings = GetIt.I.get<UserSettings>();
     final GoogleAuthApi googleAuthApi = GetIt.I.get<GoogleAuthApi>();
 
-    GoogleSignInAccount? user;
+    GoogleSignInAccount? user = googleAuthApi.currentUser;
 
-    if (googleAuthApi.currentUser == null) {
-      user = await googleAuthApi.googleLogin();
-    } else {
+    if (user == null) {
+      await googleAuthApi.signInSilently();
+
       user = googleAuthApi.currentUser;
     }
 
-    if (user == null) return 'Você deve ter acesso à internet e estar logado no Google para enviar um email';
+    if (user == null) return 'Você precisa estar conectado à internet e logado com o Google para enviar o email';
+
 
     final String userEmail = user.email;
     final auth = await user.authentication;
