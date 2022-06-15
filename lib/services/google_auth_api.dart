@@ -57,8 +57,6 @@ class GoogleAuthApi {
         return null;
       }
 
-      log(googleUser.toString());
-
       currentUser = googleUser;
       
       return googleUser;

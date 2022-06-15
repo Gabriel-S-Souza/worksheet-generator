@@ -46,6 +46,7 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Observer(
           builder: (context) {
             return Column(
@@ -119,7 +120,6 @@ class _ServicesClientFormScreenState extends State<ServicesClientFormScreen> {
                 CustomActionButtonGroup(
                   onPrimaryPressed:!servicesController.isLoading
                       ? () async {
-                        
                           await servicesController.save();
         
                           widget.onPrimaryPressed();

@@ -56,6 +56,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
          child: Observer(
            builder: (context) {
              return Column(

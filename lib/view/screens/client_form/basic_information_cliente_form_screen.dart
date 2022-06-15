@@ -67,6 +67,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Observer(
           builder: (context) {
             return Column(
@@ -272,7 +273,7 @@ class _BasicInformationsClienteFormScreenState extends State<BasicInformationsCl
                       secondaryChild: const Text('Anterior'),
                       onPrimaryPressed: !basicInformationsController.isLoading
                           ? () async {
-                              
+                              FocusScope.of(context).unfocus();
                               await basicInformationsController.save();
             
                               widget.onPrimaryPressed();
