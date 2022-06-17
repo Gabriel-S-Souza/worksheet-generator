@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:formulario_de_atendimento/controllers/equipment_form/services_equipment_controller.dart';
 import 'package:formulario_de_atendimento/default_values/default_values.dart';
+import 'package:formulario_de_atendimento/view/widgets/custom_field_suggestion.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_outlined_buttom.dart';
 
 import '../../widgets/custom_action_form_group.dart';
@@ -13,12 +14,14 @@ import '../../widgets/custom_text_field.dart';
 import '../../widgets/custom_text_label.dart';
 
 class ServicesEquipmentScreen extends StatefulWidget {
+  final String equipmentName;
   final VoidCallback? onPrimaryPressed;
   final VoidCallback? onSecondaryPressed;
   const ServicesEquipmentScreen({
     Key? key, 
     this.onPrimaryPressed, 
-    this.onSecondaryPressed}) : super(key: key);
+    this.onSecondaryPressed, 
+    required this.equipmentName}) : super(key: key);
 
   @override
   State<ServicesEquipmentScreen> createState() => _ServicesEquipmentScreenState();
@@ -47,6 +50,8 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
     _controllerQuantityScrew.text = quantityScrew.toString();
     _controllerQuantityShim.text = quantityShim.toString();
     _controllerQuantityknives.text = quantityknives.toString();
+    
+    _assignCodesAndSpecifications();
   }
 
   @override
@@ -120,7 +125,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                           servicesEquipmentcontroller.screws[i][0], 
                           servicesEquipmentcontroller.screws[i][1], 
                           servicesEquipmentcontroller.screws[i][2],
-                        ], 
+                        ],
                         index: i,
                         tableItens: TableItens.screws,
                       ),
@@ -133,40 +138,47 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                     },
                   ),
                   const SizedBox(height: 48),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 40,
-                          child: CustomTextField(
-                            controller: _controllerScrewCode,
-                            hint: 'Código',
-                            obscure: false,
-                            contentPadding: const EdgeInsets.only(bottom: 15),
-                            style: const TextStyle(fontSize: 14),
-                            onChanged: (value) => setState((){}), 
-
+                  Stack(
+                    children: [ 
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 40,
+                              child: CustomFieldSuggestion(
+                                controller: _controllerScrewCode,
+                                hint: 'Código',
+                                contentPadding: const EdgeInsets.only(bottom: 15),
+                                style: const TextStyle(fontSize: 14),
+                                onChanged: (value) => setState((){}),
+                                onTap: (index) {
+                                  _controllerScrewSize.text = servicesEquipmentcontroller.screwsSpecification[index];
+                                },
+                                suggestions: servicesEquipmentcontroller.screwsCode.where(
+                                  (element) => servicesEquipmentcontroller.screws.map((element) => element[0]).contains(element) == false
+                                ).toList(),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: SizedBox(
-                          height: 40,
-                          child: CustomTextField(
-                            controller: _controllerScrewSize,
-                            hint: 'Tamanho',
-                            obscure: false, 
-                            contentPadding: const EdgeInsets.only(bottom: 15),
-                            style: const TextStyle(fontSize: 14),
-                            onChanged: (value) => setState((){}), 
-
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: SizedBox(
+                              height: 40,
+                              child: CustomFieldSuggestion(
+                                controller: _controllerScrewSize,
+                                hint: 'Tamanho',
+                                contentPadding: const EdgeInsets.only(bottom: 15),
+                                style: const TextStyle(fontSize: 14),
+                                onChanged: (value) => setState((){}),
+                                suggestions: servicesEquipmentcontroller.screwsSpecification,
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(width: 8),
+                          _buildQuantityField(ButtomQuantity.screw, _controllerQuantityScrew),
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      _buildQuantityField(ButtomQuantity.screw, _controllerQuantityScrew),
-                    ],
+                    ]
                   ),
                   const SizedBox(height: 16),
                   Align(
@@ -223,13 +235,19 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomTextField(
+                          child: CustomFieldSuggestion(
                             controller: _controllerShimCode,
                             hint: 'Código',
                             obscure: false,
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
-                            onChanged: (value) => setState((){}), 
+                            onChanged: (value) => setState((){}),
+                            onTap: (index) {
+                                  _controllerShimSize.text = servicesEquipmentcontroller.shimsSpecification[index];
+                                },
+                            suggestions: servicesEquipmentcontroller.shimsCode.where(
+                              (element) => servicesEquipmentcontroller.shims.map((element) => element[0]).contains(element) == false
+                            ).toList(),
 
                           ),
                         ),
@@ -238,14 +256,14 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomTextField(
+                          child: CustomFieldSuggestion(
                             controller: _controllerShimSize,
                             hint: 'Tamanho',
                             obscure: false, 
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
-                            onChanged: (value) => setState((){}), 
-
+                            onChanged: (value) => setState((){}),
+                            suggestions: servicesEquipmentcontroller.shimsSpecification,
                           ),
                         ),
                       ),
@@ -308,14 +326,20 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomTextField(
+                          child: CustomFieldSuggestion(
                             controller: _controllerKnivesCode,
                             hint: 'Código',
                             obscure: false,
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
-                            onChanged: (value) => setState((){}), 
+                            onChanged: (value) => setState((){}),
                             onSubmitted: () => FocusScope.of(context).nextFocus(),
+                            onTap: (index) {
+                                  _controllerKnivesSize.text = servicesEquipmentcontroller.knivesSpecification[index];
+                                },
+                            suggestions: servicesEquipmentcontroller.knivesCode.where(
+                              (element) => servicesEquipmentcontroller.knives.map((element) => element[0]).contains(element) == false
+                            ).toList(),
                           ),
                         ),
                       ),
@@ -323,14 +347,15 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                       Expanded(
                         child: SizedBox(
                           height: 40,
-                          child: CustomTextField(
+                          child: CustomFieldSuggestion(
                             controller: _controllerKnivesSize,
                             hint: 'Furação',
                             obscure: false, 
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
-                            onChanged: (value) => setState((){}), 
+                            onChanged: (value) => setState((){}),
                             onSubmitted: () => FocusScope.of(context).nextFocus(),
+                            suggestions: servicesEquipmentcontroller.knivesSpecification,
                           ),
                         ),
                       ),
@@ -387,6 +412,94 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
         ),
       )
     );
+  }
+
+  _assignCodesAndSpecifications() {
+    final List<String> equipmentList =  EquipmentScissorNames.toList();
+    for (var i = 0; i < equipmentList.length; i++) {
+      if (equipmentList[i] == widget.equipmentName) {
+        if (i == 0) {
+          for (var element in ProductCodeAndSpecification.screwsVtn4000) {
+            servicesEquipmentcontroller.screwsCode.add(element.keys.first);
+            servicesEquipmentcontroller.screwsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.shimsVtn4000) {
+            servicesEquipmentcontroller.shimsCode.add(element.keys.first);
+            servicesEquipmentcontroller.shimsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.knivesVtn4000) {
+            servicesEquipmentcontroller.knivesCode.add(element.keys.first);
+            servicesEquipmentcontroller.knivesSpecification.add(element.values.first);
+          }
+
+        } else if (i == 1) {
+          for (var element in ProductCodeAndSpecification.screwsIndeco45_90) {
+            servicesEquipmentcontroller.screwsCode.add(element.keys.first);
+            servicesEquipmentcontroller.screwsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.shimsIndeco45_90) {
+            servicesEquipmentcontroller.shimsCode.add(element.keys.first);
+            servicesEquipmentcontroller.shimsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.knivesIndeco45_90) {
+            servicesEquipmentcontroller.knivesCode.add(element.keys.first);
+            servicesEquipmentcontroller.knivesSpecification.add(element.values.first);
+          }
+
+        } else if (i == 2) {
+          for (var element in ProductCodeAndSpecification.screwsIndeco35_60) {
+            servicesEquipmentcontroller.screwsCode.add(element.keys.first);
+            servicesEquipmentcontroller.screwsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.shimsIndeco35_60) {
+            servicesEquipmentcontroller.shimsCode.add(element.keys.first);
+            servicesEquipmentcontroller.shimsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.knivesIndeco35_60) {
+            servicesEquipmentcontroller.knivesCode.add(element.keys.first);
+            servicesEquipmentcontroller.knivesSpecification.add(element.values.first);
+          }
+
+        } else if (i == 3) {
+          for (var element in ProductCodeAndSpecification.screwsLabountyMsd2500) {
+            servicesEquipmentcontroller.screwsCode.add(element.keys.first);
+            servicesEquipmentcontroller.screwsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.shimsLabountyMsd2500) {
+            servicesEquipmentcontroller.shimsCode.add(element.keys.first);
+            servicesEquipmentcontroller.shimsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.knivesLabountyMsd2500) {
+            servicesEquipmentcontroller.knivesCode.add(element.keys.first);
+            servicesEquipmentcontroller.knivesSpecification.add(element.values.first);
+          }
+
+        } else if (i == 4) {
+          for (var element in ProductCodeAndSpecification.screwsLabountyMsd4000) {
+            servicesEquipmentcontroller.screwsCode.add(element.keys.first);
+            servicesEquipmentcontroller.screwsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.shimsLabountyMsd4000) {
+            servicesEquipmentcontroller.shimsCode.add(element.keys.first);
+            servicesEquipmentcontroller.shimsSpecification.add(element.values.first);
+          }
+
+          for (var element in ProductCodeAndSpecification.knivesLabountyMsd4000) {
+            servicesEquipmentcontroller.knivesCode.add(element.keys.first);
+            servicesEquipmentcontroller.knivesSpecification.add(element.values.first);
+          }
+        }
+      }
+    }
   }
 
   TableRow _buildRow(List<String> cells, {bool isHeader = false, int? index, TableItens? tableItens}) {

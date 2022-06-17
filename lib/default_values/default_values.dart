@@ -68,6 +68,26 @@ class DefaultKeys{
   static const basicInfoControllerEquipment = 'basic_info_controller_equipment';
 }
 
+class EquipmentScissorNames {
+  static const String vtn4000 = 'TESOURA VTN 4000';
+  static const String indeco45_90 ='TESOURA INDECO 45/90';
+  static const String indeco35_60 ='TESOURA INDECO 35/60';
+  static const String labountyMsd2500 ='TESOURA LABOUNTY MSD-2500';
+  static const String labountyMsd4000 ='TESOURA LABOUNTY MSD-4000';
+  static const String other ='OUTRO';
+
+  static List<String> toList() {
+    return [
+      vtn4000,
+      indeco45_90,
+      indeco35_60,
+      labountyMsd2500,
+      labountyMsd4000,
+      other
+    ];
+  }
+}
+
 class ProductCodeAndSpecification {
   //VTN 4000
   static const List<Map<String, String>> screwsVtn4000 = [
@@ -75,7 +95,7 @@ class ProductCodeAndSpecification {
     {'FVPG-07570': '24X130'},
     {'FVPG-07574': '24X160'},
     {'FVPG-05273': '24X107'},
-    {'FVPG- 140194': '24X70'},
+    {'FVPG-140194': '24X70'},
     {'FVPG-140257': '24X110'},
     {'FVPG-140256': '24X100'},
     {'FDPG-02011': 'PORCA'},
@@ -182,7 +202,7 @@ class ProductCodeAndSpecification {
   ];
 
   //LABOUNTY MSD 4000
-  static const List<Map<String, String>> screwslabountyMsd4000 = [
+  static const List<Map<String, String>> screwsLabountyMsd4000 = [
     {'501517': '24X150'},
     {'503082': '24X160'},
     {'503227': '24X130'},
@@ -191,7 +211,7 @@ class ProductCodeAndSpecification {
     {'513007': '24X100'},
   ];
   
-  static const List<Map<String, String>> shimslabountyMsd4000 = [
+  static const List<Map<String, String>> shimsLabountyMsd4000 = [
     {'141586': '4 FUROS- 10MM'},
     {'144127': '6 FUROS-10MM'},
     {'SDXZWER': '4 FUROS- 1MM'},
@@ -202,7 +222,7 @@ class ProductCodeAndSpecification {
     {'510765MM2': 'LOSANGO-2MM'},
   ];
 
-  static const List<Map<String, String>> kniveslabountyMsd4000 = [
+  static const List<Map<String, String>> knivesLabountyMsd4000 = [
     {'5121-48': '6 FUROS'},
     {'5117-60': '4 FUROS'},
     {'5134-35': 'BICO'},

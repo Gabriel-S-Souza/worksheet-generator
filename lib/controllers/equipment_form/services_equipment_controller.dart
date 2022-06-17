@@ -27,6 +27,17 @@ abstract class ServicesEquipmentControllerBase with Store {
 
   ObservableList<List<String>> knives = ObservableList<List<String>>();
 
+  List<String> screwsCode = [];
+  List<String> screwsSpecification = [];
+
+  List<String> shimsCode = [];
+  List<String> shimsSpecification = [];
+
+  List<String> knivesCode = [];
+  List<String> knivesSpecification = [];
+
+
+
   String? pendencies;
 
   @observable

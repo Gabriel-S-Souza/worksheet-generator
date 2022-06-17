@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:formulario_de_atendimento/controllers/login_controller.dart';
+import 'package:formulario_de_atendimento/default_values/default_values.dart';
 import 'package:formulario_de_atendimento/main.dart';
 import 'package:formulario_de_atendimento/view/screens/equipment_form/equipment_form_screen.dart';
 import 'package:formulario_de_atendimento/view/widgets/custom_app_buttom.dart';
@@ -27,12 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
   PermissionStatus permissionStatus = PermissionStatus.denied;
   String? value;
   final List<String> equipment = [
-    'TESOURA VTN 4000',
-    'TESOURA INDECO 45/90',
-    'TESOURA INDECO 35/60',
-    'TESOURA LABOUNTY MSD-2500',
-    'TESOURA LABOUNTY MSD-4000',
-    'OUTRO'
+    EquipmentScissorNames.vtn4000,
+    EquipmentScissorNames.indeco45_90,
+    EquipmentScissorNames.indeco35_60,
+    EquipmentScissorNames.labountyMsd2500,
+    EquipmentScissorNames.labountyMsd4000,
+    EquipmentScissorNames.other,
   ];
   bool isLoading = false;
 
@@ -207,21 +208,4 @@ class _HomeScreenState extends State<HomeScreen> {
         permissionStatus = status;
      });
   }
-
-  // Future<void> _initDownloadsDirectoryState() async {
-  //   String? directory;
-
-  //   try {
-  //     directory = await AndroidPathProvider.downloadsPath;
-  //   } on PlatformException {
-  //     throw Exception('Could not get the downloads directory');
-  //   }
-
-  //   if (!mounted) return;
-
-  //   setState(() {
-  //     downloadsDirectory = directory!;
-  //   });
-  // }
-
 }

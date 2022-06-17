@@ -69,6 +69,7 @@ class _EquipmentFormScreenState extends State<EquipmentFormScreen> {
             },
           ),
           ServicesEquipmentScreen(
+            equipmentName: widget.equipmentName,
             onPrimaryPressed: () {
               animatePage(2);
             },
