@@ -1095,9 +1095,9 @@ class SpreedsheetEquipmentGenerator {
     String attedanceEndHour = '',
     String totalOfHours = '',
   }) {
-
-    attendants.insert(0, 'NOME');
-    final listLength = attendants.length + 1;
+    final List<String> attendentsCopy = List.from(attendants);
+    attendentsCopy.insert(0, 'NOME');
+    final listLength = attendentsCopy.length + 1;
     
     return pw.Column(
       children: [
@@ -1239,7 +1239,7 @@ class SpreedsheetEquipmentGenerator {
                       height: cellHeight,
                       paddingLeft: 4,
                       child: pw.Text(
-                        attendants.length - 1 >= index ? attendants[index] : '',
+                        attendentsCopy.length - 1 >= index ? attendentsCopy[index] : '',
                         style: pw.TextStyle(fontSize: fontSmallSize),
                       )
                     );
