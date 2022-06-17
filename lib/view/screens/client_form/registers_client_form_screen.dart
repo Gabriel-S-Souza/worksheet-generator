@@ -199,6 +199,18 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                     CustomTextLabel(registersController.totalOfHours ?? '00:00', color: Colors.black54),
                   ]
                 ),
+                const SizedBox(height: 16),
+               const CustomTextLabel(
+                  'Texto do email',
+                  marginTop: 8,
+                  marginBottom: 8,
+                  fontSize: 16,
+                ),
+                CustomTextField(
+                  hint: 'Texto do email',
+                  prefix: const Icon(Icons.text_fields),
+                  onChanged: (value) => registersController.emailDescription = value,
+                ),
                 const SizedBox(height: 40),
                 Observer(
                   builder: (context) {
@@ -248,7 +260,7 @@ class _RegistersClientFormScreenState extends State<RegistersClientFormScreen> {
                   onPressed: !registersController.loadOnSend && registersController.readyToSendEmail
                       ? () async {
                         registersController.loadOnSend = true;
-                        generalClientController.sendByEmail()
+                        generalClientController.sendByEmail(body: registersController.emailDescription)
                             .then((value) {
                                 _buildSnackBar(context, value);
                                  registersController.loadOnSend = false;

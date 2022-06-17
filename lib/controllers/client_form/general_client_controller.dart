@@ -115,8 +115,8 @@ class GeneralClientController {
     }
   }
 
-  Future<String> sendByEmail() async {
-    return await spreedsheetClientGenerator.sendByEmail();
+  Future<String> sendByEmail({String? body})async {
+    return await spreedsheetClientGenerator.sendByEmail(body: body);
   }
   
   Future<String> export() async {

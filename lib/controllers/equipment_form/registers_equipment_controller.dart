@@ -35,6 +35,8 @@ abstract class RegistersEquipmentControllerBase with Store {
   String? attedanceStartHour;
   String? attedanceEndHour;
 
+  String? emailDescription;
+
   @observable
   String? totalOfHours;
 

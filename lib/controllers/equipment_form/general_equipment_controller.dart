@@ -117,8 +117,8 @@ class GeneralEquipmentController {
     return await spreedsheetEquipmentGenerator.exportFile();
   }
 
-  Future<String> sendByEmail() async {
-    return await spreedsheetEquipmentGenerator.sendByEmail();
+  Future<String> sendByEmail({String? body}) async {
+    return await spreedsheetEquipmentGenerator.sendByEmail(body: body);
   }
 
   void clear() {

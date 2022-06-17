@@ -267,6 +267,15 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                           ),
                       ],
                     ),
+                const CustomTextLabel(
+                  'Texto de email',
+                  fontSize: 16,
+                ),
+                CustomTextField(
+                  hint: 'Texto do email',
+                  prefix: const Icon(Icons.text_fields),
+                  onChanged: (value) => registersEquipmentController.emailDescription = value,
+                ),
                 const SizedBox(height: 40),
                 CustomActionButtonGroup(
                   onPrimaryPressed:!registersEquipmentController.isLoading
@@ -313,7 +322,7 @@ class _RegistersEquipmentScreenState extends State<RegistersEquipmentScreen> {
                   onPressed: !registersEquipmentController.loadOnSend && registersEquipmentController.readyToSendEmail
                       ? () async {
                         registersEquipmentController.loadOnSend = true;
-                        generalEquipmentController.sendByEmail()
+                        generalEquipmentController.sendByEmail(body: registersEquipmentController.emailDescription)
                             .then((value) {
                                 _buildSnackBar(context, value);
                                  registersEquipmentController.loadOnSend = false;

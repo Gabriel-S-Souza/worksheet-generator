@@ -47,6 +47,9 @@ abstract class RegistersControllerBase with Store {
   String? attendanceStartTime;
   String? attendanceEndTime;
 
+
+  String? emailDescription;
+
   @observable
   String? totalOfHours;
 

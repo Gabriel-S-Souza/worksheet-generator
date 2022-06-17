@@ -43,13 +43,13 @@ class SpreedsheetEquipmentGenerator {
     
   }
 
-  Future<String> sendByEmail() async {
+  Future<String> sendByEmail({String? body}) async {
 
     if (file == null) return 'Arquivo não gerado'; 
 
     final message = await EmailService.sendEmail(
       subject: 'Formulário de Atendimento', 
-      body: '', 
+      body: body ?? '', 
       file: file!,
     );
 
