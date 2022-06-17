@@ -404,7 +404,7 @@ class SpreedsheetClientGenerator {
                       width: 100,
                       child: pw.Text('Local de Atendimento:', style: pw.TextStyle(fontSize: fontMediumSize)),
                     ),
-                    pw.Text(localOfAttendance, style: pw.TextStyle(fontSize: fontMediumSize)),
+                    pw.Text(localOfAttendance.toUpperCase(), style: pw.TextStyle(fontSize: fontMediumSize)),
                   ]
                 )
               ),
