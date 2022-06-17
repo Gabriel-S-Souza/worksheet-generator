@@ -21,8 +21,10 @@ class CustomFieldSuggestion extends StatefulWidget {
     this.contentPadding, 
     this.style, 
     this.onTap, 
+    this.baseList,
   }) : super(key: key);
   final TextEditingController controller;
+  final List<String>? baseList;
   final List<String> suggestions;
   final String? hint;
   final Widget? prefix;
@@ -138,7 +140,10 @@ class _CustomFieldSuggestionState extends State<CustomFieldSuggestion> {
                 ),
                 onTap: () {
                   widget.controller.text = widget.suggestions[index];
-                  widget.onTap?.call(index);
+                  if (widget.baseList != null) {
+                    final int indexInBaseList = widget.baseList!.indexOf(widget.suggestions[index]);
+                    widget.onTap?.call(indexInBaseList);
+                  }
                   widget.onChanged(widget.suggestions[index]);
                   focusNode.unfocus();
                 },

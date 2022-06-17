@@ -151,6 +151,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                                 contentPadding: const EdgeInsets.only(bottom: 15),
                                 style: const TextStyle(fontSize: 14),
                                 onChanged: (value) => setState((){}),
+                                baseList: servicesEquipmentcontroller.screwsCodeBaseList,
                                 onTap: (index) {
                                   _controllerScrewSize.text = servicesEquipmentcontroller.screwsSpecification[index];
                                 },
@@ -242,6 +243,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}),
+                            baseList: servicesEquipmentcontroller.shimsCodeBaseList,
                             onTap: (index) {
                                   _controllerShimSize.text = servicesEquipmentcontroller.shimsSpecification[index];
                                 },
@@ -333,6 +335,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                             contentPadding: const EdgeInsets.only(bottom: 15),
                             style: const TextStyle(fontSize: 14),
                             onChanged: (value) => setState((){}),
+                            baseList:  servicesEquipmentcontroller.knivesCodeBaseList,
                             onSubmitted: () => FocusScope.of(context).nextFocus(),
                             onTap: (index) {
                                   _controllerKnivesSize.text = servicesEquipmentcontroller.knivesSpecification[index];
@@ -500,6 +503,9 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
         }
       }
     }
+    servicesEquipmentcontroller.screwsCodeBaseList = servicesEquipmentcontroller.screwsCode;
+    servicesEquipmentcontroller.shimsCodeBaseList = servicesEquipmentcontroller.shimsCode;
+    servicesEquipmentcontroller.knivesCodeBaseList = servicesEquipmentcontroller.knivesCode;
   }
 
   TableRow _buildRow(List<String> cells, {bool isHeader = false, int? index, TableItens? tableItens}) {

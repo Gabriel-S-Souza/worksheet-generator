@@ -36,7 +36,20 @@ abstract class ServicesEquipmentControllerBase with Store {
   List<String> knivesCode = [];
   List<String> knivesSpecification = [];
 
+  /// Essa lista é atribuída no início do ciclo da página de serviços e não pode ser alterada em outro
+  /// momento do ciclo. Ela é utilizada para preencher a especificação (tamanho, furação) referente
+  /// ao código do item.
+  late List<String> screwsCodeBaseList = [];
 
+  /// Essa lista é atribuída no início do ciclo da página de serviços e não pode ser alterada em outro
+  /// momento do ciclo. Ela é utilizada para preencher a especificação (tamanho, furação) referente
+  /// ao código do item.
+  late List<String> shimsCodeBaseList = [];
+
+  /// Essa lista é atribuída no início do ciclo da página de serviços e não pode ser alterada em outro
+  /// momento do ciclo. Ela é utilizada para preencher a especificação (tamanho, furação) referente
+  /// ao código do item.
+  late List<String> knivesCodeBaseList = [];
 
   String? pendencies;
 
