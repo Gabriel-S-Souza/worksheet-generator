@@ -107,10 +107,17 @@ class _CustomFieldSuggestionState extends State<CustomFieldSuggestion> {
     double offsetTop;
     double space = 5.0;
     double mediaQueryHeight = MediaQuery.of(context).size.height;
+    double boxHeight;
+
+    if (widget.suggestions.length >= 5) {
+        boxHeight = 240.0;
+      } else {
+        boxHeight = 48.0 * widget.suggestions.length;
+    }
 
     if (offset.dy > mediaQueryHeight * 0.38) {
       offsetTop = offset.dy - size.height;
-      space = -(MediaQuery.of(context).size.height * 0.3 + 48);
+      space = - boxHeight - 48.0;
     } else {
       offsetTop = offset.dy + size.height;
     }
@@ -123,7 +130,7 @@ class _CustomFieldSuggestionState extends State<CustomFieldSuggestion> {
           link: layerLink,
           showWhenUnlinked: false,
           offset: Offset(0.0, size.height + space),
-          child: buildOverlay(context)
+          child: buildOverlay(context, boxHeight)
         )
       ),
     );
@@ -131,12 +138,12 @@ class _CustomFieldSuggestionState extends State<CustomFieldSuggestion> {
     overlay.insert(entry!);
   }
 
-  Widget buildOverlay(BuildContext context) {
+  Widget buildOverlay(BuildContext context, double height) {
     return Material(
       elevation: 8,
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.3,
+          maxHeight: height,
         ),
         child: SingleChildScrollView(
           child: Column(          
