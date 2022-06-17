@@ -408,7 +408,7 @@ class _ServicesEquipmentScreenState extends State<ServicesEquipmentScreen> {
                     },
                     ),
                     const SizedBox(height: 20),
-                  const SizedBox(height: 48),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 ],
               );
           }

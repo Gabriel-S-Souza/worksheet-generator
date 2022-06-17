@@ -98,18 +98,31 @@ class _CustomFieldSuggestionState extends State<CustomFieldSuggestion> {
   void showOverlay() {
     final overlay = Overlay.of(context)!;
 
+    //calculate the offsset to top and to bottom
+
     final RenderBox renderBox = context.findRenderObject()! as RenderBox;
     final size = renderBox.size;
     final offset = renderBox.localToGlobal(Offset.zero);
 
+    double offsetTop;
+    double space = 5.0;
+    double mediaQueryHeight = MediaQuery.of(context).size.height;
+
+    if (offset.dy > mediaQueryHeight * 0.38) {
+      offsetTop = offset.dy - size.height;
+      space = -(MediaQuery.of(context).size.height * 0.3 + 48);
+    } else {
+      offsetTop = offset.dy + size.height;
+    }
+
     entry = OverlayEntry(
       builder: (context) => Positioned(
         width: size.width,
-        top: offset.dy + size.height,
+        top: offsetTop,
         child: CompositedTransformFollower(
           link: layerLink,
           showWhenUnlinked: false,
-          offset: Offset(0.0, size.height + 5.0),
+          offset: Offset(0.0, size.height + space),
           child: buildOverlay(context)
         )
       ),
