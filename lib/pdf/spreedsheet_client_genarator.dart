@@ -465,7 +465,7 @@ class SpreedsheetClientGenerator {
                   width: 280,
                   child: pw.Row(
                     children: [
-                      pw.Text('Ateendido por:  ', style: pw.TextStyle(fontSize: fontMediumSize)),
+                      pw.Text('Atendido por:  ', style: pw.TextStyle(fontSize: fontMediumSize)),
                       pw.Text(attendant, style: pw.TextStyle(fontSize: fontMediumSize)),
                     ]
                   )
