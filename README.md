@@ -2,15 +2,6 @@
 
 An attendance spreadsheet generator made for a freelance job
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+https://github.com/Gabriel-S-Souza/worksheet-generator/assets/94877176/35818541-6a3c-4118-8fbb-74c489043f72
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
